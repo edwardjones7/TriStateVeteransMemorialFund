@@ -1,0 +1,32 @@
+---
+/**
+ * LetterCard — a paper-deep card with a folded corner and soft shadow.
+ * Used for the mission statement and veteran quotations.
+ */
+interface Props {
+  class?: string;
+  tone?: 'paper-deep' | 'paper';
+}
+const { class: cls = '', tone = 'paper-deep' } = Astro.props;
+const bg = tone === 'paper' ? 'bg-paper' : 'bg-paper-deep';
+---
+
+<figure
+  class:list={[
+    'relative border border-line p-7 sm:p-10',
+    'shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_22px_44px_-32px_rgba(33,28,21,0.55)]',
+    bg,
+    cls,
+  ]}
+>
+  {/* folded corner */}
+  <span
+    class="absolute right-0 top-0 h-0 w-0 border-l-[26px] border-t-[26px] border-l-transparent border-t-paper"
+    aria-hidden="true"
+  ></span>
+  <span
+    class="absolute right-[26px] top-0 h-0 w-0 border-r-[1px] border-t-[26px] border-r-transparent border-t-line"
+    aria-hidden="true"
+  ></span>
+  <slot />
+</figure>

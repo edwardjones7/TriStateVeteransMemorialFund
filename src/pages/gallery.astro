@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Section from '@/components/Section.astro';
+import Reveal from '@/components/Reveal.astro';
+import Plate from '@/components/Plate.astro';
+import CallToAction from '@/components/CallToAction.astro';
+
+/*
+ * The gallery currently renders captioned placeholder plates (PRD §15.5).
+ * When real photographs are supplied, swap each <Plate> for a
+ * <TreatedImage src=...> — the develop animation and lightbox hook
+ * (data-lightbox) are already wired in src/scripts/motion.ts.
+ */
+const photos = await getCollection('gallery');
+const tones = ['field', 'night', 'paper'] as const;
+---
+
+<Base
+  title="Gallery"
+  description="Moments from TriState Veterans Memorial Fund events — 5K runs, ceremonies, and gatherings honoring those who served."
+>
+  <PageHeader
+    eyebrow="Gallery"
+    title="Moments worth keeping."
+    intro="From the starting line of our 5K to the placing of flags at Washington Lake Park — a look at the community we are building, together."
+  />
+
+  <Section class="py-20 sm:py-24">
+    <div class="columns-1 gap-6 sm:columns-2 lg:columns-3">
+      {
+        photos.map((photo, i) => (
+          <Reveal class="mb-6 break-inside-avoid" delay={(i % 3) * 60}>
+            <figure data-lightbox>
+              <Plate
+                ratio={i % 3 === 1 ? '4 / 5' : '4 / 3'}
+                tone={tones[i % 3]}
+                label={photo.data.label}
+              />
+              <figcaption class="mt-2.5 flex items-baseline justify-between gap-3">
+                <span class="text-sm text-ink">{photo.data.caption}</span>
+                {photo.data.year && (
+                  <span class="font-typewriter text-xs text-ink-soft">
+                    {photo.data.year}
+                  </span>
+                )}
+              </figcaption>
+            </figure>
+          </Reveal>
+        ))
+      }
+    </div>
+  </Section>
+
+  <CallToAction
+    heading="Be part of the next chapter."
+    body="Join us at an event, or support the work — and help us fill these pages with new memories."
+  />
+</Base>

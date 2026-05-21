@@ -1,0 +1,53 @@
+---
+import '@/styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import SEO from '@/components/SEO.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown>[];
+}
+const { title, description, image, noindex, jsonLd } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <SEO
+      title={title}
+      description={description}
+      image={image}
+      noindex={noindex}
+      jsonLd={jsonLd}
+    />
+    <ClientRouter />
+    {/* Set has-js before first paint so reveal elements never flash. */}
+    <script is:inline>
+      document.documentElement.classList.add('has-js');
+    </script>
+  </head>
+  <body>
+    <a
+      href="#main"
+      class="sr-only z-[100] focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:rounded-[3px] focus:bg-poppy focus:px-4 focus:py-2 focus:font-semibold focus:text-paper"
+      >Skip to content</a
+    >
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      import '@/scripts/motion.ts';
+    </script>
+  </body>
+</html>

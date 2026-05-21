@@ -1,0 +1,74 @@
+---
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Section from '@/components/Section.astro';
+import Eyebrow from '@/components/Eyebrow.astro';
+import Reveal from '@/components/Reveal.astro';
+import Plate from '@/components/Plate.astro';
+import Button from '@/components/Button.astro';
+import CallToAction from '@/components/CallToAction.astro';
+import { Icon } from 'astro-icon/components';
+
+/*
+ * Lightweight merch (PRD §9.6 / §15.3). When products are ready, each
+ * card below becomes an embedded buy-button (Shopify / Printful) — the
+ * layout does not need to change.
+ */
+const previews = [
+  { label: 'Commemorative apparel', caption: 'Tees & hats' },
+  { label: 'Remembrance poppy pin', caption: 'Wear it proudly' },
+  { label: 'Event keepsakes', caption: 'From our 5K & ceremonies' },
+];
+---
+
+<Base
+  title="Shop"
+  description="Merchandise from the TriState Veterans Memorial Fund — every purchase supports programs that benefit veterans."
+>
+  <PageHeader
+    eyebrow="Shop"
+    title="Wear your support."
+    intro="Every purchase supports programs that benefit veterans. Our store is being prepared — here is a first look at what's coming."
+  />
+
+  <Section class="py-20 sm:py-24">
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        previews.map((item, i) => (
+          <Reveal delay={i * 70}>
+            <figure class="border border-line bg-paper">
+              <div class="relative">
+                <Plate ratio="1 / 1" tone="field" label={item.label} />
+                <span class="absolute left-4 top-4 bg-poppy px-2.5 py-1 font-typewriter text-[0.6rem] uppercase tracking-[0.16em] text-paper">
+                  Coming soon
+                </span>
+              </div>
+              <figcaption class="p-5">
+                <p class="font-display text-xl">{item.label}</p>
+                <p class="mt-1 text-sm text-ink-soft">{item.caption}</p>
+              </figcaption>
+            </figure>
+          </Reveal>
+        ))
+      }
+    </div>
+
+    <Reveal
+      class="mt-14 flex flex-col items-center gap-4 border border-line bg-paper-deep px-6 py-12 text-center"
+    >
+      <Icon name="lucide:store" class="size-8 text-poppy" aria-hidden="true" />
+      <h2 class="font-display text-2xl">The store is on its way.</h2>
+      <p class="max-w-md leading-relaxed text-ink-soft">
+        We're putting the finishing touches on our merchandise. Until then,
+        the most direct way to help is a donation — it goes straight to work
+        for our veterans.
+      </p>
+      <div class="mt-2 flex flex-wrap justify-center gap-3">
+        <Button href="/donate">Make a donation</Button>
+        <Button href="/events" variant="secondary">See upcoming events</Button>
+      </div>
+    </Reveal>
+  </Section>
+
+  <CallToAction />
+</Base>

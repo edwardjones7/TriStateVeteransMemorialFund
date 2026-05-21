@@ -1,0 +1,120 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Section from '@/components/Section.astro';
+import Eyebrow from '@/components/Eyebrow.astro';
+import Reveal from '@/components/Reveal.astro';
+import Plate from '@/components/Plate.astro';
+import Button from '@/components/Button.astro';
+import SectionRule from '@/components/SectionRule.astro';
+import CallToAction from '@/components/CallToAction.astro';
+import { Icon } from 'astro-icon/components';
+import { site } from '@/config/site';
+
+const testimonials = (await getCollection('testimonials')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<Base
+  title="Veterans Corner"
+  description="A safe place for veterans and their families to share their stories. Every voice helps a fellow veteran know they are not alone."
+>
+  <PageHeader
+    eyebrow="Veterans Corner"
+    title="Your voice matters."
+    intro="Every veteran has a story. Sharing yours can inspire others, foster understanding, and remind a fellow veteran that they are not alone."
+  />
+
+  {/* Intro */}
+  <Section class="py-20 sm:py-24">
+    <Reveal class="mx-auto max-w-2xl text-center">
+      <p class="text-lg leading-relaxed text-ink">
+        By sharing your journey, you contribute to a powerful collective
+        voice — one that breaks down barriers, raises awareness, and provides
+        healing. Whether you are reflecting on your service or the challenges
+        you have faced since coming home, your experience can help another
+        veteran find strength and hope.
+      </p>
+      <SectionRule class="mx-auto mt-9 max-w-xs" />
+    </Reveal>
+  </Section>
+
+  {/* Testimonies */}
+  <Section tone="paper-deep" class="border-y border-line py-20 sm:py-24">
+    <Reveal class="mb-10">
+      <Eyebrow>In their own words</Eyebrow>
+      <h2 class="mt-4 font-display text-3xl sm:text-4xl">Veteran testimonies.</h2>
+    </Reveal>
+    <div class="grid gap-8 sm:grid-cols-2">
+      {
+        testimonials.map((t, i) => (
+          <Reveal delay={i * 80}>
+            <figure class="border border-line bg-paper">
+              <div class="relative">
+                <Plate ratio="16 / 9" tone="night" label="Video testimony" />
+                <span class="absolute inset-0 flex items-center justify-center">
+                  <span class="inline-flex size-14 items-center justify-center rounded-full bg-poppy text-paper">
+                    <Icon name="lucide:play" class="size-6" aria-hidden="true" />
+                  </span>
+                </span>
+              </div>
+              <figcaption class="flex items-center justify-between gap-4 p-6">
+                <div>
+                  <p class="font-display text-2xl">{t.data.name}</p>
+                  <p class="font-typewriter text-xs uppercase tracking-[0.16em] text-poppy">
+                    {t.data.branch}
+                  </p>
+                </div>
+                <a
+                  href={site.social.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="link-underline shrink-0 text-sm font-semibold text-ink"
+                >
+                  Watch &rarr;
+                </a>
+              </figcaption>
+            </figure>
+          </Reveal>
+        ))
+      }
+    </div>
+    <Reveal class="mt-8">
+      <p class="font-typewriter text-xs uppercase tracking-[0.14em] text-ink-soft">
+        Video testimonies are shared on our Facebook page.
+      </p>
+    </Reveal>
+  </Section>
+
+  {/* Tell your story */}
+  <Section class="py-20 sm:py-24">
+    <Reveal
+      class="grid gap-10 border border-line bg-paper p-8 sm:p-12 lg:grid-cols-2 lg:items-center"
+    >
+      <div>
+        <Eyebrow>Share your journey</Eyebrow>
+        <h2 class="mt-4 font-display text-3xl">Tell your story.</h2>
+        <p class="mt-4 leading-relaxed text-ink-soft">
+          Whether you served or love someone who did, your story has a place
+          here. Reach out and we will help you share it — at your pace, on
+          your terms.
+        </p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <Button href={site.social.facebook} external>
+            <Icon name="lucide:facebook" class="size-4" aria-hidden="true" />
+            Share on Facebook
+          </Button>
+          <Button href="/contact" variant="secondary">Contact us</Button>
+        </div>
+      </div>
+      <Plate ratio="4 / 3" tone="field" label="Families honoring loved ones" />
+    </Reveal>
+  </Section>
+
+  <CallToAction
+    heading="Help us amplify their voices."
+    body="Your support funds the outreach, the gatherings, and the care that give veterans a place to be heard."
+  />
+</Base>

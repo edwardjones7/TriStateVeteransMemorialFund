@@ -1,0 +1,302 @@
+{
+  "client": "TriState Veterans Memorial Fund",
+  "client_type": "501(c)(3) nonprofit",
+  "client_description": "501(c)(3) charity based in Sewell, Gloucester County, NJ, dedicated to honoring and supporting U.S. military veterans across South Jersey, Southeastern Pennsylvania, and Northern Delaware; provides mental-health aid, PTSD service dogs, and a Veteran's Corner.",
+  "source": {
+    "site": "https://www.tristateveteransmemorialfund.org/",
+    "pages_analyzed": ["/", "/services", "/testimonials", "/meet-the-team", "/events"],
+    "scrape_tool": "Firecrawl",
+    "scrape_date": "2026-05-21",
+    "facebook": {
+      "url": "https://www.facebook.com/p/TriState-Veterans-Memorial-Fund-61553187641153/",
+      "scrape_status": "not accessible programmatically - Facebook requires login, Firecrawl does not support the site, and a direct fetch returned a login wall. Profile and post data below were supplied by the client via manual copy-paste on 2026-05-21.",
+      "followers": 217,
+      "following": 43,
+      "about": {
+        "phone": "(856) 370-8440",
+        "email": "tristatevmf@gmail.com",
+        "mailing_address": "POB 8662, Sewell, NJ 08080, United States",
+        "website": "tristateveteransmemorialfund.org",
+        "hours": "Always open"
+      },
+      "observed_posts": [
+        "Springtime post: banners and an American flag displayed around the Township as a visible reminder of gratitude and respect for those who served; tagged Peter M. Del Borrello and 13 others.",
+        "Shared post from Washington Township Police Department (Gloucester County): 'Thank you Chief!!! WTPD Best of breed!!!' - police department publicly thanking the fund.",
+        "Valentine's Day Dance Party promoted as featuring 'The Bob Pantano Dance Party' at the Senior Center."
+      ],
+      "manual_input_post": "We're growing-and we're proud to share a major step forward. We now have a permanent location at 321 Theis Rd., Sewell, NJ, where we're honored to share space with VFW Post 6332 and American Legion Post 521 in the former Washington Township firehouse. We are deeply grateful to the Township of Washington for this opportunity. Thank you to our community for the continued support, and to our Mayor, Chief of the Fire Department, Chief of Police, and our council members for standing with us. You'll also begin hearing us on the radio (1210 AM), made possible by our friends and supporters, the Pantano family. We also extend our condolences to Bob and his family on the passing of his wife's father, a proud WWII veteran. We will be honoring his service on our website as we continue to grow. Stay tuned for upcoming events-our next major one is our 5K on Saturday, August 8th. Registration opens at 7:00 AM, with a start time expected around 8:15 AM. Thank you all. If you're able, please consider supporting us through the donation tab on our website."
+    }
+  },
+  "recent_developments": [
+    "Opened a permanent location at 321 Theis Rd., Sewell, NJ, in the former Washington Township firehouse, co-located with VFW Post 6332 and American Legion Post 521; space provided by the Township of Washington.",
+    "Gained a radio presence on 1210 AM, enabled by the Pantano family.",
+    "Next major event: 5K on Saturday, August 8th (registration opens 7:00 AM, start expected ~8:15 AM); inferred as the 3rd Annual based on prior event history.",
+    "Publicly backed by the Mayor, Fire Chief, Police Chief, and council members of Washington Township; the Washington Township Police Department has publicly thanked the fund on Facebook.",
+    "Honoring a WWII veteran (father-in-law of supporter 'Bob') on the website as the organization grows.",
+    "Partnered with The Bob Pantano Dance Party (a long-running regional radio dance-party brand) for the Valentine's Day Dance Party fundraiser.",
+    "Runs a seasonal Township banner and American flag display program honoring those who served."
+  ],
+  "data_quality_notes": [
+    "Phone number discrepancy: the website lists (856) 270-8440; the Facebook About section lists (856) 370-8440. Confirm the correct number with the client before using in outreach copy.",
+    "Facebook reach is small (217 followers as of 2026-05-21); social channels alone are a limited acquisition path - radio (1210 AM), events, and partner organizations carry more weight.",
+    "Facebook page is not programmatically accessible; all FB data is client-supplied via manual copy-paste and may be incomplete."
+  ],
+  "icps": [
+    {
+      "segment": "corporate_sponsors",
+      "segment_label": "Corporate Sponsors / Business Donors",
+      "firmographics": {
+        "industry": "local consumer-facing and skilled-trade businesses (inferred from current sponsor wall)",
+        "sub_industry": "auto dealerships, funeral homes, contracting/construction, engineering, dental, personal services (bakery, barbershop, car wash, boutique), skilled-trade union locals (inferred)",
+        "company_size_employees": "unknown",
+        "company_size_revenue": "unknown",
+        "geography": "South Jersey, Southeastern Pennsylvania, Northern Delaware; concentrated in Gloucester County, NJ (Sewell / Washington Township); fund HQ now at 321 Theis Rd., Sewell, NJ",
+        "business_model": "owner-operated local B2C service businesses and trade union locals (inferred)",
+        "years_in_business": "unknown; one current sponsor referenced as operating over 30 years (inferred as established local businesses)"
+      },
+      "decision_maker": {
+        "primary_title": "Owner / Operator (inferred)",
+        "secondary_titles": "General Manager; Union Business Agent / Local President; Marketing or Community Relations Director (inferred)",
+        "department": "ownership / community relations (inferred)",
+        "seniority": "owner / executive (inferred)",
+        "reports_to": "unknown",
+        "age_range": "unknown; inferred 45-70",
+        "tech_savviness": "low-to-moderate (inferred; org uses Wix site, Facebook-first, PayPal and mailed checks)"
+      },
+      "pain_points": {
+        "pain_1": "limited local brand visibility; want community recognition (inferred)",
+        "pain_2": "want to demonstrate corporate community involvement and goodwill (inferred)",
+        "pain_3": "personal or staff connection to veterans/military families seeking an outlet (inferred)",
+        "pain_4": "want a low-cost, local, trustworthy charitable partner (inferred)",
+        "pain_5": "unknown"
+      },
+      "goals": {
+        "goal_1": "visible association with a respected local veterans cause (inferred)",
+        "goal_2": "community goodwill and customer trust in local market (inferred)",
+        "goal_3": "honor veterans / fulfill civic or faith-based values (inferred)"
+      },
+      "triggers": {
+        "trigger_1": "next major event - 5K on Saturday, August 8th; plus seasonal fundraisers (inferred annual cycle)",
+        "trigger_2": "Veterans Day / Memorial Day seasonal giving period (inferred)",
+        "trigger_3": "peer referral from existing sponsors, Knights of Columbus network, or co-located VFW/American Legion posts (inferred)"
+      },
+      "objections": {
+        "objection_1": "uncertainty about how funds are used; small and young organization - partly mitigated by new permanent location and public municipal endorsement (inferred)",
+        "objection_2": "limited brand exposure - the fund's Facebook following is small (217); 1210 AM radio and partner events are the real reach levers for a sponsor (inferred)",
+        "objection_3": "competing local sponsorship requests (inferred)"
+      },
+      "where_they_hang_out": {
+        "platforms": "Facebook (small following, ~217); radio 1210 AM (primary reach lever)",
+        "communities": "Knights of Columbus Sancta Familia Council #11498; Church of the Holy Family; VFW Post 6332 and American Legion Post 521 (co-located with the fund); Township of Washington municipal network including the Washington Township Police Department; The Bob Pantano Dance Party audience; Washington Township civic/business community; local trade unions",
+        "publications": "unknown",
+        "events": "5K Run/Walk (next: Saturday, August 8th); Flags for Forgotten Veterans; dance/buffet fundraisers; Valentine's Day Dance Party (featuring The Bob Pantano Dance Party)"
+      },
+      "current_solutions": {
+        "using_now": "sponsoring other local charities and civic events (inferred)",
+        "why_switching": "not_applicable (sponsorship is additive, not a switch)",
+        "competitors_considered": "other veteran charities and local nonprofits competing for sponsorship dollars (inferred)"
+      },
+      "buying_process": {
+        "decision_timeline": "unknown",
+        "budget_range": "unknown for sponsorship tiers; published event pricing $20-$40 per person",
+        "approval_chain": "unknown",
+        "preferred_contact_method": "phone (verify number - website (856) 270-8440 vs Facebook (856) 370-8440); email tristatevmf@gmail.com; website contact form; in person at 321 Theis Rd., Sewell, NJ; mail to POB 8662, Sewell, NJ 08080"
+      },
+      "messaging_hooks": {
+        "hook_1": "position the sponsor as a community partner - the fund works 'with local communities and businesses to not only honor our veterans'",
+        "hook_2": "credibility - the fund is endorsed by the Township of Washington's Mayor, Fire Chief, Police Chief, council, and Police Department, and now has a permanent home",
+        "hook_3": "local impact and reach - sponsorship dollars stay in the tri-state community and gain 1210 AM radio exposure and Bob Pantano Dance Party event visibility"
+      },
+      "evidence": [
+        {
+          "quote": "Our mission is to raise public awareness of the issue, and work with local communities and businesses to not only honor our veterans, but to help us raise funds to provide services to assist them with their struggles.",
+          "source": "homepage"
+        },
+        {
+          "quote": "Thank you to our team of dedicated professionals",
+          "source": "homepage, Our Sponsors section (sponsors include auto dealers, funeral homes, contractors, engineering firms, trade-union locals)"
+        },
+        {
+          "quote": "Thank you to our community for the continued support, and to our Mayor, Chief of the Fire Department, Chief of Police, and our council members for standing with us.",
+          "source": "Facebook post supplied by client, 2026-05-21"
+        }
+      ],
+      "confidence_notes": {
+        "high_confidence": "geography, platforms, events, contact method, sponsor industry mix, municipal and police endorsement, permanent location, radio presence, Facebook reach (217 followers) (directly observed or client-confirmed)",
+        "low_confidence": "pain points, goals, decision maker, buying process - the site has no sponsor-facing content, so these are inferred",
+        "gaps": "sponsorship tier pricing and benefits, sponsor company size/revenue, decision timeline, who signs off at sponsor companies, correct primary phone number (two conflicting numbers on file)"
+      }
+    },
+    {
+      "segment": "individual_donors",
+      "segment_label": "Individual Donors / Event Attendees",
+      "firmographics": {
+        "industry": "not_applicable",
+        "sub_industry": "not_applicable",
+        "company_size_employees": "not_applicable",
+        "company_size_revenue": "not_applicable",
+        "geography": "South Jersey, Southeastern Pennsylvania, Northern Delaware; core base Gloucester County / Washington Township, Sewell, NJ",
+        "business_model": "not_applicable",
+        "years_in_business": "not_applicable"
+      },
+      "decision_maker": {
+        "primary_title": "individual community member / donor (not a business role)",
+        "secondary_titles": "event attendee; 5K participant; veteran family member",
+        "department": "not_applicable",
+        "seniority": "not_applicable",
+        "reports_to": "not_applicable",
+        "age_range": "unknown; inferred 35-75 (family-oriented event framing)",
+        "tech_savviness": "low-to-moderate (inferred; donations via Facebook, PayPal link, and mailed checks)"
+      },
+      "pain_points": {
+        "pain_1": "want a meaningful, trustworthy way to support veterans locally (inferred)",
+        "pain_2": "aware of veteran suicide and PTSD but unsure how to help (inferred)",
+        "pain_3": "personal or family military connection seeking an outlet (inferred)",
+        "pain_4": "want family-friendly community activities tied to a cause (inferred)",
+        "pain_5": "unknown"
+      },
+      "goals": {
+        "goal_1": "honor veterans and give back (inferred)",
+        "goal_2": "community and social connection through events (inferred)",
+        "goal_3": "affordable, local participation (inferred)"
+      },
+      "triggers": {
+        "trigger_1": "Veterans Day / Memorial Day seasonal events (e.g., Flags for Forgotten Veterans)",
+        "trigger_2": "annual 5K (next: Saturday, August 8th) and seasonal dance/buffet fundraisers",
+        "trigger_3": "Facebook event promotion, 1210 AM radio exposure, and friend invitations (inferred)"
+      },
+      "objections": {
+        "objection_1": "uncertainty whether the donation reaches veterans (inferred)",
+        "objection_2": "small, young organization with limited name recognition - partly mitigated by new permanent location and municipal endorsement (inferred)",
+        "objection_3": "competing demands on discretionary giving (inferred)"
+      },
+      "where_they_hang_out": {
+        "platforms": "Facebook (small following, ~217); radio 1210 AM",
+        "communities": "Church of the Holy Family; Knights of Columbus Sancta Familia Council #11498; VFW Post 6332 and American Legion Post 521; The Bob Pantano Dance Party audience; Washington Township residents; Senior Center community",
+        "publications": "unknown",
+        "events": "5K Run/Walk (next: Saturday, August 8th); Valentine's Day Dance Party (featuring The Bob Pantano Dance Party); Flags for Forgotten Veterans; dance & buffet fundraisers; bakery/pretzel fundraisers"
+      },
+      "current_solutions": {
+        "using_now": "giving to other veteran or community charities (inferred)",
+        "why_switching": "not_applicable",
+        "competitors_considered": "other local and veteran-focused charities (inferred)"
+      },
+      "buying_process": {
+        "decision_timeline": "short / event-driven - register and pay at the event (inferred)",
+        "budget_range": "$20-$40 per person per event; donations also via the website donation tab, PayPal, or mailed check",
+        "approval_chain": "not_applicable",
+        "preferred_contact_method": "Facebook; website donation tab and contact form; phone (verify number - website (856) 270-8440 vs Facebook (856) 370-8440); email; PayPal link; mailed check to POB 8662, Sewell, NJ 08080; in person at 321 Theis Rd., Sewell, NJ"
+      },
+      "messaging_hooks": {
+        "hook_1": "the 'twenty-two veterans commit suicide each month' statistic",
+        "hook_2": "'Don't they deserve this?'",
+        "hook_3": "family-friendly and local - 'Bring the whole family for a fun time!'"
+      },
+      "evidence": [
+        {
+          "quote": "We kindly ask for a $20 donation per person or $35 per couple.",
+          "source": "/events"
+        },
+        {
+          "quote": "If you're able, please consider supporting us through the donation tab on our website.",
+          "source": "Facebook post supplied by client, 2026-05-21"
+        },
+        {
+          "quote": "All money raised goes toward the purchase of one or more comfort dog(s) to support the Paws Assisting Veterans (PAVE) which provides highly trained service dogs to Veterans to enhance their quality of life.",
+          "source": "/events"
+        }
+      ],
+      "confidence_notes": {
+        "high_confidence": "geography, platforms, events, event pricing, contact/payment methods, radio presence, Facebook reach (217 followers) (directly observed or client-confirmed)",
+        "low_confidence": "pain points, goals, age range, objections - inferred from event framing, not stated",
+        "gaps": "donor demographics, average gift size, repeat vs. one-time donor split, what drives first-time donors to repeat, correct primary phone number (two conflicting numbers on file)"
+      }
+    },
+    {
+      "segment": "veteran_beneficiaries",
+      "segment_label": "Veteran Beneficiaries (Service Recipients)",
+      "profile_type": "beneficiary profile, not a buyer ICP",
+      "firmographics": {
+        "industry": "not_applicable",
+        "sub_industry": "not_applicable",
+        "company_size_employees": "not_applicable",
+        "company_size_revenue": "not_applicable",
+        "geography": "South Jersey, Southeastern Pennsylvania, Northern Delaware; fund operates from 321 Theis Rd., Sewell, NJ",
+        "business_model": "not_applicable",
+        "years_in_business": "not_applicable"
+      },
+      "decision_maker": {
+        "primary_title": "U.S. military veteran (service recipient)",
+        "secondary_titles": "veteran's family member; spouse; caregiver",
+        "department": "not_applicable",
+        "seniority": "not_applicable",
+        "reports_to": "not_applicable",
+        "age_range": "unknown; testimonials reference Army and Marine Corps veterans",
+        "tech_savviness": "unknown; inferred low-to-moderate (Facebook used for Veteran's Corner)"
+      },
+      "pain_points": {
+        "pain_1": "post-traumatic stress disorder (PTSD) - explicitly named as common among veterans",
+        "pain_2": "depression and anxiety - explicitly named on the services page",
+        "pain_3": "traumatic brain injuries (TBIs) - explicitly named on the services page",
+        "pain_4": "difficulty finding help - 'the frustration that our veterans have finding the comfort and assistance needed'",
+        "pain_5": "isolation and mental-health stigma - 'feelings of isolation'; 'stigma surrounding Mental Health'"
+      },
+      "goals": {
+        "goal_1": "return to normal civilian life - 'help them return to normal life after serving in combat'",
+        "goal_2": "find peace and enjoy life - 'the help they need to finally find peace'",
+        "goal_3": "connection and belonging - 'a space of belonging' (inferred as a beneficiary goal)"
+      },
+      "triggers": {
+        "trigger_1": "mental-health crisis or emergency - org promotes hotlines 'for immediate help' (inferred)",
+        "trigger_2": "difficult transition back to civilian life after combat or deployment (inferred)",
+        "trigger_3": "referral from family, peers, the co-located VFW/American Legion posts, or community (inferred)"
+      },
+      "objections": {
+        "objection_1": "stigma around seeking mental-health help",
+        "objection_2": "distrust or prior frustration accessing services (inferred)",
+        "objection_3": "reluctance to ask for help (inferred)"
+      },
+      "where_they_hang_out": {
+        "platforms": "Facebook (Veteran's Corner); radio 1210 AM",
+        "communities": "VFW Post 6332 and American Legion Post 521 (co-located with the fund at 321 Theis Rd., Sewell, NJ); veteran peer networks; American Legion (also referenced via board member)",
+        "publications": "unknown",
+        "events": "org community events; Veteran's Corner on Facebook"
+      },
+      "current_solutions": {
+        "using_now": "VA services and crisis hotlines (inferred)",
+        "why_switching": "frustration finding adequate, accessible help (inferred; org is complementary, not a replacement)",
+        "competitors_considered": "not_applicable"
+      },
+      "buying_process": {
+        "decision_timeline": "not_applicable",
+        "budget_range": "not_applicable - services are provided free to veterans",
+        "approval_chain": "unknown",
+        "preferred_contact_method": "phone ('CALL NOW'; verify number - website (856) 270-8440 vs Facebook (856) 370-8440); email tristatevmf@gmail.com; website contact form; Facebook; in person at 321 Theis Rd., Sewell, NJ (co-located with VFW Post 6332 and American Legion Post 521)"
+      },
+      "messaging_hooks": {
+        "hook_1": "'We will let them know they're not alone and people do care.'",
+        "hook_2": "a 'space of belonging'",
+        "hook_3": "emotional support / service dogs - a veteran gains 'a loving friend by their side'"
+      },
+      "evidence": [
+        {
+          "quote": "Conditions like post-traumatic stress disorder (PTSD), depression, anxiety, and traumatic brain injuries (TBIs) are common among veterans, often as a result of combat exposure, the stress of deployment, or difficulties transitioning back to civilian life.",
+          "source": "/services"
+        },
+        {
+          "quote": "We now have a permanent location at 321 Theis Rd., Sewell, NJ, where we're honored to share space with VFW Post 6332 and American Legion Post 521 in the former Washington Township firehouse.",
+          "source": "Facebook post supplied by client, 2026-05-21"
+        },
+        {
+          "quote": "With a stigma surrounding Mental Health, Al hopes the Tri-State Veterans Memorial Fund will help veterans and provide a space of belonging.",
+          "source": "/meet-the-team"
+        }
+      ],
+      "confidence_notes": {
+        "high_confidence": "pain points, goals, geography, contact method, and co-location with VFW Post 6332 and American Legion Post 521 (services page names PTSD/depression/anxiety/TBIs; co-location client-confirmed)",
+        "low_confidence": "triggers, objections, current solutions, age range - inferred; the site does not profile individual veterans",
+        "gaps": "how veterans currently find the org, intake/eligibility process, age and service-era breakdown, demand volume vs. capacity, correct primary phone number (two conflicting numbers on file)"
+      }
+    }
+  ]
+}

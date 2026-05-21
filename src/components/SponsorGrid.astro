@@ -1,0 +1,38 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+/**
+ * SponsorGrid — sponsors set typographically (no logo assets yet).
+ * Names are treated as the design element, which suits the editorial
+ * direction. Drop in real logos later without changing the layout.
+ */
+interface Props {
+  sponsors: CollectionEntry<'sponsors'>[];
+}
+const { sponsors } = Astro.props;
+---
+
+<ul class="grid grid-cols-2 gap-px bg-line sm:grid-cols-3 lg:grid-cols-4">
+  {
+    sponsors.map((s) => (
+      <li>
+        <a
+          href={s.data.url ?? '#'}
+          target={s.data.url ? '_blank' : undefined}
+          rel={s.data.url ? 'noopener noreferrer' : undefined}
+          class="group flex h-full min-h-[7rem] flex-col items-center justify-center gap-1.5 bg-paper px-5 py-7 text-center transition-colors duration-200 hover:bg-paper-deep"
+        >
+          <span class="font-display text-lg leading-tight text-ink group-hover:text-poppy">
+            {s.data.name}
+          </span>
+          {s.data.url && (
+            <span class="inline-flex items-center gap-1 font-typewriter text-[0.6rem] uppercase tracking-[0.16em] text-ink-soft opacity-0 transition-opacity group-hover:opacity-100">
+              Visit
+              <Icon name="lucide:arrow-up-right" class="size-3" aria-hidden="true" />
+            </span>
+          )}
+        </a>
+      </li>
+    ))
+  }
+</ul>

@@ -1,0 +1,189 @@
+---
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Section from '@/components/Section.astro';
+import Eyebrow from '@/components/Eyebrow.astro';
+import Reveal from '@/components/Reveal.astro';
+import { Icon } from 'astro-icon/components';
+import { site } from '@/config/site';
+
+const field =
+  'w-full rounded-[3px] border border-line bg-paper px-4 py-3 text-ink placeholder:text-ink-soft/55 transition-colors focus-visible:border-poppy';
+const label =
+  'block font-typewriter text-xs uppercase tracking-[0.14em] text-ink-soft';
+
+const channels = [
+  { icon: 'phone', label: 'Call us', value: site.phone, href: site.phoneHref },
+  {
+    icon: 'mail',
+    label: 'Email us',
+    value: site.email,
+    href: `mailto:${site.email}`,
+  },
+  {
+    icon: 'facebook',
+    label: 'Facebook',
+    value: 'Follow our page',
+    href: site.social.facebook,
+    external: true,
+  },
+  { icon: 'radio', label: 'On the air', value: `Hear us on ${site.radio}` },
+];
+const mapSrc =
+  'https://www.google.com/maps?q=321+Theis+Rd,+Sewell,+NJ+08080&output=embed';
+---
+
+<Base
+  title="Contact"
+  description="Get in touch with the TriState Veterans Memorial Fund. We are here to help veterans and their families however we can."
+>
+  <PageHeader
+    eyebrow="Contact"
+    title="Your voice matters. We're listening."
+    intro="Whether you need help, want to volunteer, or simply have a question — send us a message and one of our members will reach out."
+  />
+
+  <Section class="py-20 sm:py-24">
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+      {/* Form */}
+      <Reveal class="lg:col-span-7">
+        <Eyebrow>Send us a message</Eyebrow>
+        <h2 class="mt-4 font-display text-3xl">We'll get back to you shortly.</h2>
+
+        <form
+          name="contact"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          action="/thank-you/"
+          class="mt-8 space-y-5"
+        >
+          <input type="hidden" name="form-name" value="contact" />
+          <p hidden>
+            <label>Don't fill this out: <input name="bot-field" /></label>
+          </p>
+
+          <div class="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label for="first-name" class={label}>First name</label>
+              <input
+                id="first-name"
+                name="first-name"
+                type="text"
+                required
+                autocomplete="given-name"
+                class={`mt-2 ${field}`}
+              />
+            </div>
+            <div>
+              <label for="last-name" class={label}>Last name</label>
+              <input
+                id="last-name"
+                name="last-name"
+                type="text"
+                required
+                autocomplete="family-name"
+                class={`mt-2 ${field}`}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label for="email" class={label}>Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              autocomplete="email"
+              class={`mt-2 ${field}`}
+            />
+          </div>
+
+          <div>
+            <label for="phone" class={label}>Phone <span class="normal-case tracking-normal">(optional)</span></label>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              autocomplete="tel"
+              class={`mt-2 ${field}`}
+            />
+          </div>
+
+          <div>
+            <label for="message" class={label}>Your message</label>
+            <textarea
+              id="message"
+              name="message"
+              required
+              rows="6"
+              class={`mt-2 ${field} resize-y`}></textarea>
+          </div>
+
+          <button
+            type="submit"
+            class="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-[3px] bg-poppy px-7 py-3 font-body font-semibold text-paper shadow-sm transition-[background-color,transform] duration-150 ease-out-soft hover:bg-poppy-deep active:scale-[0.98]"
+          >
+            Send message
+            <Icon name="lucide:send" class="size-4" aria-hidden="true" />
+          </button>
+        </form>
+      </Reveal>
+
+      {/* Details */}
+      <Reveal class="lg:col-span-5" delay={100}>
+        <div class="border border-line bg-paper-deep p-7 sm:p-8">
+          <Eyebrow>Reach us directly</Eyebrow>
+          <ul class="mt-6 space-y-5">
+            {
+              channels.map((c) => (
+                <li class="flex items-start gap-3.5">
+                  <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-paper text-poppy">
+                    <Icon name={`lucide:${c.icon}`} class="size-4.5" aria-hidden="true" />
+                  </span>
+                  <span>
+                    <span class="block font-typewriter text-xs uppercase tracking-[0.14em] text-ink-soft">
+                      {c.label}
+                    </span>
+                    {c.href ? (
+                      <a
+                        href={c.href}
+                        target={c.external ? '_blank' : undefined}
+                        rel={c.external ? 'noopener noreferrer' : undefined}
+                        class="link-underline font-medium text-ink"
+                      >
+                        {c.value}
+                      </a>
+                    ) : (
+                      <span class="font-medium text-ink">{c.value}</span>
+                    )}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+
+          <hr class="my-7 border-line" />
+
+          <Eyebrow>Visit us</Eyebrow>
+          <address class="mt-4 space-y-1 text-sm not-italic leading-relaxed text-ink">
+            <p class="font-medium">{site.address.full}</p>
+            <p class="text-ink-soft">{site.address.note}</p>
+            <p class="text-ink-soft">Mailing: {site.mailing}</p>
+            <p class="text-ink-soft">Hours: {site.hours}</p>
+          </address>
+        </div>
+
+        <div class="mt-6 overflow-hidden border border-line">
+          <iframe
+            src={mapSrc}
+            title="Map to 321 Theis Rd., Sewell, NJ"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            class="aspect-[4/3] w-full"></iframe>
+        </div>
+      </Reveal>
+    </div>
+  </Section>
+</Base>

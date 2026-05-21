@@ -1,0 +1,271 @@
+@import "tailwindcss";
+@import "@fontsource-variable/fraunces/opsz.css";
+@import "@fontsource-variable/hanken-grotesk/wght.css";
+@import "@fontsource/special-elite/400.css";
+
+/* ============================================================
+   TriState Veterans Memorial Fund — "Letters Home" design system
+   Tokens are the single source of truth. No hardcoded hex in
+   components — reference these via Tailwind utilities.
+   ============================================================ */
+@theme {
+  /* --- Color --------------------------------------------------- */
+  --color-paper: #f6eedf;
+  --color-paper-deep: #ece1c9;
+  --color-ink: #211c15;
+  --color-ink-soft: #5a5142;
+  --color-poppy: #a8322a;
+  --color-poppy-deep: #861f19;
+  --color-poppy-light: #d6603f;
+  --color-field: #34402f;
+  --color-field-soft: #4e5a44;
+  --color-brass: #a98a4b;
+  --color-night: #20231b;
+  --color-line: #d7c8a6;
+
+  /* --- Typography ---------------------------------------------- */
+  --font-body: "Hanken Grotesk Variable", system-ui, -apple-system, sans-serif;
+  --font-display: "Fraunces Variable", "Hoefler Text", Georgia, serif;
+  --font-typewriter: "Special Elite", "Courier New", ui-monospace, monospace;
+  --font-sans: var(--font-body);
+
+  /* Modular type scale (PRD §3.2) */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.3125rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.5rem;
+  --text-4xl: 3.5rem;
+  --text-5xl: 4.5rem;
+
+  /* --- Motion -------------------------------------------------- */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-soft: cubic-bezier(0.55, 0, 0.68, 0.3);
+}
+
+/* ============================================================
+   Base layer
+   ============================================================ */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  @media (min-width: 768px) {
+    body {
+      font-size: 1.125rem;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-optical-sizing: auto;
+    line-height: 1.08;
+    letter-spacing: -0.012em;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  img,
+  picture,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+
+  ::selection {
+    background: var(--color-poppy);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-poppy);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Paper grain — one fixed, low-opacity overlay across the page. */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Honor reduced-motion globally. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ============================================================
+   Component / utility layer
+   ============================================================ */
+@layer components {
+  /* Scroll reveal — hidden only when JS is available, so no-JS
+     visitors always see content. Toggled by src/scripts/motion. */
+  .has-js [data-reveal] {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  .has-js [data-reveal].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 320ms var(--ease-out-soft),
+      transform 320ms var(--ease-out-soft);
+  }
+
+  /* Photo "develop" — the signature motion. Treated images fade in
+     from a warm, slightly-blurred state once loaded. */
+  .has-js .develop {
+    opacity: 0;
+    filter: blur(12px) saturate(0.4);
+    transform: scale(1.02);
+  }
+  .has-js .develop.is-developed {
+    opacity: 1;
+    filter: blur(0) saturate(1);
+    transform: scale(1);
+    transition:
+      opacity 450ms var(--ease-out-soft),
+      filter 600ms var(--ease-out-soft),
+      transform 600ms var(--ease-out-soft);
+  }
+
+  /* Animated poppy underline for inline/nav links. */
+  .link-underline {
+    background-image: linear-gradient(var(--color-poppy), var(--color-poppy));
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 2px;
+    transition: background-size 180ms var(--ease-out-soft);
+  }
+  .link-underline:hover,
+  .link-underline:focus-visible {
+    background-size: 100% 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .has-js [data-reveal],
+    .has-js .develop {
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+    }
+  }
+
+  /* Rendered Markdown (service detail, mission narrative). */
+  .rich > * + * {
+    margin-top: 1.15em;
+  }
+  .rich p {
+    max-width: 68ch;
+    line-height: 1.7;
+  }
+  .rich h2 {
+    font-size: var(--text-2xl);
+    margin-top: 1.8em;
+  }
+  .rich h3 {
+    font-size: var(--text-xl);
+    margin-top: 1.5em;
+  }
+  .rich a {
+    color: var(--color-poppy);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .rich ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  .rich li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-top: 0.5em;
+    max-width: 66ch;
+  }
+  .rich li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 0.4rem;
+    height: 0.4rem;
+    rotate: 45deg;
+    background: var(--color-poppy);
+  }
+  .rich strong {
+    font-weight: 600;
+  }
+}
+
+@layer utilities {
+  /* Warm photo treatment — unifies the client's mixed-quality source
+     photos. Apply to <img>/<Image> via the TreatedImage component. */
+  .treated {
+    filter: saturate(0.82) contrast(1.04) brightness(1.02) sepia(0.08);
+  }
+
+  /* Vertical paper-fiber texture for dark "night" sections. */
+  .texture-night {
+    background-image:
+      radial-gradient(
+        ellipse at top,
+        rgba(169, 138, 75, 0.08),
+        transparent 60%
+      );
+  }
+}

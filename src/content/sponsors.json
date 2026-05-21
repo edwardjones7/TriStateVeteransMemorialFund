@@ -1,0 +1,23 @@
+[
+  { "id": "morris-graphics", "name": "Morris Graphics", "url": "https://morrisgraphics.com/", "tier": "partner" },
+  { "id": "sj-timing", "name": "South Jersey Timing", "url": "https://www.sjtiming.com/", "tier": "partner" },
+  { "id": "turnersville-auto-mall", "name": "Turnersville Auto Mall", "url": "https://www.turnersvilleautomall.com/", "tier": "partner" },
+  { "id": "fidelio-dental", "name": "Fidelio Dental", "url": "https://fideliodental.com/", "tier": "sponsor" },
+  { "id": "american-auto-group", "name": "American Auto Group NJ", "url": "https://www.americanautogroupnj.com/", "tier": "sponsor" },
+  { "id": "athena-contracting", "name": "Athena Contracting", "url": "https://athenacontractinginc.com/", "tier": "sponsor" },
+  { "id": "egizi-funeral", "name": "Egizi Funeral Home", "url": "https://www.egizifuneral.com/", "tier": "sponsor" },
+  { "id": "aversas-bakery", "name": "Aversa's Bakery", "url": "https://aversasbakery.com/", "tier": "sponsor" },
+  { "id": "pennoni", "name": "Pennoni", "url": "https://www.pennoni.com/", "tier": "sponsor" },
+  { "id": "jpc-group", "name": "JPC Group", "url": "https://www.jpcgroupinc.com/", "tier": "sponsor" },
+  { "id": "wtfd", "name": "Washington Township Fire District 1", "url": "https://www.wtfd10.com/", "tier": "supporter" },
+  { "id": "ironworkers-405", "name": "Reinforced Ironworkers Riggers Local 405", "url": "https://www.reinforcedironworkersriggerslocal405.com/", "tier": "supporter" },
+  { "id": "autosheen", "name": "Autosheen Car Wash", "url": "https://autosheencarwash.com/", "tier": "sponsor" },
+  { "id": "timmons-barbershop", "name": "Timmons Barbershop", "url": "https://www.facebook.com/timmonsbarbershop/", "tier": "supporter" },
+  { "id": "ua-322", "name": "Plumbers & Pipefitters UA Local 322", "url": "https://www.ua322.org/", "tier": "supporter" },
+  { "id": "torjman-properties", "name": "Torjman Properties", "url": "https://torjmanproperties.com/", "tier": "sponsor" },
+  { "id": "eas-carpenters", "name": "Eastern Atlantic States Carpenters", "url": "https://eascarpenters.org/", "tier": "supporter" },
+  { "id": "two-sweet-boutique", "name": "Two Sweet Boutique", "url": "https://www.facebook.com/twosweetboutiquenj/", "tier": "supporter" },
+  { "id": "kadar", "name": "Kadar", "url": "https://gokadar.com/", "tier": "sponsor" },
+  { "id": "pops-ice", "name": "Pop's Italian Water Ice", "url": "https://www.popsice.com/", "tier": "supporter" },
+  { "id": "mitchell-funeral-support", "name": "Mitchell Funeral Support", "url": "http://mitchellfuneralsupport.com/", "tier": "sponsor" }
+]

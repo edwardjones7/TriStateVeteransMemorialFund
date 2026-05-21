@@ -1,0 +1,114 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Section from '@/components/Section.astro';
+import Eyebrow from '@/components/Eyebrow.astro';
+import Reveal from '@/components/Reveal.astro';
+import EventCard from '@/components/EventCard.astro';
+import PoppyMark from '@/components/PoppyMark.astro';
+import Button from '@/components/Button.astro';
+import CallToAction from '@/components/CallToAction.astro';
+import { isUpcoming } from '@/lib/format';
+import { site } from '@/config/site';
+
+const events = await getCollection('events');
+const upcoming = events
+  .filter((e) => isUpcoming(e.data.date))
+  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+const past = events
+  .filter((e) => !isUpcoming(e.data.date))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const eventLd = upcoming.map((e) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: e.data.title,
+  startDate: e.data.date.toISOString().slice(0, 10),
+  eventStatus: 'https://schema.org/EventScheduled',
+  location: {
+    '@type': 'Place',
+    name: e.data.location,
+    address: e.data.address ?? e.data.location,
+  },
+  organizer: { '@type': 'Organization', name: site.name, url: site.url },
+}));
+---
+
+<Base
+  title="Events"
+  description="Upcoming and past events from the TriState Veterans Memorial Fund — 5K runs, ceremonies, and fundraisers that support our veterans."
+  jsonLd={eventLd}
+>
+  <PageHeader
+    eyebrow="Events"
+    title="Gather with us."
+    intro="Every run, every ceremony, every evening of dancing raises real support for veterans — and reminds them their community has not forgotten."
+  />
+
+  {/* Upcoming */}
+  <Section class="py-20 sm:py-24">
+    <Reveal class="mb-10">
+      <Eyebrow>Upcoming</Eyebrow>
+      <h2 class="mt-4 font-display text-3xl sm:text-4xl">On the horizon.</h2>
+    </Reveal>
+    {
+      upcoming.length > 0 ? (
+        <div class="space-y-6">
+          <Reveal>
+            <EventCard event={upcoming[0]!} status="upcoming" featured />
+          </Reveal>
+          {upcoming.length > 1 && (
+            <div>
+              {upcoming.slice(1).map((e, i) => (
+                <Reveal delay={i * 50}>
+                  <EventCard event={e} status="upcoming" />
+                </Reveal>
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
+        <Reveal class="border border-line bg-paper-deep px-8 py-14 text-center">
+          <PoppyMark class="mx-auto w-10 text-poppy/60" />
+          <p class="mt-4 font-display text-xl">
+            No events are on the calendar just yet.
+          </p>
+          <p class="mx-auto mt-2 max-w-md text-ink-soft">
+            Follow us on Facebook to be the first to know when the next
+            gathering is announced.
+          </p>
+          <Button href={site.social.facebook} external variant="secondary" class="mt-6">
+            Follow on Facebook
+          </Button>
+        </Reveal>
+      )
+    }
+  </Section>
+
+  {/* Past */}
+  {
+    past.length > 0 && (
+      <Section tone="paper-deep" class="border-t border-line py-20 sm:py-24">
+        <Reveal class="mb-6">
+          <Eyebrow>From the archive</Eyebrow>
+          <h2 class="mt-4 font-display text-3xl sm:text-4xl">
+            Where we've been.
+          </h2>
+        </Reveal>
+        <div>
+          {past.map((e, i) => (
+            <Reveal delay={Math.min(i, 6) * 40}>
+              <EventCard event={e} status="past" />
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+    )
+  }
+
+  <CallToAction
+    heading="Bring the whole family."
+    body="Our events are for everyone who wants to stand with our veterans. Come for the cause — stay for the community."
+  />
+</Base>

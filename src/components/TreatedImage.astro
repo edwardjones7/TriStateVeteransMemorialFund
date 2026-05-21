@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+import Plate from './Plate.astro';
+/**
+ * TreatedImage — renders a real photograph with the warm "Letters Home"
+ * treatment and the develop-on-load animation. Falls back to a Plate
+ * placeholder when no `src` is supplied, so pages work before assets
+ * are delivered (PRD §15.5).
+ */
+interface Props {
+  src?: ImageMetadata;
+  alt?: string;
+  ratio?: string;
+  label?: string;
+  tone?: 'paper' | 'field' | 'night';
+  loading?: 'lazy' | 'eager';
+  sizes?: string;
+  class?: string;
+}
+const {
+  src,
+  alt = '',
+  ratio = '4 / 3',
+  label,
+  tone = 'paper',
+  loading = 'lazy',
+  sizes = '(min-width: 1024px) 600px, 100vw',
+  class: cls = '',
+} = Astro.props;
+---
+
+{
+  src ? (
+    <div
+      class:list={['relative overflow-hidden', cls]}
+      style={`aspect-ratio:${ratio}`}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        loading={loading}
+        sizes={sizes}
+        widths={[480, 768, 1100, 1600]}
+        class="treated develop h-full w-full object-cover"
+      />
+    </div>
+  ) : (
+    <Plate ratio={ratio} label={label ?? 'Photograph'} tone={tone} class={cls} />
+  )
+}

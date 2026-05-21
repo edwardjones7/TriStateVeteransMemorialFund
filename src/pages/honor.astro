@@ -1,0 +1,101 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Section from '@/components/Section.astro';
+import Eyebrow from '@/components/Eyebrow.astro';
+import Reveal from '@/components/Reveal.astro';
+import HonoreeCard from '@/components/HonoreeCard.astro';
+import LetterCard from '@/components/LetterCard.astro';
+import PostmarkSeal from '@/components/PostmarkSeal.astro';
+import SectionRule from '@/components/SectionRule.astro';
+import Button from '@/components/Button.astro';
+import CallToAction from '@/components/CallToAction.astro';
+
+const honorees = (await getCollection('honorees')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const rendered = await Promise.all(
+  honorees.map(async (h) => ({ entry: h, Content: (await render(h)).Content })),
+);
+---
+
+<Base
+  title="Honor Roll"
+  description="A register honoring the service of veterans in our community — preserving their names, their service, and their stories."
+>
+  <PageHeader
+    eyebrow="Honor Roll"
+    title="Lest we forget."
+    intro="A living register honoring the veterans of our community — preserving their names, their service, and the stories their families wish to keep alive."
+  />
+
+  <Section class="py-20 sm:py-24">
+    {
+      rendered.length > 0 ? (
+        <div class="mx-auto max-w-3xl space-y-6">
+          {rendered.map(({ entry, Content }, i) => (
+            <Reveal delay={Math.min(i, 8) * 40}>
+              <HonoreeCard
+                name={entry.data.name}
+                branch={entry.data.branch}
+                era={entry.data.era}
+                years={entry.data.years}
+              >
+                <Content />
+              </HonoreeCard>
+            </Reveal>
+          ))}
+        </div>
+      ) : (
+        <Reveal class="mx-auto max-w-2xl text-center">
+          <PostmarkSeal class="mx-auto w-28 text-brass" />
+          <h2 class="mt-8 font-display text-3xl">The register begins.</h2>
+          <p class="mt-4 leading-relaxed text-ink-soft">
+            As our organization grows, this page will hold the names and
+            stories of the veterans our community asks us to remember —
+            beginning with a proud World War II veteran whose family has
+            entrusted his memory to us.
+          </p>
+          <SectionRule class="mx-auto mt-10 max-w-xs" />
+        </Reveal>
+      )
+    }
+  </Section>
+
+  {/* Submit a name */}
+  <Section tone="paper-deep" class="border-y border-line py-20 sm:py-24">
+    <div class="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
+      <Reveal>
+        <Eyebrow>Add a name</Eyebrow>
+        <h2 class="mt-4 font-display text-3xl sm:text-4xl">
+          Honor a veteran you love.
+        </h2>
+        <p class="mt-5 leading-relaxed text-ink-soft">
+          If you would like a veteran in your family added to the Honor Roll,
+          we would be privileged to remember them. Reach out and share their
+          name, their branch of service, and the story you wish to preserve.
+        </p>
+        <Button href="/contact" class="mt-7">Submit a name</Button>
+      </Reveal>
+      <Reveal delay={100}>
+        <LetterCard tone="paper">
+          <p class="font-typewriter text-sm leading-[1.9]">
+            “We will be honoring his service on our website as we continue to
+            grow.”
+          </p>
+          <figcaption
+            class="mt-6 font-typewriter text-xs uppercase tracking-[0.16em] text-ink-soft"
+          >
+            — A promise to one family, and to every family who asks
+          </figcaption>
+        </LetterCard>
+      </Reveal>
+    </div>
+  </Section>
+
+  <CallToAction
+    heading="Their memory deserves our care."
+    body="Help us maintain this register and the programs that carry their legacy forward."
+  />
+</Base>

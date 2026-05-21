@@ -1,0 +1,21 @@
+---
+/**
+ * Reveal — wraps content so it fades + rises into view on scroll.
+ * Falls back to fully-visible when JS is off or motion is reduced.
+ */
+interface Props {
+  as?: 'div' | 'li' | 'section' | 'article' | 'figure' | 'header';
+  class?: string;
+  delay?: number;
+}
+const { as = 'div', class: cls = '', delay } = Astro.props;
+const Tag = as;
+---
+
+<Tag
+  class:list={[cls]}
+  data-reveal
+  style={delay ? `transition-delay:${delay}ms` : undefined}
+>
+  <slot />
+</Tag>

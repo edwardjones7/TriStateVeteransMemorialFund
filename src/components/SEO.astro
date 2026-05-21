@@ -1,0 +1,77 @@
+---
+import { site } from '@/config/site';
+/**
+ * SEO — meta tags, Open Graph, Twitter card, and JSON-LD.
+ * Organization structured data is emitted on every page; pages may
+ * pass extra structured data (e.g. Event) via `jsonLd`.
+ */
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown>[];
+}
+const {
+  title,
+  description = site.description,
+  image = '/og-image.svg',
+  noindex = false,
+  jsonLd = [],
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const ogImage = new URL(image, site.url).href;
+const fullTitle =
+  title === site.name ? title : `${title} — ${site.name}`;
+
+const orgLd = {
+  '@context': 'https://schema.org',
+  '@type': ['NGO', 'LocalBusiness'],
+  name: site.name,
+  url: site.url,
+  description: site.description,
+  telephone: site.phone,
+  email: site.email,
+  foundingDate: String(site.founded),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.address.line1,
+    addressLocality: site.address.city,
+    addressRegion: site.address.state,
+    postalCode: site.address.zip,
+    addressCountry: 'US',
+  },
+  areaServed: 'South Jersey, Southeastern Pennsylvania, Northern Delaware',
+  sameAs: [site.social.facebook],
+};
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<meta name="theme-color" content="#f6eedf" />
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(orgLd)}
+/>
+{
+  jsonLd.map((block) => (
+    <script type="application/ld+json" set:html={JSON.stringify(block)} />
+  ))
+}

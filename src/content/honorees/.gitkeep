@@ -1,0 +1,12 @@
+# Honor Roll entries live here — one Markdown file per honoree.
+# See src/content.config.ts for the schema. Example:
+#
+#   ---
+#   name: John A. Smith
+#   branch: U.S. Navy
+#   era: World War II
+#   years: 1925–2024
+#   order: 1
+#   ---
+#
+#   A tribute to his service and his life.

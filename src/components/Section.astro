@@ -1,0 +1,41 @@
+---
+/**
+ * Section — consistent page section wrapper.
+ * tone sets the background; width controls the inner measure.
+ */
+interface Props {
+  tone?: 'paper' | 'paper-deep' | 'night' | 'field';
+  width?: 'default' | 'wide' | 'narrow';
+  class?: string;
+  id?: string;
+  as?: 'section' | 'div' | 'header' | 'footer';
+}
+const {
+  tone = 'paper',
+  width = 'default',
+  class: cls = '',
+  id,
+  as = 'section',
+} = Astro.props;
+
+const toneClass = {
+  paper: 'bg-paper text-ink',
+  'paper-deep': 'bg-paper-deep text-ink',
+  night: 'bg-night text-paper texture-night',
+  field: 'bg-field text-paper',
+}[tone];
+
+const widthClass = {
+  default: 'max-w-6xl',
+  wide: 'max-w-7xl',
+  narrow: 'max-w-3xl',
+}[width];
+
+const Tag = as;
+---
+
+<Tag id={id} class:list={[toneClass, 'relative', cls]}>
+  <div class:list={[widthClass, 'mx-auto px-6 sm:px-8 lg:px-12']}>
+    <slot />
+  </div>
+</Tag>

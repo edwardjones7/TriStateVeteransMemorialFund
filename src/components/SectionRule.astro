@@ -1,0 +1,26 @@
+---
+/** SectionRule — hairline divider, optionally centred with a poppy dot. */
+interface Props {
+  variant?: 'centered' | 'lead';
+  class?: string;
+  tone?: 'line' | 'paper';
+}
+const { variant = 'centered', class: cls = '', tone = 'line' } = Astro.props;
+const lineColor = tone === 'paper' ? 'bg-paper/25' : 'bg-line';
+const dotColor = tone === 'paper' ? 'bg-paper/60' : 'bg-poppy';
+---
+
+{
+  variant === 'centered' ? (
+    <div class:list={['flex items-center gap-4', cls]} aria-hidden="true">
+      <span class:list={['h-px flex-1', lineColor]} />
+      <span class:list={['h-1.5 w-1.5 rotate-45', dotColor]} />
+      <span class:list={['h-px flex-1', lineColor]} />
+    </div>
+  ) : (
+    <div class:list={['flex items-center gap-3', cls]} aria-hidden="true">
+      <span class:list={['h-1.5 w-1.5 rotate-45', dotColor]} />
+      <span class:list={['h-px w-16', lineColor]} />
+    </div>
+  )
+}

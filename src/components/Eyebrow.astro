@@ -1,0 +1,25 @@
+---
+/** Eyebrow — small-caps label that sits above headings. */
+interface Props {
+  tone?: 'ink' | 'poppy' | 'paper';
+  class?: string;
+}
+const { tone = 'poppy', class: cls = '' } = Astro.props;
+
+const tones = {
+  ink: 'text-ink-soft',
+  poppy: 'text-poppy',
+  paper: 'text-paper/70',
+};
+---
+
+<p
+  class:list={[
+    'flex items-center gap-2.5 font-body text-[0.8125rem] font-bold uppercase tracking-[0.16em]',
+    tones[tone],
+    cls,
+  ]}
+>
+  <span class="h-px w-6 bg-current opacity-60" aria-hidden="true"></span>
+  <slot />
+</p>

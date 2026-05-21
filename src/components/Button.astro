@@ -1,0 +1,52 @@
+---
+/**
+ * Button — rendered as an anchor. One primary CTA per screen (poppy).
+ * Meets the 44px minimum touch target.
+ */
+interface Props {
+  href: string;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'on-dark';
+  size?: 'md' | 'lg';
+  class?: string;
+  external?: boolean;
+  'aria-label'?: string;
+}
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  class: cls = '',
+  external = false,
+  'aria-label': ariaLabel,
+} = Astro.props;
+
+const base =
+  'group inline-flex items-center justify-center gap-2.5 rounded-[3px] font-body font-semibold tracking-tight transition-[background-color,color,transform,box-shadow] duration-150 ease-out-soft active:scale-[0.98]';
+
+const sizes = {
+  md: 'px-5 py-2.5 text-base min-h-[44px]',
+  lg: 'px-7 py-3.5 text-lg min-h-[52px]',
+};
+
+const variants = {
+  primary: 'bg-poppy text-paper hover:bg-poppy-deep shadow-sm',
+  secondary:
+    'border border-ink/35 text-ink hover:border-ink hover:bg-ink hover:text-paper',
+  ghost: 'text-ink hover:text-poppy px-0',
+  'on-dark':
+    'border border-paper/40 text-paper hover:bg-paper hover:text-ink',
+};
+
+const ext = external
+  ? { target: '_blank', rel: 'noopener noreferrer' }
+  : {};
+---
+
+<a
+  href={href}
+  class:list={[base, sizes[size], variants[variant], cls]}
+  aria-label={ariaLabel}
+  {...ext}
+>
+  <slot />
+</a>

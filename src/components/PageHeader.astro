@@ -1,0 +1,30 @@
+---
+import Eyebrow from './Eyebrow.astro';
+import PoppyMark from './PoppyMark.astro';
+/** PageHeader — the masthead band for interior pages. */
+interface Props {
+  eyebrow?: string;
+  title: string;
+  intro?: string;
+}
+const { eyebrow, title, intro } = Astro.props;
+---
+
+<section class="relative overflow-hidden border-b border-line bg-paper-deep">
+  <PoppyMark
+    class="pointer-events-none absolute -right-10 -top-10 w-56 text-poppy/8"
+  />
+  <div
+    class="mx-auto max-w-6xl px-6 py-16 sm:px-8 sm:py-20 lg:px-12"
+  >
+    {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
+    <h1 class="mt-4 max-w-3xl font-display text-4xl sm:text-5xl">{title}</h1>
+    {
+      intro && (
+        <p class="mt-5 max-w-2xl text-lg leading-relaxed text-ink-soft">
+          {intro}
+        </p>
+      )
+    }
+  </div>
+</section>

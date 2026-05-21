@@ -1,0 +1,195 @@
+---
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Section from '@/components/Section.astro';
+import Eyebrow from '@/components/Eyebrow.astro';
+import Reveal from '@/components/Reveal.astro';
+import Plate from '@/components/Plate.astro';
+import LetterCard from '@/components/LetterCard.astro';
+import SectionRule from '@/components/SectionRule.astro';
+import Button from '@/components/Button.astro';
+import CallToAction from '@/components/CallToAction.astro';
+import { Icon } from 'astro-icon/components';
+
+const aims = [
+  {
+    icon: 'megaphone',
+    title: 'Raise awareness',
+    body: 'We bring the realities of veteran mental health into the open, working to lift the stigma that keeps people silent.',
+  },
+  {
+    icon: 'flag',
+    title: 'Honor their service',
+    body: 'We work with local communities and businesses to recognize the men and women who served — and never let their sacrifice be forgotten.',
+  },
+  {
+    icon: 'hand-coins',
+    title: 'Raise funds for real help',
+    body: 'We raise the resources needed to provide veterans with direct services and support for their struggles.',
+  },
+  {
+    icon: 'life-buoy',
+    title: 'Connect to resources',
+    body: 'We make sure veterans know the hotlines to call for immediate help and the resources available on the road back.',
+  },
+];
+---
+
+<Base
+  title="Our Mission"
+  description="Why the TriState Veterans Memorial Fund exists — and how we honor, support, and stand with U.S. military veterans across the tri-state area."
+>
+  <PageHeader
+    eyebrow="Our Mission"
+    title="Working for those who worked for us."
+    intro="The TriState Veterans Memorial Fund is a 501(c)(3) charity based in Sewell, New Jersey, dedicated to honoring and supporting U.S. military veterans — and the individuals among them facing PTSD and other mental-health challenges."
+  />
+
+  {/* Narrative */}
+  <Section class="py-20 sm:py-24">
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-14">
+      <Reveal class="lg:col-span-5">
+        <Plate ratio="3 / 4" tone="field" label="Our board, our neighbors" />
+      </Reveal>
+      <Reveal class="lg:col-span-7" delay={100}>
+        <Eyebrow>How it began</Eyebrow>
+        <h2 class="mt-4 font-display text-3xl sm:text-4xl">
+          We could not look away.
+        </h2>
+        <div class="rich mt-6 text-ink">
+          <p>
+            We formed this nonprofit because too many veterans are lost to
+            suicide — and it is unacceptable to us that the brave men and
+            women we call heroes should be unable to get the help they need
+            to deal with what they carry home.
+          </p>
+          <p>
+            Some of us on the board have personally seen the mental effects
+            of combat on our fellow servicemen, or seen those effects on
+            someone we love. On too many occasions we have witnessed — or
+            heard of — the frustration veterans face in finding the comfort
+            and assistance needed to return to normal life after serving in
+            combat.
+          </p>
+          <p>
+            So we built an organization to change that. With a well-rounded
+            board of directors from diverse backgrounds — several with
+            military service of their own — we are committed to making a
+            meaningful difference in our community.
+          </p>
+        </div>
+      </Reveal>
+    </div>
+  </Section>
+
+  {/* Pull quote */}
+  <Section tone="night" class="py-20 text-center sm:py-24">
+    <Reveal class="mx-auto max-w-3xl">
+      <Icon
+        name="lucide:quote"
+        class="mx-auto size-8 text-poppy-light"
+        aria-hidden="true"
+      />
+      <p class="mt-6 font-display text-2xl leading-snug sm:text-3xl">
+        We invite you to join our growing community of Americans who care for
+        our heroes — and want to give them the help they need to finally find
+        peace, and enjoy their lives like you and I do.
+      </p>
+      <SectionRule tone="paper" class="mx-auto mt-9 max-w-xs" />
+      <p
+        class="mt-6 font-typewriter text-sm uppercase tracking-[0.18em] text-paper/70"
+      >
+        Don't they deserve this?
+      </p>
+    </Reveal>
+  </Section>
+
+  {/* What we set out to do */}
+  <Section class="py-20 sm:py-24">
+    <Reveal class="max-w-2xl">
+      <Eyebrow>Our mission in practice</Eyebrow>
+      <h2 class="mt-4 font-display text-3xl sm:text-4xl">
+        What we set out to do.
+      </h2>
+    </Reveal>
+    <div class="mt-12 grid gap-x-10 gap-y-9 sm:grid-cols-2">
+      {
+        aims.map((aim, i) => (
+          <Reveal delay={i * 60}>
+            <div class="flex gap-4">
+              <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-line text-poppy">
+                <Icon name={`lucide:${aim.icon}`} class="size-5" aria-hidden="true" />
+              </span>
+              <div>
+                <h3 class="font-display text-xl">{aim.title}</h3>
+                <p class="mt-1.5 leading-relaxed text-ink-soft">{aim.body}</p>
+              </div>
+            </div>
+          </Reveal>
+        ))
+      }
+    </div>
+  </Section>
+
+  {/* ESA highlight */}
+  <Section tone="paper-deep" class="border-y border-line py-20 sm:py-24">
+    <div class="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
+      <Reveal>
+        <Eyebrow>One of our core services</Eyebrow>
+        <h2 class="mt-4 font-display text-3xl sm:text-4xl">
+          A loving friend, by their side.
+        </h2>
+        <div class="rich mt-5 text-ink-soft">
+          <p>
+            One example of our core services is providing veterans with
+            emotional-support and service animals. We have seen first-hand
+            how the right animal helps a veteran cope with PTSD — becoming
+            more active, getting out socially, and having a loyal companion
+            always near.
+          </p>
+          <p>They do — quite simply — save lives.</p>
+        </div>
+        <Button href="/services" class="mt-7">Explore our services</Button>
+      </Reveal>
+      <Reveal delay={100}>
+        <LetterCard tone="paper">
+          <p class="font-typewriter text-sm leading-[1.9]">
+            “With a stigma surrounding mental health, we hope the TriState
+            Veterans Memorial Fund will help veterans and provide a space of
+            belonging. We will let them know they're not alone — and that
+            people do care.”
+          </p>
+          <figcaption
+            class="mt-6 font-typewriter text-xs uppercase tracking-[0.16em] text-ink-soft"
+          >
+            — Al Frattali, President &amp; U.S. Army veteran
+          </figcaption>
+        </LetterCard>
+      </Reveal>
+    </div>
+  </Section>
+
+  {/* Honor Roll teaser */}
+  <Section class="py-20 sm:py-24">
+    <Reveal
+      class="flex flex-col items-start gap-6 border border-line bg-paper p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10"
+    >
+      <div class="max-w-xl">
+        <Eyebrow>Lest we forget</Eyebrow>
+        <h2 class="mt-3 font-display text-2xl sm:text-3xl">
+          The Honor Roll
+        </h2>
+        <p class="mt-3 leading-relaxed text-ink-soft">
+          As we grow, we are building a register to honor the service of
+          veterans in our community — beginning with those whose families
+          have asked us to remember them.
+        </p>
+      </div>
+      <Button href="/honor" variant="secondary" class="shrink-0"
+        >Visit the Honor Roll</Button
+      >
+    </Reveal>
+  </Section>
+
+  <CallToAction />
+</Base>

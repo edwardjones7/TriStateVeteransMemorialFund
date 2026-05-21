@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f6eedf" />
+  <rect x="32" y="32" width="1136" height="566" fill="none" stroke="#a98a4b" stroke-width="2" />
+  <g fill="#a8322a">
+    <g transform="translate(990 150) scale(1.7)" opacity="0.95">
+      <g opacity="0.5">
+        <ellipse cx="0" cy="-19" rx="15" ry="20" transform="rotate(45)" />
+        <ellipse cx="0" cy="-19" rx="15" ry="20" transform="rotate(135)" />
+      </g>
+      <ellipse cx="0" cy="-20" rx="18" ry="22" />
+      <ellipse cx="0" cy="-20" rx="18" ry="22" transform="rotate(90)" />
+      <circle cx="0" cy="0" r="7" />
+    </g>
+  </g>
+  <text x="96" y="210" font-family="Georgia, serif" font-size="34" fill="#5a5142" letter-spacing="6">EST. SEWELL, NEW JERSEY &#183; 501(C)(3)</text>
+  <text x="92" y="330" font-family="Georgia, serif" font-size="104" font-weight="600" fill="#211c15">TriState Veterans</text>
+  <text x="92" y="438" font-family="Georgia, serif" font-size="104" font-weight="600" fill="#211c15">Memorial Fund</text>
+  <rect x="96" y="486" width="120" height="4" fill="#a8322a" />
+  <text x="96" y="552" font-family="Georgia, serif" font-size="34" fill="#5a5142">Honoring veterans. Healing minds. Building belonging.</text>
+</svg>

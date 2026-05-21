@@ -1,0 +1,270 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import Section from '@/components/Section.astro';
+import Eyebrow from '@/components/Eyebrow.astro';
+import Button from '@/components/Button.astro';
+import PoppyMark from '@/components/PoppyMark.astro';
+import Plate from '@/components/Plate.astro';
+import PostmarkSeal from '@/components/PostmarkSeal.astro';
+import LetterCard from '@/components/LetterCard.astro';
+import SectionRule from '@/components/SectionRule.astro';
+import Reveal from '@/components/Reveal.astro';
+import ServiceCard from '@/components/ServiceCard.astro';
+import EventCard from '@/components/EventCard.astro';
+import StatBand from '@/components/StatBand.astro';
+import SponsorGrid from '@/components/SponsorGrid.astro';
+import CallToAction from '@/components/CallToAction.astro';
+import { Icon } from 'astro-icon/components';
+import { site } from '@/config/site';
+import { isUpcoming } from '@/lib/format';
+
+const services = (await getCollection('services')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const sponsors = await getCollection('sponsors');
+
+const events = await getCollection('events');
+const upcoming = events
+  .filter((e) => isUpcoming(e.data.date))
+  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+const featuredEvent =
+  upcoming.find((e) => e.data.featured) ?? upcoming[0] ?? null;
+
+const involve = [
+  {
+    icon: 'hand-heart',
+    title: 'Donate',
+    body: 'Every gift funds mental-health aid, service dogs, and outreach. Give once or monthly.',
+    href: '/donate',
+    cta: 'Give now',
+  },
+  {
+    icon: 'users',
+    title: 'Volunteer',
+    body: 'Lend your hands at a 5K, a ceremony, or a fundraiser. There is a place for everyone.',
+    href: '/contact',
+    cta: 'Get involved',
+  },
+  {
+    icon: 'handshake',
+    title: 'Sponsor',
+    body: 'Local businesses keep this mission moving. Partner with us and stand with our veterans.',
+    href: '/contact',
+    cta: 'Become a sponsor',
+  },
+];
+---
+
+<Base title={site.name} description={site.description}>
+  {/* ---------- Hero ---------- */}
+  <Section class="pt-12 pb-16 sm:pt-16 lg:pt-20 lg:pb-24">
+    <div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-12">
+      <div class="lg:col-span-7">
+        <Reveal>
+          <Eyebrow>
+            Est. {site.founded} &middot; Sewell, New Jersey &middot; 501(c)(3)
+          </Eyebrow>
+        </Reveal>
+        <Reveal delay={60}>
+          <h1
+            class="mt-6 font-display text-[2.7rem] leading-[1.03] sm:text-6xl lg:text-[4.15rem]"
+          >
+            Bringing our veterans <span class="text-poppy"
+              >all the way home.</span
+            >
+          </h1>
+        </Reveal>
+        <Reveal delay={120}>
+          <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
+            The TriState Veterans Memorial Fund honors and supports U.S.
+            military veterans across South Jersey, Southeastern Pennsylvania,
+            and Northern Delaware — through mental-health aid, PTSD service
+            dogs, and a community that refuses to look away.
+          </p>
+        </Reveal>
+        <Reveal delay={180}>
+          <div class="mt-8 flex flex-wrap gap-4">
+            <Button href="/donate" size="lg">Donate</Button>
+            <Button href="/mission" variant="secondary" size="lg"
+              >Our mission</Button
+            >
+          </div>
+          <p
+            class="mt-8 font-typewriter text-xs uppercase tracking-[0.14em] text-ink-soft"
+          >
+            Serving South Jersey &middot; Southeastern PA &middot; Northern
+            Delaware
+          </p>
+        </Reveal>
+      </div>
+      <Reveal class="lg:col-span-5" delay={140}>
+        <div class="relative">
+          <Plate ratio="4 / 5" tone="field" label="For those who served" />
+          <PostmarkSeal
+            class="absolute -bottom-7 -left-7 hidden w-28 rounded-full bg-paper p-2 text-brass shadow-lg sm:block"
+          />
+        </div>
+      </Reveal>
+    </div>
+  </Section>
+
+  {/* ---------- Mission excerpt ---------- */}
+  <Section tone="paper-deep" class="border-y border-line py-20 sm:py-24">
+    <div class="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
+      <Reveal>
+        <Eyebrow>Why we are here</Eyebrow>
+        <h2 class="mt-4 font-display text-3xl sm:text-4xl">
+          Some of us have seen the cost of war up close.
+        </h2>
+        <p class="mt-5 max-w-md leading-relaxed text-ink-soft">
+          We are a board of neighbors — veterans among us — who watched too
+          many heroes struggle to find help after coming home. So we built a
+          place to change that.
+        </p>
+        <Button href="/mission" variant="ghost" class="mt-6">
+          Read our full mission
+          <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+        </Button>
+      </Reveal>
+      <Reveal delay={120}>
+        <LetterCard>
+          <p class="font-typewriter text-sm leading-[1.9] text-ink">
+            “We formed this organization because too many veterans are lost to
+            suicide — and it is unacceptable to us that the men and women we
+            call heroes cannot get the help they need. Too often we have
+            witnessed their frustration in trying to find the comfort and
+            assistance to return to normal life. Our mission is to change
+            that.”
+          </p>
+          <figcaption
+            class="mt-6 font-typewriter text-xs uppercase tracking-[0.16em] text-ink-soft"
+          >
+            — The Board of Directors
+          </figcaption>
+        </LetterCard>
+      </Reveal>
+    </div>
+  </Section>
+
+  {/* ---------- What we do ---------- */}
+  <Section class="py-20 sm:py-24">
+    <Reveal class="max-w-2xl">
+      <Eyebrow>How we help</Eyebrow>
+      <h2 class="mt-4 font-display text-3xl sm:text-4xl">
+        Three ways we stand with veterans.
+      </h2>
+    </Reveal>
+    <div class="mt-12 grid gap-6 md:grid-cols-3">
+      {
+        services.map((s, i) => (
+          <Reveal delay={i * 60}>
+            <ServiceCard
+              title={s.data.title}
+              summary={s.data.summary}
+              icon={s.data.icon}
+              href="/services"
+            />
+          </Reveal>
+        ))
+      }
+    </div>
+  </Section>
+
+  {/* ---------- Featured event ---------- */}
+  {
+    featuredEvent && (
+      <Section tone="paper-deep" class="border-y border-line py-20 sm:py-24">
+        <Reveal class="mb-10 flex items-end justify-between gap-6">
+          <div>
+            <Eyebrow>Mark your calendar</Eyebrow>
+            <h2 class="mt-4 font-display text-3xl sm:text-4xl">
+              Come stand with us.
+            </h2>
+          </div>
+          <Button href="/events" variant="ghost" class="hidden shrink-0 sm:inline-flex">
+            All events
+            <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+          </Button>
+        </Reveal>
+        <Reveal delay={100}>
+          <EventCard event={featuredEvent} status="upcoming" featured />
+        </Reveal>
+      </Section>
+    )
+  }
+
+  {/* ---------- Impact statistic ---------- */}
+  <StatBand
+    eyebrow="Why we exist"
+    figure="22"
+    lede="Twenty-two veterans a day. That figure is why our founders refused to stay silent — and why this Fund exists."
+    source="Honor their service · End the silence"
+  />
+
+  {/* ---------- Sponsors ---------- */}
+  <Section class="py-20 sm:py-24">
+    <Reveal class="mx-auto max-w-2xl text-center">
+      <Eyebrow class="justify-center">Our sponsors</Eyebrow>
+      <h2 class="mt-4 font-display text-3xl sm:text-4xl">
+        A community of dedicated professionals.
+      </h2>
+      <p class="mt-4 text-ink-soft">
+        These local businesses and trade organizations keep our mission
+        moving. We are grateful for every one of them.
+      </p>
+      <SectionRule class="mx-auto mt-8 max-w-xs" />
+    </Reveal>
+    <Reveal class="mt-12" delay={80}>
+      <SponsorGrid sponsors={sponsors} />
+    </Reveal>
+    <Reveal class="mt-10 text-center" delay={120}>
+      <Button href="/contact" variant="secondary">Become a sponsor</Button>
+    </Reveal>
+  </Section>
+
+  {/* ---------- Get involved ---------- */}
+  <Section tone="paper-deep" class="border-t border-line py-20 sm:py-24">
+    <Reveal class="max-w-2xl">
+      <Eyebrow>Get involved</Eyebrow>
+      <h2 class="mt-4 font-display text-3xl sm:text-4xl">
+        There is a place for you in this.
+      </h2>
+    </Reveal>
+    <div class="mt-12 grid gap-6 md:grid-cols-3">
+      {
+        involve.map((item, i) => (
+          <Reveal delay={i * 60}>
+            <div class="flex h-full flex-col border border-line bg-paper p-7">
+              <span class="inline-flex size-12 items-center justify-center rounded-full bg-poppy/8 text-poppy">
+                <Icon name={`lucide:${item.icon}`} class="size-6" aria-hidden="true" />
+              </span>
+              <h3 class="mt-5 font-display text-2xl">{item.title}</h3>
+              <p class="mt-2.5 flex-1 text-[0.95rem] leading-relaxed text-ink-soft">
+                {item.body}
+              </p>
+              <Button href={item.href} variant="ghost" class="mt-5">
+                {item.cta}
+                <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+              </Button>
+            </div>
+          </Reveal>
+        ))
+      }
+    </div>
+    <Reveal
+      class="mt-12 flex flex-col gap-3 border border-line bg-paper px-6 py-5 text-sm sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p class="flex items-center gap-2.5 text-ink-soft">
+        <Icon name="lucide:map-pin" class="size-4 text-poppy" aria-hidden="true" />
+        Find us at {site.address.full}
+      </p>
+      <Button href="/contact" variant="ghost">
+        Directions &amp; contact
+        <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+      </Button>
+    </Reveal>
+  </Section>
+
+  <CallToAction />
+</Base>

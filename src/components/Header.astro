@@ -1,0 +1,141 @@
+---
+import { primaryNav, secondaryNav, site } from '@/config/site';
+import { Icon } from 'astro-icon/components';
+import PoppyMark from './PoppyMark.astro';
+import Button from './Button.astro';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
+---
+
+<header
+  data-site-header
+  class="sticky top-0 z-50 bg-paper transition-shadow duration-200 [&[data-scrolled]]:shadow-[0_1px_0_var(--color-line),0_14px_30px_-26px_rgba(33,28,21,0.8)]"
+>
+  <div
+    class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-3.5 sm:px-8 lg:px-12"
+  >
+    <a
+      href="/"
+      class="flex shrink-0 items-center gap-3"
+      aria-label={`${site.name} — home`}
+    >
+      <PoppyMark class="w-8 text-poppy" />
+      <span class="leading-[1.04]">
+        <span
+          class="block font-display text-base font-semibold tracking-tight"
+          >TriState Veterans</span
+        >
+        <span
+          class="block font-typewriter text-[0.6rem] uppercase tracking-[0.2em] text-ink-soft"
+          >Memorial Fund</span
+        >
+      </span>
+    </a>
+
+    <nav aria-label="Primary" class="hidden items-center gap-7 lg:flex">
+      {
+        primaryNav.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              'link-underline py-1 text-[0.95rem] font-medium',
+              isActive(item.href) ? 'text-poppy' : 'text-ink',
+            ]}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-2 sm:gap-3">
+      <a
+        href={site.phoneHref}
+        class="link-underline hidden items-center gap-2 text-sm font-medium text-ink-soft xl:inline-flex"
+      >
+        <Icon name="lucide:phone" class="size-4" aria-hidden="true" />
+        {site.phone}
+      </a>
+      <Button href="/donate" class="hidden sm:inline-flex">Donate</Button>
+      <button
+        type="button"
+        data-menu-open
+        class="inline-flex size-11 items-center justify-center text-ink lg:hidden"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <Icon name="lucide:menu" class="size-6" aria-hidden="true" />
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Full-screen mobile menu -->
+<div
+  id="mobile-menu"
+  data-mobile-menu
+  hidden
+  class="fixed inset-0 z-[70] flex flex-col bg-paper lg:hidden"
+>
+  <div
+    class="flex items-center justify-between border-b border-line px-6 py-3.5"
+  >
+    <span
+      class="font-typewriter text-[0.65rem] uppercase tracking-[0.22em] text-ink-soft"
+      >Menu</span
+    >
+    <button
+      type="button"
+      data-menu-close
+      class="inline-flex size-11 items-center justify-center text-ink"
+      aria-label="Close menu"
+    >
+      <Icon name="lucide:x" class="size-6" aria-hidden="true" />
+    </button>
+  </div>
+  <nav
+    aria-label="Mobile"
+    class="flex flex-1 flex-col gap-1 overflow-y-auto px-6 py-8"
+  >
+    {
+      primaryNav.map((item) => (
+        <a
+          href={item.href}
+          class:list={[
+            'border-b border-line/70 py-3 font-display text-2xl',
+            isActive(item.href) ? 'text-poppy' : 'text-ink',
+          ]}
+          aria-current={isActive(item.href) ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+    <div class="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+      {
+        secondaryNav.map((item) => (
+          <a
+            href={item.href}
+            class="py-1 text-sm font-medium text-ink-soft"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </div>
+    <div class="mt-auto pt-8">
+      <Button href="/donate" size="lg" class="w-full">Donate</Button>
+      <a
+        href={site.phoneHref}
+        class="mt-4 flex items-center justify-center gap-2 text-sm font-medium text-ink-soft"
+      >
+        <Icon name="lucide:phone" class="size-4" aria-hidden="true" />
+        {site.phone}
+      </a>
+    </div>
+  </nav>
+</div>

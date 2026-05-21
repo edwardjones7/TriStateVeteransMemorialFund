@@ -1,0 +1,14 @@
+[
+  {
+    "id": "mark-army",
+    "name": "Mark",
+    "branch": "U.S. Army",
+    "order": 1
+  },
+  {
+    "id": "bruce-marine-corps",
+    "name": "Bruce",
+    "branch": "U.S. Marine Corps",
+    "order": 2
+  }
+]
