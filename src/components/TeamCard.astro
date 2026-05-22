@@ -30,7 +30,7 @@ const { name, role, isVeteran = false, branch, portrait } = Astro.props;
     </p>
     {
       isVeteran && branch && (
-        <p class="mt-2 inline-flex items-center gap-1.5 border border-navy/30 bg-navy/5 px-2.5 py-1 text-xs font-semibold text-navy-soft">
+        <p class="mt-2 inline-flex items-center gap-1.5 border border-navy/30 bg-navy/5 px-2.5 py-1 text-xs font-semibold text-navy">
           <Icon name="lucide:medal" class="size-3.5" aria-hidden="true" />
           Veteran &middot; {branch}
         </p>
