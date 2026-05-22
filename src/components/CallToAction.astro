@@ -9,8 +9,8 @@ interface Props {
   body?: string;
 }
 const {
-  heading = "Don't they deserve this?",
-  body = 'Join our growing community of Americans who care for our heroes — and help them find the peace they have earned.',
+  heading = 'Stand with those who served.',
+  body = 'Every gift funds mental-health care, PTSD service dogs, and the outreach that helps a veteran find peace after the fight.',
 } = Astro.props;
 ---
 
@@ -25,14 +25,12 @@ const {
       <h2 class="font-display text-3xl sm:text-4xl">{heading}</h2>
       <p class="mx-auto mt-4 max-w-xl text-bone/85">{body}</p>
       <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
-        <Button
-          href="/donate"
-          class="bg-bone text-red hover:bg-bone-deep hover:text-red-deep"
-          size="lg">Make a donation</Button
-        >
+        <Button href="/donate" variant="light" size="lg">Make a donation</Button>
         <Button href="/contact" variant="on-dark" size="lg">Get in touch</Button>
       </div>
-      <p class="mt-6 font-stencil text-xs uppercase tracking-[0.16em] text-bone/70">
+      <p
+        class="mt-6 font-stencil text-xs uppercase tracking-[0.16em] text-bone/70"
+      >
         Or call us &middot; {site.phone}
       </p>
     </Reveal>
