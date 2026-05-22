@@ -74,7 +74,7 @@ const involve = [
 <Base title={site.name} description={site.description}>
   {/* ---------- Hero ---------- */}
   <section
-    class="relative isolate flex min-h-[88vh] flex-col justify-end overflow-hidden bg-navy-deep"
+    class="relative isolate flex min-h-[88vh] flex-col items-center justify-center overflow-hidden bg-navy-deep"
   >
     <Image
       src={heroImg}
@@ -86,26 +86,23 @@ const involve = [
       fetchpriority="high"
     />
     {/* legibility overlays */}
+    <div class="absolute inset-0 -z-10 bg-navy-deep/55"></div>
     <div
-      class="absolute inset-0 -z-10 bg-gradient-to-t from-navy-deep via-navy-deep/65 to-navy-deep/30"
-    >
-    </div>
-    <div
-      class="absolute inset-0 -z-10 bg-gradient-to-r from-navy-deep/95 via-navy-deep/55 to-transparent"
+      class="absolute inset-0 -z-10 bg-gradient-to-t from-navy-deep via-navy-deep/40 to-navy-deep/70"
     >
     </div>
 
     <div
-      class="mx-auto w-full max-w-7xl px-6 pb-14 pt-32 sm:px-8 lg:px-12 lg:pb-20 lg:pt-40"
+      class="mx-auto w-full max-w-4xl px-6 py-32 text-center sm:px-8 lg:py-40"
     >
       <Reveal>
-        <Eyebrow tone="bone">
+        <Eyebrow tone="bone" class="justify-center">
           Est. {site.founded} &middot; Sewell, New Jersey
         </Eyebrow>
       </Reveal>
       <Reveal delay={80}>
         <h1
-          class="mt-6 max-w-[15ch] font-display text-[3.25rem] leading-[0.9] text-bone sm:text-[5.5rem] lg:text-[7rem]"
+          class="mx-auto mt-6 max-w-[18ch] font-display text-[3.25rem] leading-[0.9] text-bone sm:text-[5.5rem] lg:text-[7rem]"
         >
           Bringing our veterans <span class="text-red-light"
             >all the way home.</span
@@ -113,7 +110,9 @@ const involve = [
         </h1>
       </Reveal>
       <Reveal delay={150}>
-        <p class="mt-7 max-w-xl text-lg leading-relaxed text-bone/85">
+        <p
+          class="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-bone/85"
+        >
           Honoring and supporting U.S. military veterans across South Jersey,
           Southeastern Pennsylvania, and Northern Delaware — through
           mental-health aid, PTSD service dogs, and a community that refuses
@@ -121,7 +120,7 @@ const involve = [
         </p>
       </Reveal>
       <Reveal delay={210}>
-        <div class="mt-9 flex flex-wrap gap-4">
+        <div class="mt-9 flex flex-wrap justify-center gap-4">
           <Button href="/donate" size="lg">Donate</Button>
           <Button href="/mission" variant="on-dark" size="lg"
             >Our mission</Button
@@ -130,9 +129,11 @@ const involve = [
       </Reveal>
     </div>
 
-    <div class="relative border-t border-bone/15 bg-navy-deep/70">
+    <div
+      class="absolute inset-x-0 bottom-0 border-t border-bone/15 bg-navy-deep/70"
+    >
       <p
-        class="mx-auto max-w-7xl px-6 py-3.5 font-stencil text-xs uppercase tracking-[0.18em] text-bone/65 sm:px-8 lg:px-12"
+        class="mx-auto max-w-7xl px-6 py-3.5 text-center font-stencil text-xs uppercase tracking-[0.18em] text-bone/65 sm:px-8 lg:px-12"
       >
         Serving South Jersey &middot; Southeastern Pennsylvania &middot;
         Northern Delaware
@@ -143,7 +144,7 @@ const involve = [
   {/* ---------- Mission excerpt ---------- */}
   <Section tone="bone-deep" class="border-b border-line py-20 sm:py-24">
     <div class="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
-      <Reveal class="lg:col-span-5">
+      <Reveal class="lg:col-span-5 lg:-mt-12 lg:self-start">
         <TreatedImage
           src={silhouette}
           alt="A veteran stands and salutes at dusk"

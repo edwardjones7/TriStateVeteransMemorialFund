@@ -11,6 +11,8 @@ import Emblem from '@/components/Emblem.astro';
 import SectionRule from '@/components/SectionRule.astro';
 import Button from '@/components/Button.astro';
 import CallToAction from '@/components/CallToAction.astro';
+import TreatedImage from '@/components/TreatedImage.astro';
+import memorialPhoto from '@/assets/photos/memorial-names.jpg';
 
 const honorees = (await getCollection('honorees')).sort(
   (a, b) => a.data.order - b.data.order,
@@ -49,8 +51,14 @@ const rendered = await Promise.all(
         </div>
       ) : (
         <Reveal class="mx-auto max-w-2xl text-center">
-          <Emblem class="mx-auto w-28 text-gold" />
-          <h2 class="mt-8 font-display text-3xl">The register begins.</h2>
+          <TreatedImage
+            src={memorialPhoto}
+            alt="An American flag at a memorial engraved with the names of the fallen"
+            ratio="16 / 9"
+            class="mb-10"
+          />
+          <Emblem class="mx-auto w-20 text-gold" />
+          <h2 class="mt-6 font-display text-3xl">The register begins.</h2>
           <p class="mt-4 leading-relaxed text-ink-soft">
             As our organization grows, this page will hold the names and
             stories of the veterans our community asks us to remember —

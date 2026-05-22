@@ -6,6 +6,8 @@ import Eyebrow from '@/components/Eyebrow.astro';
 import Reveal from '@/components/Reveal.astro';
 import Button from '@/components/Button.astro';
 import QuoteCard from '@/components/QuoteCard.astro';
+import TreatedImage from '@/components/TreatedImage.astro';
+import veteranPhoto from '@/assets/photos/navy-veteran.jpg';
 import { Icon } from 'astro-icon/components';
 import { site } from '@/config/site';
 
@@ -69,6 +71,12 @@ const impact = [
             a veteran on the road back.”
           </p>
         </QuoteCard>
+        <TreatedImage
+          src={veteranPhoto}
+          alt="A U.S. Navy veteran"
+          ratio="3 / 2"
+          class="mt-6"
+        />
       </Reveal>
 
       {/* Ways to give */}
