@@ -1,6 +1,6 @@
 ---
 import Button from './Button.astro';
-import PoppyMark from './PoppyMark.astro';
+import StarMark from './StarMark.astro';
 import Reveal from './Reveal.astro';
 import { site } from '@/config/site';
 /** CallToAction — closing band, reused near the foot of most pages. */
@@ -14,25 +14,25 @@ const {
 } = Astro.props;
 ---
 
-<section class="relative overflow-hidden bg-poppy text-paper">
-  <PoppyMark
-    class="pointer-events-none absolute -bottom-16 -left-10 w-64 text-paper/10"
+<section class="relative overflow-hidden bg-red text-bone">
+  <StarMark
+    class="pointer-events-none absolute -bottom-16 -left-10 w-64 text-bone/10"
   />
   <div
     class="mx-auto flex max-w-4xl flex-col items-center px-6 py-20 text-center sm:px-8 sm:py-24"
   >
     <Reveal>
       <h2 class="font-display text-3xl sm:text-4xl">{heading}</h2>
-      <p class="mx-auto mt-4 max-w-xl text-paper/85">{body}</p>
+      <p class="mx-auto mt-4 max-w-xl text-bone/85">{body}</p>
       <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
         <Button
           href="/donate"
-          class="bg-paper text-poppy hover:bg-paper-deep hover:text-poppy-deep"
+          class="bg-bone text-red hover:bg-bone-deep hover:text-red-deep"
           size="lg">Make a donation</Button
         >
         <Button href="/contact" variant="on-dark" size="lg">Get in touch</Button>
       </div>
-      <p class="mt-6 font-typewriter text-xs uppercase tracking-[0.16em] text-paper/70">
+      <p class="mt-6 font-stencil text-xs uppercase tracking-[0.16em] text-bone/70">
         Or call us &middot; {site.phone}
       </p>
     </Reveal>

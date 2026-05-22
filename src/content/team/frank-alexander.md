@@ -3,6 +3,7 @@ name: Frank Alexander
 role: Executive Director, Trustee & Founder
 group: leadership
 order: 1
+portrait: ../../assets/photos/team/frank-alexander.png
 ---
 
 Frank was born in Albuquerque, New Mexico on the Manzano Air Force Base — the son of a Korean War and pre-escalation Vietnam War veteran. Raised in Philadelphia and a resident of Washington Township since 2018, he is a devoted father of four and a proud grandfather of five.

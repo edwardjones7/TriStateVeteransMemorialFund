@@ -1,50 +1,77 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '@/layouts/Base.astro';
 import PageHeader from '@/components/PageHeader.astro';
 import Section from '@/components/Section.astro';
 import Reveal from '@/components/Reveal.astro';
-import Plate from '@/components/Plate.astro';
+import TreatedImage from '@/components/TreatedImage.astro';
 import CallToAction from '@/components/CallToAction.astro';
 
-/*
- * The gallery currently renders captioned placeholder plates (PRD §15.5).
- * When real photographs are supplied, swap each <Plate> for a
- * <TreatedImage src=...> — the develop animation and lightbox hook
- * (data-lightbox) are already wired in src/scripts/motion.ts.
- */
-const photos = await getCollection('gallery');
-const tones = ['field', 'night', 'paper'] as const;
+import uniform from '@/assets/photos/uniform.png';
+import silhouette from '@/assets/photos/silhouette.png';
+import serviceDogs from '@/assets/photos/service-dogs.png';
+import withFamily from '@/assets/photos/with-family.png';
+import flagCloseup from '@/assets/photos/flag-closeup.png';
+import backHeadshot from '@/assets/photos/backheadshot.png';
+
+const photos = [
+  {
+    src: uniform,
+    alt: 'A soldier in uniform with the American flag patch on the shoulder',
+    caption: 'Always ready',
+    ratio: '13 / 12',
+  },
+  {
+    src: silhouette,
+    alt: 'A veteran salutes at dusk, silhouetted against the sky',
+    caption: 'The salute',
+    ratio: '1 / 2',
+  },
+  {
+    src: serviceDogs,
+    alt: 'A veteran shares a quiet moment with his service dog',
+    caption: 'A loyal companion',
+    ratio: '4 / 7',
+  },
+  {
+    src: flagCloseup,
+    alt: 'A close view of the American flag',
+    caption: 'Our colors',
+    ratio: '2 / 3',
+  },
+  {
+    src: withFamily,
+    alt: 'A veteran walks hand in hand with his two children',
+    caption: 'Coming home',
+    ratio: '4 / 7',
+  },
+  {
+    src: backHeadshot,
+    alt: 'A service member salutes during a remembrance ceremony',
+    caption: 'Lest we forget',
+    ratio: '3 / 5',
+  },
+];
 ---
 
 <Base
   title="Gallery"
-  description="Moments from TriState Veterans Memorial Fund events — 5K runs, ceremonies, and gatherings honoring those who served."
+  description="Images honoring those who served — the people, the duty, and the homecoming behind the TriState Veterans Memorial Fund's mission."
 >
   <PageHeader
     eyebrow="Gallery"
-    title="Moments worth keeping."
-    intro="From the starting line of our 5K to the placing of flags at Washington Lake Park — a look at the community we are building, together."
+    title="The faces of the mission."
+    intro="The service, the sacrifice, and the homecoming — the people our work is built around, and the community we are proud to stand beside."
   />
 
   <Section class="py-20 sm:py-24">
     <div class="columns-1 gap-6 sm:columns-2 lg:columns-3">
       {
         photos.map((photo, i) => (
-          <Reveal class="mb-6 break-inside-avoid" delay={(i % 3) * 60}>
-            <figure data-lightbox>
-              <Plate
-                ratio={i % 3 === 1 ? '4 / 5' : '4 / 3'}
-                tone={tones[i % 3]}
-                label={photo.data.label}
-              />
-              <figcaption class="mt-2.5 flex items-baseline justify-between gap-3">
-                <span class="text-sm text-ink">{photo.data.caption}</span>
-                {photo.data.year && (
-                  <span class="font-typewriter text-xs text-ink-soft">
-                    {photo.data.year}
-                  </span>
-                )}
+          <Reveal class="mb-6 break-inside-avoid" delay={(i % 3) * 70}>
+            <figure>
+              <TreatedImage src={photo.src} alt={photo.alt} ratio={photo.ratio} />
+              <figcaption class="mt-2.5 font-stencil text-xs uppercase tracking-[0.18em] text-ink-soft">
+                {photo.caption}
               </figcaption>
             </figure>
           </Reveal>
@@ -55,6 +82,6 @@ const tones = ['field', 'night', 'paper'] as const;
 
   <CallToAction
     heading="Be part of the next chapter."
-    body="Join us at an event, or support the work — and help us fill these pages with new memories."
+    body="Join us at an event, or support the work — and help us carry this mission forward."
   />
 </Base>

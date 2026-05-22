@@ -6,7 +6,7 @@ import Section from '@/components/Section.astro';
 import Eyebrow from '@/components/Eyebrow.astro';
 import Reveal from '@/components/Reveal.astro';
 import EventCard from '@/components/EventCard.astro';
-import PoppyMark from '@/components/PoppyMark.astro';
+import StarMark from '@/components/StarMark.astro';
 import Button from '@/components/Button.astro';
 import CallToAction from '@/components/CallToAction.astro';
 import { isUpcoming } from '@/lib/format';
@@ -69,8 +69,8 @@ const eventLd = upcoming.map((e) => ({
           )}
         </div>
       ) : (
-        <Reveal class="border border-line bg-paper-deep px-8 py-14 text-center">
-          <PoppyMark class="mx-auto w-10 text-poppy/60" />
+        <Reveal class="border border-line bg-bone-deep px-8 py-14 text-center">
+          <StarMark class="mx-auto w-10 text-red/60" />
           <p class="mt-4 font-display text-xl">
             No events are on the calendar just yet.
           </p>
@@ -89,7 +89,7 @@ const eventLd = upcoming.map((e) => ({
   {/* Past */}
   {
     past.length > 0 && (
-      <Section tone="paper-deep" class="border-t border-line py-20 sm:py-24">
+      <Section tone="bone-deep" class="border-t border-line py-20 sm:py-24">
         <Reveal class="mb-6">
           <Eyebrow>From the archive</Eyebrow>
           <h2 class="mt-4 font-display text-3xl sm:text-4xl">

@@ -5,6 +5,7 @@ group: advisory
 order: 9
 isVeteran: true
 branch: U.S. Army
+portrait: ../../assets/photos/team/robert-timmons.png
 ---
 
 A proud resident of Washington Township since 1963, Robert E. Timmons is widely recognized as a pillar of the community. He has served on the Veterans Board, the Board of Economic Development, and the Historic Preservation Commission, and earned the Rick Zammer Award for Man of the Year.

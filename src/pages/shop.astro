@@ -16,7 +16,7 @@ import { Icon } from 'astro-icon/components';
  */
 const previews = [
   { label: 'Commemorative apparel', caption: 'Tees & hats' },
-  { label: 'Remembrance poppy pin', caption: 'Wear it proudly' },
+  { label: 'Remembrance red pin', caption: 'Wear it proudly' },
   { label: 'Event keepsakes', caption: 'From our 5K & ceremonies' },
 ];
 ---
@@ -36,10 +36,10 @@ const previews = [
       {
         previews.map((item, i) => (
           <Reveal delay={i * 70}>
-            <figure class="border border-line bg-paper">
+            <figure class="border border-line bg-bone">
               <div class="relative">
-                <Plate ratio="1 / 1" tone="field" label={item.label} />
-                <span class="absolute left-4 top-4 bg-poppy px-2.5 py-1 font-typewriter text-[0.6rem] uppercase tracking-[0.16em] text-paper">
+                <Plate ratio="1 / 1" tone="navy" label={item.label} />
+                <span class="absolute left-4 top-4 bg-red px-2.5 py-1 font-stencil text-[0.6rem] uppercase tracking-[0.16em] text-bone">
                   Coming soon
                 </span>
               </div>
@@ -54,9 +54,9 @@ const previews = [
     </div>
 
     <Reveal
-      class="mt-14 flex flex-col items-center gap-4 border border-line bg-paper-deep px-6 py-12 text-center"
+      class="mt-14 flex flex-col items-center gap-4 border border-line bg-bone-deep px-6 py-12 text-center"
     >
-      <Icon name="lucide:store" class="size-8 text-poppy" aria-hidden="true" />
+      <Icon name="lucide:store" class="size-8 text-red" aria-hidden="true" />
       <h2 class="font-display text-2xl">The store is on its way.</h2>
       <p class="max-w-md leading-relaxed text-ink-soft">
         We're putting the finishing touches on our merchandise. Until then,

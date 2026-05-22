@@ -5,6 +5,7 @@ group: leadership
 order: 2
 isVeteran: true
 branch: U.S. Army
+portrait: ../../assets/photos/team/al-frattali.png
 ---
 
 Al is a 41-year resident of Washington Township and a retired Union Ironworker of 50 years. He chairs the Washington Township Planning Board and has given decades to youth coaching, his church, and the Knights of Columbus.

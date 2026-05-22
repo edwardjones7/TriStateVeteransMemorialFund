@@ -3,6 +3,7 @@ name: Mike McGinty
 role: Advisory Board
 group: advisory
 order: 7
+portrait: ../../assets/photos/team/mike-mcginty.png
 ---
 
 Mike was raised in Philadelphia and South Jersey and built a 30-year career as an IRS agent, rising to Supervisory Branch Chief — followed by years as a director at KPMG and as a CPA.

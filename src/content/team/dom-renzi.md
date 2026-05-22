@@ -3,6 +3,7 @@ name: Dominic "Dom" Renzi
 role: Treasurer
 group: leadership
 order: 4
+portrait: ../../assets/photos/team/dom-renzi.png
 ---
 
 Dom has been a proud resident of Washington Township for 46 years. His professional career spanned the banking and account-management industry, where he rose to Vice President of Operations.

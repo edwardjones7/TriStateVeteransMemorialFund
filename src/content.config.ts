@@ -21,14 +21,16 @@ const events = defineCollection({
 /* Board & advisory members — one Markdown file per person; body is the bio. */
 const team = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/team' }),
-  schema: z.object({
-    name: z.string(),
-    role: z.string(),
-    group: z.enum(['leadership', 'advisory']).default('advisory'),
-    order: z.number(),
-    isVeteran: z.boolean().default(false),
-    branch: z.string().optional(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      name: z.string(),
+      role: z.string(),
+      group: z.enum(['leadership', 'advisory']).default('advisory'),
+      order: z.number(),
+      isVeteran: z.boolean().default(false),
+      branch: z.string().optional(),
+      portrait: image().optional(),
+    }),
 });
 
 /* Programs / services — one Markdown file per service; body is the detail. */

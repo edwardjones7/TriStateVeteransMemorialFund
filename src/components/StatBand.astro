@@ -4,7 +4,7 @@ import SectionRule from './SectionRule.astro';
 import Reveal from './Reveal.astro';
 /**
  * StatBand — a single statistic set as a typographic centerpiece on a
- * dark "night" section. Full-bleed for weight.
+ * dark "navy-deep" section. Full-bleed for weight.
  */
 interface Props {
   eyebrow?: string;
@@ -15,30 +15,30 @@ interface Props {
 const { eyebrow = 'Why we exist', figure, lede, source } = Astro.props;
 ---
 
-<section class="relative bg-night text-paper texture-night">
+<section class="relative bg-navy-deep text-bone texture-navy-deep">
   <div class="mx-auto max-w-4xl px-6 py-24 text-center sm:py-32">
     <Reveal>
-      <Eyebrow tone="paper" class="justify-center">{eyebrow}</Eyebrow>
+      <Eyebrow tone="bone" class="justify-center">{eyebrow}</Eyebrow>
     </Reveal>
     <Reveal delay={80}>
       <p
-        class="mt-8 font-display text-[5.5rem] font-semibold leading-[0.9] tracking-tight text-poppy-light sm:text-[8rem]"
+        class="mt-8 font-display text-[5.5rem] font-semibold leading-[0.9] tracking-tight text-red-light sm:text-[8rem]"
       >
         {figure}
       </p>
     </Reveal>
     <Reveal delay={140}>
       <p
-        class="mx-auto mt-6 max-w-2xl text-balance font-display text-2xl leading-snug text-paper sm:text-3xl"
+        class="mx-auto mt-6 max-w-2xl text-balance font-display text-2xl leading-snug text-bone sm:text-3xl"
       >
         {lede}
       </p>
     </Reveal>
     <Reveal delay={200}>
-      <SectionRule tone="paper" class="mx-auto mt-10 max-w-xs" />
+      <SectionRule tone="bone" class="mx-auto mt-10 max-w-xs" />
       {
         source && (
-          <p class="mt-6 font-typewriter text-xs uppercase tracking-[0.18em] text-paper/55">
+          <p class="mt-6 font-stencil text-xs uppercase tracking-[0.18em] text-bone/55">
             {source}
           </p>
         )

@@ -4,14 +4,14 @@
  * tone sets the background; width controls the inner measure.
  */
 interface Props {
-  tone?: 'paper' | 'paper-deep' | 'night' | 'field';
+  tone?: 'bone' | 'bone-deep' | 'navy-deep' | 'navy';
   width?: 'default' | 'wide' | 'narrow';
   class?: string;
   id?: string;
   as?: 'section' | 'div' | 'header' | 'footer';
 }
 const {
-  tone = 'paper',
+  tone = 'bone',
   width = 'default',
   class: cls = '',
   id,
@@ -19,10 +19,10 @@ const {
 } = Astro.props;
 
 const toneClass = {
-  paper: 'bg-paper text-ink',
-  'paper-deep': 'bg-paper-deep text-ink',
-  night: 'bg-night text-paper texture-night',
-  field: 'bg-field text-paper',
+  bone: 'bg-bone text-ink',
+  'bone-deep': 'bg-bone-deep text-ink',
+  'navy-deep': 'bg-navy-deep text-bone texture-navy-deep',
+  navy: 'bg-navy text-bone',
 }[tone];
 
 const widthClass = {

@@ -1,8 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import { primaryNav, secondaryNav, site } from '@/config/site';
 import { Icon } from 'astro-icon/components';
-import PoppyMark from './PoppyMark.astro';
 import Button from './Button.astro';
+import logo from '@/assets/logo.png';
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isActive = (href: string) =>
@@ -11,27 +12,22 @@ const isActive = (href: string) =>
 
 <header
   data-site-header
-  class="sticky top-0 z-50 bg-paper transition-shadow duration-200 [&[data-scrolled]]:shadow-[0_1px_0_var(--color-line),0_14px_30px_-26px_rgba(33,28,21,0.8)]"
+  class="sticky top-0 z-50 border-b-2 border-red bg-navy-deep text-bone transition-shadow duration-200 [&[data-scrolled]]:shadow-[0_14px_30px_-22px_rgba(0,0,0,0.9)]"
 >
   <div
-    class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-3.5 sm:px-8 lg:px-12"
+    class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-2.5 sm:px-8 lg:px-12"
   >
     <a
       href="/"
-      class="flex shrink-0 items-center gap-3"
+      class="flex shrink-0 items-center"
       aria-label={`${site.name} — home`}
     >
-      <PoppyMark class="w-8 text-poppy" />
-      <span class="leading-[1.04]">
-        <span
-          class="block font-display text-base font-semibold tracking-tight"
-          >TriState Veterans</span
-        >
-        <span
-          class="block font-typewriter text-[0.6rem] uppercase tracking-[0.2em] text-ink-soft"
-          >Memorial Fund</span
-        >
-      </span>
+      <Image
+        src={logo}
+        alt={site.name}
+        class="h-12 w-auto sm:h-14"
+        loading="eager"
+      />
     </a>
 
     <nav aria-label="Primary" class="hidden items-center gap-7 lg:flex">
@@ -40,8 +36,8 @@ const isActive = (href: string) =>
           <a
             href={item.href}
             class:list={[
-              'link-underline py-1 text-[0.95rem] font-medium',
-              isActive(item.href) ? 'text-poppy' : 'text-ink',
+              'link-underline py-1 font-stencil text-[0.95rem] font-bold uppercase tracking-[0.06em]',
+              isActive(item.href) ? 'text-white' : 'text-bone/80',
             ]}
             aria-current={isActive(item.href) ? 'page' : undefined}
           >
@@ -54,7 +50,7 @@ const isActive = (href: string) =>
     <div class="flex items-center gap-2 sm:gap-3">
       <a
         href={site.phoneHref}
-        class="link-underline hidden items-center gap-2 text-sm font-medium text-ink-soft xl:inline-flex"
+        class="link-underline hidden items-center gap-2 text-sm font-medium text-bone/70 xl:inline-flex"
       >
         <Icon name="lucide:phone" class="size-4" aria-hidden="true" />
         {site.phone}
@@ -63,7 +59,7 @@ const isActive = (href: string) =>
       <button
         type="button"
         data-menu-open
-        class="inline-flex size-11 items-center justify-center text-ink lg:hidden"
+        class="inline-flex size-11 items-center justify-center text-bone lg:hidden"
         aria-label="Open menu"
         aria-expanded="false"
         aria-controls="mobile-menu"
@@ -79,19 +75,19 @@ const isActive = (href: string) =>
   id="mobile-menu"
   data-mobile-menu
   hidden
-  class="fixed inset-0 z-[70] flex flex-col bg-paper lg:hidden"
+  class="fixed inset-0 z-[70] flex flex-col bg-navy-deep text-bone lg:hidden"
 >
   <div
-    class="flex items-center justify-between border-b border-line px-6 py-3.5"
+    class="flex items-center justify-between border-b border-bone/15 px-6 py-3"
   >
     <span
-      class="font-typewriter text-[0.65rem] uppercase tracking-[0.22em] text-ink-soft"
+      class="font-stencil text-xs font-bold uppercase tracking-[0.22em] text-bone/60"
       >Menu</span
     >
     <button
       type="button"
       data-menu-close
-      class="inline-flex size-11 items-center justify-center text-ink"
+      class="inline-flex size-11 items-center justify-center text-bone"
       aria-label="Close menu"
     >
       <Icon name="lucide:x" class="size-6" aria-hidden="true" />
@@ -106,8 +102,8 @@ const isActive = (href: string) =>
         <a
           href={item.href}
           class:list={[
-            'border-b border-line/70 py-3 font-display text-2xl',
-            isActive(item.href) ? 'text-poppy' : 'text-ink',
+            'border-b border-bone/12 py-3 font-display text-3xl uppercase',
+            isActive(item.href) ? 'text-red-light' : 'text-bone',
           ]}
           aria-current={isActive(item.href) ? 'page' : undefined}
         >
@@ -120,7 +116,7 @@ const isActive = (href: string) =>
         secondaryNav.map((item) => (
           <a
             href={item.href}
-            class="py-1 text-sm font-medium text-ink-soft"
+            class="py-1 font-stencil text-sm font-bold uppercase tracking-[0.08em] text-bone/65"
           >
             {item.label}
           </a>
@@ -131,7 +127,7 @@ const isActive = (href: string) =>
       <Button href="/donate" size="lg" class="w-full">Donate</Button>
       <a
         href={site.phoneHref}
-        class="mt-4 flex items-center justify-center gap-2 text-sm font-medium text-ink-soft"
+        class="mt-4 flex items-center justify-center gap-2 text-sm font-medium text-bone/70"
       >
         <Icon name="lucide:phone" class="size-4" aria-hidden="true" />
         {site.phone}

@@ -6,6 +6,8 @@ import Section from '@/components/Section.astro';
 import Eyebrow from '@/components/Eyebrow.astro';
 import Reveal from '@/components/Reveal.astro';
 import Plate from '@/components/Plate.astro';
+import TreatedImage from '@/components/TreatedImage.astro';
+import familyPhoto from '@/assets/photos/with-family.png';
 import Button from '@/components/Button.astro';
 import SectionRule from '@/components/SectionRule.astro';
 import CallToAction from '@/components/CallToAction.astro';
@@ -42,7 +44,7 @@ const testimonials = (await getCollection('testimonials')).sort(
   </Section>
 
   {/* Testimonies */}
-  <Section tone="paper-deep" class="border-y border-line py-20 sm:py-24">
+  <Section tone="bone-deep" class="border-y border-line py-20 sm:py-24">
     <Reveal class="mb-10">
       <Eyebrow>In their own words</Eyebrow>
       <h2 class="mt-4 font-display text-3xl sm:text-4xl">Veteran testimonies.</h2>
@@ -51,11 +53,11 @@ const testimonials = (await getCollection('testimonials')).sort(
       {
         testimonials.map((t, i) => (
           <Reveal delay={i * 80}>
-            <figure class="border border-line bg-paper">
+            <figure class="border border-line bg-bone">
               <div class="relative">
-                <Plate ratio="16 / 9" tone="night" label="Video testimony" />
+                <Plate ratio="16 / 9" tone="navy-deep" label="Video testimony" />
                 <span class="absolute inset-0 flex items-center justify-center">
-                  <span class="inline-flex size-14 items-center justify-center rounded-full bg-poppy text-paper">
+                  <span class="inline-flex size-14 items-center justify-center rounded-full bg-red text-bone">
                     <Icon name="lucide:play" class="size-6" aria-hidden="true" />
                   </span>
                 </span>
@@ -63,7 +65,7 @@ const testimonials = (await getCollection('testimonials')).sort(
               <figcaption class="flex items-center justify-between gap-4 p-6">
                 <div>
                   <p class="font-display text-2xl">{t.data.name}</p>
-                  <p class="font-typewriter text-xs uppercase tracking-[0.16em] text-poppy">
+                  <p class="font-stencil text-xs uppercase tracking-[0.16em] text-red">
                     {t.data.branch}
                   </p>
                 </div>
@@ -82,7 +84,7 @@ const testimonials = (await getCollection('testimonials')).sort(
       }
     </div>
     <Reveal class="mt-8">
-      <p class="font-typewriter text-xs uppercase tracking-[0.14em] text-ink-soft">
+      <p class="font-stencil text-xs uppercase tracking-[0.14em] text-ink-soft">
         Video testimonies are shared on our Facebook page.
       </p>
     </Reveal>
@@ -91,7 +93,7 @@ const testimonials = (await getCollection('testimonials')).sort(
   {/* Tell your story */}
   <Section class="py-20 sm:py-24">
     <Reveal
-      class="grid gap-10 border border-line bg-paper p-8 sm:p-12 lg:grid-cols-2 lg:items-center"
+      class="grid gap-10 border border-line bg-bone p-8 sm:p-12 lg:grid-cols-2 lg:items-center"
     >
       <div>
         <Eyebrow>Share your journey</Eyebrow>
@@ -109,7 +111,11 @@ const testimonials = (await getCollection('testimonials')).sort(
           <Button href="/contact" variant="secondary">Contact us</Button>
         </div>
       </div>
-      <Plate ratio="4 / 3" tone="field" label="Families honoring loved ones" />
+      <TreatedImage
+        src={familyPhoto}
+        alt="A veteran walks hand in hand with his children"
+        ratio="4 / 3"
+      />
     </Reveal>
   </Section>
 

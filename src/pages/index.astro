@@ -1,16 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import Base from '@/layouts/Base.astro';
 import Section from '@/components/Section.astro';
 import Eyebrow from '@/components/Eyebrow.astro';
 import Button from '@/components/Button.astro';
-import PoppyMark from '@/components/PoppyMark.astro';
-import Plate from '@/components/Plate.astro';
-import PostmarkSeal from '@/components/PostmarkSeal.astro';
-import LetterCard from '@/components/LetterCard.astro';
+import QuoteCard from '@/components/QuoteCard.astro';
 import SectionRule from '@/components/SectionRule.astro';
 import Reveal from '@/components/Reveal.astro';
-import ServiceCard from '@/components/ServiceCard.astro';
+import TreatedImage from '@/components/TreatedImage.astro';
 import EventCard from '@/components/EventCard.astro';
 import StatBand from '@/components/StatBand.astro';
 import SponsorGrid from '@/components/SponsorGrid.astro';
@@ -18,6 +16,12 @@ import CallToAction from '@/components/CallToAction.astro';
 import { Icon } from 'astro-icon/components';
 import { site } from '@/config/site';
 import { isUpcoming } from '@/lib/format';
+
+import heroImg from '@/assets/photos/uniform.png';
+import silhouette from '@/assets/photos/silhouette.png';
+import serviceDogs from '@/assets/photos/service-dogs.png';
+import withFamily from '@/assets/photos/with-family.png';
+import backHeadshot from '@/assets/photos/backheadshot.png';
 
 const services = (await getCollection('services')).sort(
   (a, b) => a.data.order - b.data.order,
@@ -30,6 +34,17 @@ const upcoming = events
   .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
 const featuredEvent =
   upcoming.find((e) => e.data.featured) ?? upcoming[0] ?? null;
+
+const serviceImg: Record<string, ImageMetadata> = {
+  'mental-health-aid': backHeadshot,
+  'ptsd-service-dogs': serviceDogs,
+  'veterans-corner': withFamily,
+};
+const serviceAlt: Record<string, string> = {
+  'mental-health-aid': 'A service member salutes during a ceremony',
+  'ptsd-service-dogs': 'A veteran with his service dog',
+  'veterans-corner': 'A veteran walks with his children',
+};
 
 const involve = [
   {
@@ -58,92 +73,117 @@ const involve = [
 
 <Base title={site.name} description={site.description}>
   {/* ---------- Hero ---------- */}
-  <Section class="pt-12 pb-16 sm:pt-16 lg:pt-20 lg:pb-24">
-    <div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-12">
-      <div class="lg:col-span-7">
-        <Reveal>
-          <Eyebrow>
-            Est. {site.founded} &middot; Sewell, New Jersey &middot; 501(c)(3)
-          </Eyebrow>
-        </Reveal>
-        <Reveal delay={60}>
-          <h1
-            class="mt-6 font-display text-[2.7rem] leading-[1.03] sm:text-6xl lg:text-[4.15rem]"
+  <section
+    class="relative isolate flex min-h-[88vh] flex-col justify-end overflow-hidden bg-navy-deep"
+  >
+    <Image
+      src={heroImg}
+      alt="A United States soldier in uniform, the flag patch on the shoulder"
+      class="absolute inset-0 -z-20 h-full w-full object-cover object-center"
+      widths={[768, 1280, 1920]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+    />
+    {/* legibility overlays */}
+    <div
+      class="absolute inset-0 -z-10 bg-gradient-to-t from-navy-deep via-navy-deep/65 to-navy-deep/30"
+    >
+    </div>
+    <div
+      class="absolute inset-0 -z-10 bg-gradient-to-r from-navy-deep/95 via-navy-deep/55 to-transparent"
+    >
+    </div>
+
+    <div
+      class="mx-auto w-full max-w-7xl px-6 pb-14 pt-32 sm:px-8 lg:px-12 lg:pb-20 lg:pt-40"
+    >
+      <Reveal>
+        <Eyebrow tone="bone">
+          Est. {site.founded} &middot; Sewell, New Jersey
+        </Eyebrow>
+      </Reveal>
+      <Reveal delay={80}>
+        <h1
+          class="mt-6 max-w-[15ch] font-display text-[3.25rem] leading-[0.9] text-bone sm:text-[5.5rem] lg:text-[7rem]"
+        >
+          Bringing our veterans <span class="text-red-light"
+            >all the way home.</span
           >
-            Bringing our veterans <span class="text-poppy"
-              >all the way home.</span
-            >
-          </h1>
-        </Reveal>
-        <Reveal delay={120}>
-          <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
-            The TriState Veterans Memorial Fund honors and supports U.S.
-            military veterans across South Jersey, Southeastern Pennsylvania,
-            and Northern Delaware — through mental-health aid, PTSD service
-            dogs, and a community that refuses to look away.
-          </p>
-        </Reveal>
-        <Reveal delay={180}>
-          <div class="mt-8 flex flex-wrap gap-4">
-            <Button href="/donate" size="lg">Donate</Button>
-            <Button href="/mission" variant="secondary" size="lg"
-              >Our mission</Button
-            >
-          </div>
-          <p
-            class="mt-8 font-typewriter text-xs uppercase tracking-[0.14em] text-ink-soft"
+        </h1>
+      </Reveal>
+      <Reveal delay={150}>
+        <p class="mt-7 max-w-xl text-lg leading-relaxed text-bone/85">
+          Honoring and supporting U.S. military veterans across South Jersey,
+          Southeastern Pennsylvania, and Northern Delaware — through
+          mental-health aid, PTSD service dogs, and a community that refuses
+          to look away.
+        </p>
+      </Reveal>
+      <Reveal delay={210}>
+        <div class="mt-9 flex flex-wrap gap-4">
+          <Button href="/donate" size="lg">Donate</Button>
+          <Button href="/mission" variant="on-dark" size="lg"
+            >Our mission</Button
           >
-            Serving South Jersey &middot; Southeastern PA &middot; Northern
-            Delaware
-          </p>
-        </Reveal>
-      </div>
-      <Reveal class="lg:col-span-5" delay={140}>
-        <div class="relative">
-          <Plate ratio="4 / 5" tone="field" label="For those who served" />
-          <PostmarkSeal
-            class="absolute -bottom-7 -left-7 hidden w-28 rounded-full bg-paper p-2 text-brass shadow-lg sm:block"
-          />
         </div>
       </Reveal>
     </div>
-  </Section>
+
+    <div class="relative border-t border-bone/15 bg-navy-deep/70">
+      <p
+        class="mx-auto max-w-7xl px-6 py-3.5 font-stencil text-xs uppercase tracking-[0.18em] text-bone/65 sm:px-8 lg:px-12"
+      >
+        Serving South Jersey &middot; Southeastern Pennsylvania &middot;
+        Northern Delaware
+      </p>
+    </div>
+  </section>
 
   {/* ---------- Mission excerpt ---------- */}
-  <Section tone="paper-deep" class="border-y border-line py-20 sm:py-24">
-    <div class="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
-      <Reveal>
-        <Eyebrow>Why we are here</Eyebrow>
-        <h2 class="mt-4 font-display text-3xl sm:text-4xl">
-          Some of us have seen the cost of war up close.
-        </h2>
-        <p class="mt-5 max-w-md leading-relaxed text-ink-soft">
-          We are a board of neighbors — veterans among us — who watched too
-          many heroes struggle to find help after coming home. So we built a
-          place to change that.
-        </p>
-        <Button href="/mission" variant="ghost" class="mt-6">
-          Read our full mission
-          <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
-        </Button>
+  <Section tone="bone-deep" class="border-b border-line py-20 sm:py-24">
+    <div class="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
+      <Reveal class="lg:col-span-5">
+        <TreatedImage
+          src={silhouette}
+          alt="A veteran stands and salutes at dusk"
+          ratio="3 / 4"
+        />
       </Reveal>
-      <Reveal delay={120}>
-        <LetterCard>
-          <p class="font-typewriter text-sm leading-[1.9] text-ink">
-            “We formed this organization because too many veterans are lost to
-            suicide — and it is unacceptable to us that the men and women we
-            call heroes cannot get the help they need. Too often we have
-            witnessed their frustration in trying to find the comfort and
-            assistance to return to normal life. Our mission is to change
-            that.”
+      <div class="lg:col-span-7">
+        <Reveal>
+          <Eyebrow>Why we are here</Eyebrow>
+          <h2 class="mt-4 font-display text-3xl sm:text-4xl">
+            Some of us have seen the cost of war up close.
+          </h2>
+          <p class="mt-5 max-w-lg leading-relaxed text-ink-soft">
+            We are a board of neighbors — veterans among us — who watched too
+            many heroes struggle to find help after coming home. So we built
+            a place to change that.
           </p>
-          <figcaption
-            class="mt-6 font-typewriter text-xs uppercase tracking-[0.16em] text-ink-soft"
-          >
-            — The Board of Directors
-          </figcaption>
-        </LetterCard>
-      </Reveal>
+        </Reveal>
+        <Reveal delay={110}>
+          <QuoteCard class="mt-7">
+            <p class="font-display text-xl leading-tight text-ink">
+              “We formed this organization because too many veterans are lost
+              to suicide — and it is unacceptable to us that the men and women
+              we call heroes cannot get the help they need. Our mission is to
+              change that.”
+            </p>
+            <figcaption
+              class="mt-5 font-stencil text-xs uppercase tracking-[0.16em] text-ink-soft"
+            >
+              — The Board of Directors
+            </figcaption>
+          </QuoteCard>
+        </Reveal>
+        <Reveal delay={160}>
+          <Button href="/mission" variant="ghost" class="mt-6">
+            Read our full mission
+            <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+          </Button>
+        </Reveal>
+      </div>
     </div>
   </Section>
 
@@ -158,13 +198,31 @@ const involve = [
     <div class="mt-12 grid gap-6 md:grid-cols-3">
       {
         services.map((s, i) => (
-          <Reveal delay={i * 60}>
-            <ServiceCard
-              title={s.data.title}
-              summary={s.data.summary}
-              icon={s.data.icon}
+          <Reveal delay={i * 70}>
+            <a
               href="/services"
-            />
+              class="group flex h-full flex-col overflow-hidden border border-line bg-bone transition-[transform,border-color] duration-200 ease-out-soft hover:-translate-y-1 hover:border-red/45"
+            >
+              <TreatedImage
+                src={serviceImg[s.id]}
+                alt={serviceAlt[s.id] ?? s.data.title}
+                ratio="4 / 3"
+              />
+              <div class="flex flex-1 flex-col p-6">
+                <h3 class="font-display text-2xl">{s.data.title}</h3>
+                <p class="mt-2 flex-1 text-[0.95rem] leading-relaxed text-ink-soft">
+                  {s.data.summary}
+                </p>
+                <span class="mt-4 inline-flex items-center gap-1.5 font-stencil text-xs font-bold uppercase tracking-[0.1em] text-red">
+                  Learn more
+                  <Icon
+                    name="lucide:arrow-right"
+                    class="size-4 transition-transform duration-200 group-hover:translate-x-1"
+                    aria-hidden="true"
+                  />
+                </span>
+              </div>
+            </a>
           </Reveal>
         ))
       }
@@ -174,7 +232,7 @@ const involve = [
   {/* ---------- Featured event ---------- */}
   {
     featuredEvent && (
-      <Section tone="paper-deep" class="border-y border-line py-20 sm:py-24">
+      <Section tone="bone-deep" class="border-y border-line py-20 sm:py-24">
         <Reveal class="mb-10 flex items-end justify-between gap-6">
           <div>
             <Eyebrow>Mark your calendar</Eyebrow>
@@ -182,7 +240,11 @@ const involve = [
               Come stand with us.
             </h2>
           </div>
-          <Button href="/events" variant="ghost" class="hidden shrink-0 sm:inline-flex">
+          <Button
+            href="/events"
+            variant="ghost"
+            class="hidden shrink-0 sm:inline-flex"
+          >
             All events
             <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
           </Button>
@@ -224,7 +286,7 @@ const involve = [
   </Section>
 
   {/* ---------- Get involved ---------- */}
-  <Section tone="paper-deep" class="border-t border-line py-20 sm:py-24">
+  <Section tone="bone-deep" class="border-t border-line py-20 sm:py-24">
     <Reveal class="max-w-2xl">
       <Eyebrow>Get involved</Eyebrow>
       <h2 class="mt-4 font-display text-3xl sm:text-4xl">
@@ -235,9 +297,13 @@ const involve = [
       {
         involve.map((item, i) => (
           <Reveal delay={i * 60}>
-            <div class="flex h-full flex-col border border-line bg-paper p-7">
-              <span class="inline-flex size-12 items-center justify-center rounded-full bg-poppy/8 text-poppy">
-                <Icon name={`lucide:${item.icon}`} class="size-6" aria-hidden="true" />
+            <div class="flex h-full flex-col border border-line bg-bone p-7">
+              <span class="inline-flex size-12 items-center justify-center rounded-full bg-red/8 text-red">
+                <Icon
+                  name={`lucide:${item.icon}`}
+                  class="size-6"
+                  aria-hidden="true"
+                />
               </span>
               <h3 class="mt-5 font-display text-2xl">{item.title}</h3>
               <p class="mt-2.5 flex-1 text-[0.95rem] leading-relaxed text-ink-soft">
@@ -245,7 +311,11 @@ const involve = [
               </p>
               <Button href={item.href} variant="ghost" class="mt-5">
                 {item.cta}
-                <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+                <Icon
+                  name="lucide:arrow-right"
+                  class="size-4"
+                  aria-hidden="true"
+                />
               </Button>
             </div>
           </Reveal>
@@ -253,10 +323,14 @@ const involve = [
       }
     </div>
     <Reveal
-      class="mt-12 flex flex-col gap-3 border border-line bg-paper px-6 py-5 text-sm sm:flex-row sm:items-center sm:justify-between"
+      class="mt-12 flex flex-col gap-3 border border-line bg-bone px-6 py-5 text-sm sm:flex-row sm:items-center sm:justify-between"
     >
       <p class="flex items-center gap-2.5 text-ink-soft">
-        <Icon name="lucide:map-pin" class="size-4 text-poppy" aria-hidden="true" />
+        <Icon
+          name="lucide:map-pin"
+          class="size-4 text-red"
+          aria-hidden="true"
+        />
         Find us at {site.address.full}
       </p>
       <Button href="/contact" variant="ghost">

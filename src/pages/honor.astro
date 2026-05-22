@@ -6,8 +6,8 @@ import Section from '@/components/Section.astro';
 import Eyebrow from '@/components/Eyebrow.astro';
 import Reveal from '@/components/Reveal.astro';
 import HonoreeCard from '@/components/HonoreeCard.astro';
-import LetterCard from '@/components/LetterCard.astro';
-import PostmarkSeal from '@/components/PostmarkSeal.astro';
+import QuoteCard from '@/components/QuoteCard.astro';
+import Emblem from '@/components/Emblem.astro';
 import SectionRule from '@/components/SectionRule.astro';
 import Button from '@/components/Button.astro';
 import CallToAction from '@/components/CallToAction.astro';
@@ -49,7 +49,7 @@ const rendered = await Promise.all(
         </div>
       ) : (
         <Reveal class="mx-auto max-w-2xl text-center">
-          <PostmarkSeal class="mx-auto w-28 text-brass" />
+          <Emblem class="mx-auto w-28 text-gold" />
           <h2 class="mt-8 font-display text-3xl">The register begins.</h2>
           <p class="mt-4 leading-relaxed text-ink-soft">
             As our organization grows, this page will hold the names and
@@ -64,7 +64,7 @@ const rendered = await Promise.all(
   </Section>
 
   {/* Submit a name */}
-  <Section tone="paper-deep" class="border-y border-line py-20 sm:py-24">
+  <Section tone="bone-deep" class="border-y border-line py-20 sm:py-24">
     <div class="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
       <Reveal>
         <Eyebrow>Add a name</Eyebrow>
@@ -79,17 +79,17 @@ const rendered = await Promise.all(
         <Button href="/contact" class="mt-7">Submit a name</Button>
       </Reveal>
       <Reveal delay={100}>
-        <LetterCard tone="paper">
-          <p class="font-typewriter text-sm leading-[1.9]">
+        <QuoteCard tone="bone">
+          <p class="font-display text-xl leading-tight">
             “We will be honoring his service on our website as we continue to
             grow.”
           </p>
           <figcaption
-            class="mt-6 font-typewriter text-xs uppercase tracking-[0.16em] text-ink-soft"
+            class="mt-6 font-stencil text-xs uppercase tracking-[0.16em] text-ink-soft"
           >
             — A promise to one family, and to every family who asks
           </figcaption>
-        </LetterCard>
+        </QuoteCard>
       </Reveal>
     </div>
   </Section>

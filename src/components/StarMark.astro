@@ -1,0 +1,19 @@
+---
+/** StarMark — the recurring five-point star, drawn from the flag in
+ *  the organization's logo. Decorative only. */
+interface Props {
+  class?: string;
+}
+const { class: cls = '' } = Astro.props;
+---
+
+<svg
+  viewBox="0 0 100 100"
+  class:list={['select-none', cls]}
+  aria-hidden="true"
+  fill="currentColor"
+>
+  <path
+    d="M50 3 L60.6 35.1 L94.4 35.1 L67 54.9 L77.6 87 L50 67.2 L22.4 87 L33 54.9 L5.6 35.1 L39.4 35.1 Z"
+  ></path>
+</svg>

@@ -20,13 +20,13 @@ const { sponsors } = Astro.props;
           href={s.data.url ?? '#'}
           target={s.data.url ? '_blank' : undefined}
           rel={s.data.url ? 'noopener noreferrer' : undefined}
-          class="group flex h-full min-h-[7rem] flex-col items-center justify-center gap-1.5 bg-paper px-5 py-7 text-center transition-colors duration-200 hover:bg-paper-deep"
+          class="group flex h-full min-h-[7rem] flex-col items-center justify-center gap-1.5 bg-bone px-5 py-7 text-center transition-colors duration-200 hover:bg-bone-deep"
         >
-          <span class="font-display text-lg leading-tight text-ink group-hover:text-poppy">
+          <span class="font-display text-lg leading-tight text-ink group-hover:text-red">
             {s.data.name}
           </span>
           {s.data.url && (
-            <span class="inline-flex items-center gap-1 font-typewriter text-[0.6rem] uppercase tracking-[0.16em] text-ink-soft opacity-0 transition-opacity group-hover:opacity-100">
+            <span class="inline-flex items-center gap-1 font-stencil text-[0.6rem] uppercase tracking-[0.16em] text-ink-soft opacity-0 transition-opacity group-hover:opacity-100">
               Visit
               <Icon name="lucide:arrow-up-right" class="size-3" aria-hidden="true" />
             </span>

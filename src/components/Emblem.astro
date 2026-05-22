@@ -1,0 +1,46 @@
+---
+import { site } from '@/config/site';
+/** Emblem — a circular service roundel: curved stencil text around a
+ *  central star. Used in the footer and on quieter pages. */
+interface Props {
+  class?: string;
+}
+const { class: cls = '' } = Astro.props;
+const ring = '★ TRISTATE VETERANS MEMORIAL FUND ★ SEWELL · NEW JERSEY ';
+const star =
+  'M50 3 L60.6 35.1 L94.4 35.1 L67 54.9 L77.6 87 L50 67.2 L22.4 87 L33 54.9 L5.6 35.1 L39.4 35.1 Z';
+---
+
+<svg
+  viewBox="0 0 200 200"
+  class:list={['select-none', cls]}
+  role="img"
+  aria-label={`${site.name} — Sewell, New Jersey, established ${site.founded}`}
+  fill="currentColor"
+>
+  <defs>
+    <path
+      id="emblem-ring"
+      d="M100,100 m-75,0 a75,75 0 1,1 150,0 a75,75 0 1,1 -150,0"
+    ></path>
+  </defs>
+  <circle cx="100" cy="100" r="96" fill="none" stroke="currentColor" stroke-width="2"></circle>
+  <circle cx="100" cy="100" r="89" fill="none" stroke="currentColor" stroke-width="1" opacity="0.65"></circle>
+  <circle cx="100" cy="100" r="53" fill="none" stroke="currentColor" stroke-width="1" opacity="0.65"></circle>
+  <text
+    font-size="11.2"
+    letter-spacing="1.2"
+    style="font-family:var(--font-stencil);font-weight:700"
+  >
+    <textPath href="#emblem-ring" startOffset="0">{ring}</textPath>
+  </text>
+  <path transform="translate(62 57) scale(0.76)" d={star}></path>
+  <text
+    x="100"
+    y="151"
+    text-anchor="middle"
+    font-size="12.5"
+    letter-spacing="3.5"
+    style="font-family:var(--font-stencil);font-weight:700"
+  >EST. {site.founded}</text>
+</svg>

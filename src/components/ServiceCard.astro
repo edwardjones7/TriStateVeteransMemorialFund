@@ -12,10 +12,10 @@ const { title, summary, icon, href } = Astro.props;
 
 <a
   href={href}
-  class="group flex flex-col border border-line bg-paper p-7 transition-[border-color,background-color,transform] duration-200 ease-out-soft hover:-translate-y-1 hover:border-poppy/45 hover:bg-paper-deep"
+  class="group flex flex-col border border-line bg-bone p-7 transition-[border-color,background-color,transform] duration-200 ease-out-soft hover:-translate-y-1 hover:border-red/45 hover:bg-bone-deep"
 >
   <span
-    class="inline-flex size-12 items-center justify-center rounded-full border border-line text-poppy transition-colors group-hover:border-poppy/50"
+    class="inline-flex size-12 items-center justify-center rounded-full border border-line text-red transition-colors group-hover:border-red/50"
   >
     <Icon name={`lucide:${icon}`} class="size-6" aria-hidden="true" />
   </span>
@@ -24,7 +24,7 @@ const { title, summary, icon, href } = Astro.props;
     {summary}
   </p>
   <span
-    class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-poppy"
+    class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-red"
   >
     Learn more
     <Icon

@@ -5,7 +5,7 @@ import Section from '@/components/Section.astro';
 import Eyebrow from '@/components/Eyebrow.astro';
 import Reveal from '@/components/Reveal.astro';
 import Button from '@/components/Button.astro';
-import LetterCard from '@/components/LetterCard.astro';
+import QuoteCard from '@/components/QuoteCard.astro';
 import { Icon } from 'astro-icon/components';
 import { site } from '@/config/site';
 
@@ -55,7 +55,7 @@ const impact = [
           {
             impact.map((item) => (
               <li class="flex items-start gap-3.5">
-                <span class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-poppy/8 text-poppy">
+                <span class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-red/8 text-red">
                   <Icon name={`lucide:${item.icon}`} class="size-4.5" aria-hidden="true" />
                 </span>
                 <span class="leading-relaxed">{item.text}</span>
@@ -63,12 +63,12 @@ const impact = [
             ))
           }
         </ul>
-        <LetterCard class="mt-9">
-          <p class="font-typewriter text-sm leading-[1.9]">
+        <QuoteCard class="mt-9">
+          <p class="font-display text-xl leading-tight">
             “Please consider supporting us. If you are able, every gift helps
             a veteran on the road back.”
           </p>
-        </LetterCard>
+        </QuoteCard>
       </Reveal>
 
       {/* Ways to give */}
@@ -83,9 +83,9 @@ const impact = [
         <div class="mt-8 space-y-5">
           {/* Online */}
           <Reveal delay={60}>
-            <div class="border border-line bg-paper p-7 sm:p-8">
+            <div class="border border-line bg-bone p-7 sm:p-8">
               <div class="flex items-center gap-3">
-                <Icon name="lucide:credit-card" class="size-5 text-poppy" aria-hidden="true" />
+                <Icon name="lucide:credit-card" class="size-5 text-red" aria-hidden="true" />
                 <h3 class="font-display text-2xl">Give online</h3>
               </div>
               <p class="mt-2.5 leading-relaxed text-ink-soft">
@@ -101,9 +101,9 @@ const impact = [
 
           {/* By mail */}
           <Reveal delay={120}>
-            <div class="border border-line bg-paper p-7 sm:p-8">
+            <div class="border border-line bg-bone p-7 sm:p-8">
               <div class="flex items-center gap-3">
-                <Icon name="lucide:mail" class="size-5 text-poppy" aria-hidden="true" />
+                <Icon name="lucide:mail" class="size-5 text-red" aria-hidden="true" />
                 <h3 class="font-display text-2xl">Give by mail</h3>
               </div>
               <p class="mt-2.5 leading-relaxed text-ink-soft">
@@ -113,7 +113,7 @@ const impact = [
                 </strong>{' '}
                 and mail it to:
               </p>
-              <p class="mt-3 border-l-2 border-poppy bg-paper-deep py-3 pl-4 font-typewriter text-sm">
+              <p class="mt-3 border-l-2 border-red bg-bone-deep py-3 pl-4 font-stencil text-sm">
                 {site.mailing}
               </p>
             </div>
@@ -121,9 +121,9 @@ const impact = [
 
           {/* Sponsor */}
           <Reveal delay={180}>
-            <div class="border border-line bg-paper p-7 sm:p-8">
+            <div class="border border-line bg-bone p-7 sm:p-8">
               <div class="flex items-center gap-3">
-                <Icon name="lucide:handshake" class="size-5 text-poppy" aria-hidden="true" />
+                <Icon name="lucide:handshake" class="size-5 text-red" aria-hidden="true" />
                 <h3 class="font-display text-2xl">Sponsor or host</h3>
               </div>
               <p class="mt-2.5 leading-relaxed text-ink-soft">
@@ -141,7 +141,7 @@ const impact = [
           <p
             class="mt-7 flex items-start gap-2.5 text-sm leading-relaxed text-ink-soft"
           >
-            <Icon name="lucide:badge-check" class="mt-0.5 size-4 shrink-0 text-field-soft" aria-hidden="true" />
+            <Icon name="lucide:badge-check" class="mt-0.5 size-4 shrink-0 text-navy-soft" aria-hidden="true" />
             {site.name} is a registered 501(c)(3) nonprofit. Your donation is
             tax-deductible to the extent allowed by law.
           </p>

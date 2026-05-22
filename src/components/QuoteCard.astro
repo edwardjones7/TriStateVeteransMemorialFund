@@ -1,0 +1,28 @@
+---
+import StarMark from './StarMark.astro';
+/**
+ * QuoteCard — a bordered card with a red service bar, for the mission
+ * statement and veteran quotations.
+ */
+interface Props {
+  class?: string;
+  tone?: 'bone-deep' | 'bone' | 'navy';
+}
+const { class: cls = '', tone = 'bone-deep' } = Astro.props;
+const tones = {
+  'bone-deep': 'bg-bone-deep text-ink',
+  bone: 'bg-bone text-ink',
+  navy: 'bg-navy text-bone',
+};
+---
+
+<figure
+  class:list={[
+    'relative border border-line border-l-[3px] border-l-red p-7 sm:p-9',
+    tones[tone],
+    cls,
+  ]}
+>
+  <StarMark class="mb-4 w-6 text-red" />
+  <slot />
+</figure>

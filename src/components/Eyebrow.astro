@@ -1,25 +1,26 @@
 ---
-/** Eyebrow — small-caps label that sits above headings. */
+import StarMark from './StarMark.astro';
+/** Eyebrow — a stencil service label that sits above headings. */
 interface Props {
-  tone?: 'ink' | 'poppy' | 'paper';
+  tone?: 'ink' | 'red' | 'bone';
   class?: string;
 }
-const { tone = 'poppy', class: cls = '' } = Astro.props;
+const { tone = 'red', class: cls = '' } = Astro.props;
 
 const tones = {
   ink: 'text-ink-soft',
-  poppy: 'text-poppy',
-  paper: 'text-paper/70',
+  red: 'text-red',
+  bone: 'text-bone/75',
 };
 ---
 
 <p
   class:list={[
-    'flex items-center gap-2.5 font-body text-[0.8125rem] font-bold uppercase tracking-[0.16em]',
+    'flex items-center gap-2 font-stencil text-[0.8125rem] font-bold uppercase tracking-[0.18em]',
     tones[tone],
     cls,
   ]}
 >
-  <span class="h-px w-6 bg-current opacity-60" aria-hidden="true"></span>
+  <StarMark class="w-3" aria-hidden="true" />
   <slot />
 </p>

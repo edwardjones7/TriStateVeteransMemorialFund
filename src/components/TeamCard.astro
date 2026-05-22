@@ -1,28 +1,36 @@
 ---
 import { Icon } from 'astro-icon/components';
-import Plate from './Plate.astro';
+import TreatedImage from './TreatedImage.astro';
 /** TeamCard — a board / advisory member. Bio is passed via the slot. */
 interface Props {
   name: string;
   role: string;
   isVeteran?: boolean;
   branch?: string;
+  portrait?: ImageMetadata;
 }
-const { name, role, isVeteran = false, branch } = Astro.props;
+const { name, role, isVeteran = false, branch, portrait } = Astro.props;
 ---
 
 <article class="grid gap-6 sm:grid-cols-[10rem_1fr] sm:gap-7">
-  <Plate ratio="1 / 1" label="Portrait" class="sm:w-40" />
+  <TreatedImage
+    src={portrait}
+    alt={`Portrait of ${name}`}
+    ratio="1 / 1"
+    label="Portrait"
+    sizes="160px"
+    class="sm:w-40"
+  />
   <div>
     <h3 class="font-display text-2xl">{name}</h3>
     <p
-      class="mt-1 font-typewriter text-xs uppercase tracking-[0.16em] text-poppy"
+      class="mt-1 font-stencil text-xs uppercase tracking-[0.16em] text-red"
     >
       {role}
     </p>
     {
       isVeteran && branch && (
-        <p class="mt-2 inline-flex items-center gap-1.5 border border-field/30 bg-field/5 px-2.5 py-1 text-xs font-semibold text-field-soft">
+        <p class="mt-2 inline-flex items-center gap-1.5 border border-navy/30 bg-navy/5 px-2.5 py-1 text-xs font-semibold text-navy-soft">
           <Icon name="lucide:medal" class="size-3.5" aria-hidden="true" />
           Veteran &middot; {branch}
         </p>

@@ -5,6 +5,7 @@ group: advisory
 order: 12
 isVeteran: true
 branch: U.S. Air Force
+portrait: ../../assets/photos/team/frank-pontelandolfo.png
 ---
 
 Born in Camden and raised in Mantua Township, Frank graduated from Texas A&M University and joined the Air Force in 1969, earning his pilot wings and flying tactical airlift missions throughout Southeast Asia.

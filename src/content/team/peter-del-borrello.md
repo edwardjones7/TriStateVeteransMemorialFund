@@ -3,6 +3,7 @@ name: Peter Del Borrello, III
 role: Founder & Honorary Member
 group: leadership
 order: 5
+portrait: ../../assets/photos/team/peter-del-borrello.png
 ---
 
 Peter M. Del Borrello III is a dedicated public servant and President of the Council for Washington Township, Gloucester County. Before public life, he built a career in financial services, real estate, and venture capital.

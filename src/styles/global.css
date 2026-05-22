@@ -1,44 +1,47 @@
 @import "tailwindcss";
-@import "@fontsource-variable/fraunces/opsz.css";
-@import "@fontsource-variable/hanken-grotesk/wght.css";
-@import "@fontsource/special-elite/400.css";
+@import "@fontsource-variable/big-shoulders/index.css";
+@import "@fontsource-variable/public-sans/index.css";
+@import "@fontsource/stardos-stencil/400.css";
+@import "@fontsource/stardos-stencil/700.css";
 
 /* ============================================================
-   TriState Veterans Memorial Fund — "Letters Home" design system
-   Tokens are the single source of truth. No hardcoded hex in
-   components — reference these via Tailwind utilities.
+   TriState Veterans Memorial Fund — design system
+   Identity derived from the organization's logo: the American
+   flag, deep service navy, Old Glory red, and military stencil
+   lettering. Tokens are the single source of truth.
    ============================================================ */
 @theme {
-  /* --- Color --------------------------------------------------- */
-  --color-paper: #f6eedf;
-  --color-paper-deep: #ece1c9;
-  --color-ink: #211c15;
-  --color-ink-soft: #5a5142;
-  --color-poppy: #a8322a;
-  --color-poppy-deep: #861f19;
-  --color-poppy-light: #d6603f;
-  --color-field: #34402f;
-  --color-field-soft: #4e5a44;
-  --color-brass: #a98a4b;
-  --color-night: #20231b;
-  --color-line: #d7c8a6;
+  /* --- Color: drawn straight from the flag in the logo --------- */
+  --color-navy: #15294d;        /* primary — flag canton, headings, dark sections */
+  --color-navy-deep: #0c1730;   /* deepest — header, footer, hero panels */
+  --color-red: #b22234;         /* Old Glory red — accents & primary CTA */
+  --color-red-deep: #8c1c27;    /* red hover / active */
+  --color-red-light: #e06a5e;   /* red accent on dark backgrounds */
+  --color-bone: #f4f2ea;        /* page background — soft off-white */
+  --color-bone-deep: #e7e2d2;   /* cards / alternating sections */
+  --color-ink: #16181d;         /* primary text */
+  --color-ink-soft: #4c515c;    /* secondary text */
+  --color-gold: #b0863c;        /* sparing accent — service gold */
+  --color-steel: #97a0b0;       /* muted neutral, borders on dark */
+  --color-line: #d5cebc;        /* hairlines on light surfaces */
 
-  /* --- Typography ---------------------------------------------- */
-  --font-body: "Hanken Grotesk Variable", system-ui, -apple-system, sans-serif;
-  --font-display: "Fraunces Variable", "Hoefler Text", Georgia, serif;
-  --font-typewriter: "Special Elite", "Courier New", ui-monospace, monospace;
+  /* --- Typography --------------------------------------------- */
+  --font-display: "Big Shoulders Variable", "Arial Narrow", sans-serif;
+  --font-body: "Public Sans Variable", system-ui, -apple-system, sans-serif;
+  --font-stencil: "Stardos Stencil", "Big Shoulders Variable", sans-serif;
   --font-sans: var(--font-body);
 
-  /* Modular type scale (PRD §3.2) */
+  /* Modular type scale */
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
   --text-lg: 1.125rem;
   --text-xl: 1.3125rem;
-  --text-2xl: 1.75rem;
+  --text-2xl: 1.875rem;
   --text-3xl: 2.5rem;
   --text-4xl: 3.5rem;
-  --text-5xl: 4.5rem;
+  --text-5xl: 4.75rem;
+  --text-6xl: 6rem;
 
   /* --- Motion -------------------------------------------------- */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
@@ -64,13 +67,11 @@
   body {
     margin: 0;
     min-height: 100dvh;
-    background-color: var(--color-paper);
+    background-color: var(--color-bone);
     color: var(--color-ink);
     font-family: var(--font-body);
     font-size: 1.0625rem;
     line-height: 1.6;
-    font-synthesis-weight: none;
-    text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -81,17 +82,27 @@
     }
   }
 
+  /* Big Shoulders is a tall, condensed display face — set it tight. */
   h1,
   h2,
   h3,
   h4 {
     font-family: var(--font-display);
-    font-weight: 500;
+    font-weight: 600;
     font-optical-sizing: auto;
-    line-height: 1.08;
-    letter-spacing: -0.012em;
+    line-height: 1.04;
     text-wrap: balance;
     margin: 0;
+  }
+  /* Statement headlines run in flag-stencil all-caps. */
+  h1,
+  h2 {
+    text-transform: uppercase;
+    letter-spacing: 0.012em;
+  }
+  h3,
+  h4 {
+    letter-spacing: 0.004em;
   }
 
   p {
@@ -111,29 +122,16 @@
   }
 
   ::selection {
-    background: var(--color-poppy);
-    color: var(--color-paper);
+    background: var(--color-red);
+    color: var(--color-bone);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-poppy);
+    outline: 2px solid var(--color-red);
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: 1px;
   }
 
-  /* Paper grain — one fixed, low-opacity overlay across the page. */
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 60;
-    pointer-events: none;
-    opacity: 0.035;
-    mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-
-  /* Honor reduced-motion globally. */
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
@@ -153,40 +151,38 @@
    Component / utility layer
    ============================================================ */
 @layer components {
-  /* Scroll reveal — hidden only when JS is available, so no-JS
-     visitors always see content. Toggled by src/scripts/motion. */
+  /* Scroll reveal — hidden only when JS is available. */
   .has-js [data-reveal] {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(16px);
   }
   .has-js [data-reveal].is-visible {
     opacity: 1;
     transform: translateY(0);
     transition:
-      opacity 320ms var(--ease-out-soft),
-      transform 320ms var(--ease-out-soft);
+      opacity 340ms var(--ease-out-soft),
+      transform 340ms var(--ease-out-soft);
   }
 
-  /* Photo "develop" — the signature motion. Treated images fade in
-     from a warm, slightly-blurred state once loaded. */
+  /* Photo "develop" — images resolve into focus once loaded. */
   .has-js .develop {
     opacity: 0;
-    filter: blur(12px) saturate(0.4);
+    filter: blur(10px);
     transform: scale(1.02);
   }
   .has-js .develop.is-developed {
     opacity: 1;
-    filter: blur(0) saturate(1);
+    filter: blur(0);
     transform: scale(1);
     transition:
       opacity 450ms var(--ease-out-soft),
-      filter 600ms var(--ease-out-soft),
-      transform 600ms var(--ease-out-soft);
+      filter 560ms var(--ease-out-soft),
+      transform 560ms var(--ease-out-soft);
   }
 
-  /* Animated poppy underline for inline/nav links. */
+  /* Animated red underline for inline / nav links. */
   .link-underline {
-    background-image: linear-gradient(var(--color-poppy), var(--color-poppy));
+    background-image: linear-gradient(var(--color-red), var(--color-red));
     background-position: 0 100%;
     background-repeat: no-repeat;
     background-size: 0% 2px;
@@ -223,7 +219,7 @@
     margin-top: 1.5em;
   }
   .rich a {
-    color: var(--color-poppy);
+    color: var(--color-red);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
@@ -237,35 +233,48 @@
     margin-top: 0.5em;
     max-width: 66ch;
   }
+  /* Five-point bullet star drawn with clip-path. */
   .rich li::before {
     content: "";
     position: absolute;
     left: 0;
-    top: 0.62em;
-    width: 0.4rem;
-    height: 0.4rem;
-    rotate: 45deg;
-    background: var(--color-poppy);
+    top: 0.5em;
+    width: 0.6rem;
+    height: 0.6rem;
+    background: var(--color-red);
+    clip-path: polygon(
+      50% 0%, 61% 35%, 98% 35%, 68% 57%,
+      79% 91%, 50% 70%, 21% 91%, 32% 57%,
+      2% 35%, 39% 35%
+    );
   }
   .rich strong {
-    font-weight: 600;
+    font-weight: 700;
   }
 }
 
 @layer utilities {
-  /* Warm photo treatment — unifies the client's mixed-quality source
-     photos. Apply to <img>/<Image> via the TreatedImage component. */
+  /* Neutral, slightly crisp photo treatment — unifies mixed source
+     photography without a period tint. */
   .treated {
-    filter: saturate(0.82) contrast(1.04) brightness(1.02) sepia(0.08);
+    filter: saturate(0.9) contrast(1.05);
   }
 
-  /* Vertical paper-fiber texture for dark "night" sections. */
-  .texture-night {
-    background-image:
-      radial-gradient(
-        ellipse at top,
-        rgba(169, 138, 75, 0.08),
-        transparent 60%
-      );
+  /* Subtle depth for dark navy sections. */
+  .texture-navy-deep {
+    background-image: radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      rgba(255, 255, 255, 0.06),
+      transparent 70%
+    );
+  }
+
+  /* Star — used as a clip-path utility for decorative marks. */
+  .clip-star {
+    clip-path: polygon(
+      50% 0%, 61% 35%, 98% 35%, 68% 57%,
+      79% 91%, 50% 70%, 21% 91%, 32% 57%,
+      2% 35%, 39% 35%
+    );
   }
 }

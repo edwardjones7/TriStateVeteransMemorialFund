@@ -1,59 +1,59 @@
 ---
-import PoppyMark from './PoppyMark.astro';
+import StarMark from './StarMark.astro';
 /**
- * Plate — an archival photo-mount placeholder. Stands in wherever a
+ * Plate — a structured placeholder panel. Stands in wherever a
  * photograph belongs until real assets are supplied (PRD §15.5).
- * Styled to look intentional: a tinted mount with album corners.
+ * Styled as a framed service panel with a star and a stencil label.
  */
 interface Props {
   ratio?: string;
   label?: string;
-  tone?: 'paper' | 'field' | 'night';
+  tone?: 'bone' | 'navy' | 'navy-deep';
+  /** fill: drop the aspect ratio and fill a positioned parent instead. */
+  fill?: boolean;
   class?: string;
 }
 const {
   ratio = '4 / 3',
   label = 'Photograph',
-  tone = 'paper',
+  tone = 'navy',
+  fill = false,
   class: cls = '',
 } = Astro.props;
 
 const tones = {
-  paper: 'bg-gradient-to-br from-paper-deep to-[#e2d4b4] text-field-soft',
-  field: 'bg-gradient-to-br from-field to-[#283120] text-paper/75',
-  night: 'bg-gradient-to-br from-night to-[#161811] text-paper/65',
+  bone: 'bg-bone-deep text-ink-soft',
+  navy: 'bg-navy text-bone/80 texture-navy-deep',
+  'navy-deep': 'bg-navy-deep text-bone/70 texture-navy-deep',
 };
-
-const corners = [
-  'left-2.5 top-2.5 [clip-path:polygon(0_0,100%_0,0_100%)]',
-  'right-2.5 top-2.5 [clip-path:polygon(0_0,100%_0,100%_100%)]',
-  'left-2.5 bottom-2.5 [clip-path:polygon(0_0,100%_100%,0_100%)]',
-  'right-2.5 bottom-2.5 [clip-path:polygon(100%_0,100%_100%,0_100%)]',
-];
 ---
 
 <div
-  class:list={['relative overflow-hidden', tones[tone], cls]}
-  style={`aspect-ratio:${ratio}`}
+  class:list={[
+    'overflow-hidden',
+    fill ? 'absolute inset-0 h-full w-full' : 'relative',
+    tones[tone],
+    cls,
+  ]}
+  style={fill ? undefined : `aspect-ratio:${ratio}`}
   data-plate
 >
+  {/* inner service frame */}
   <span
-    class="pointer-events-none absolute inset-3 border border-current opacity-20"
+    class="pointer-events-none absolute inset-3 border border-current opacity-25"
     aria-hidden="true"></span>
-  {
-    corners.map((c) => (
-      <span
-        class:list={['absolute h-5 w-5 bg-current opacity-35', c]}
-        aria-hidden="true"
-      />
-    ))
-  }
+  {/* corner ticks */}
+  <span class="pointer-events-none absolute left-3 top-3 size-3 border-l-2 border-t-2 border-current opacity-50" aria-hidden="true"></span>
+  <span class="pointer-events-none absolute right-3 top-3 size-3 border-r-2 border-t-2 border-current opacity-50" aria-hidden="true"></span>
+  <span class="pointer-events-none absolute bottom-3 left-3 size-3 border-b-2 border-l-2 border-current opacity-50" aria-hidden="true"></span>
+  <span class="pointer-events-none absolute bottom-3 right-3 size-3 border-b-2 border-r-2 border-current opacity-50" aria-hidden="true"></span>
+
   <div
     class="absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 text-center"
   >
-    <PoppyMark class="w-9" />
+    <StarMark class="w-8 opacity-70" />
     <span
-      class="font-typewriter text-[0.7rem] uppercase tracking-[0.22em] opacity-75"
+      class="font-stencil text-[0.7rem] uppercase tracking-[0.22em] opacity-80"
       >{label}</span
     >
   </div>

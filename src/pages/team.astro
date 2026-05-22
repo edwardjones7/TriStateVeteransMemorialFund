@@ -22,13 +22,13 @@ const groups = [
     eyebrow: 'Leadership',
     title: 'The board of directors.',
     members: leadership,
-    tone: 'paper' as const,
+    tone: 'bone' as const,
   },
   {
     eyebrow: 'Advisory Board',
     title: 'Counsel and community.',
     members: advisory,
-    tone: 'paper-deep' as const,
+    tone: 'bone-deep' as const,
   },
 ];
 ---
@@ -61,6 +61,7 @@ const groups = [
                 role={entry.data.role}
                 isVeteran={entry.data.isVeteran}
                 branch={entry.data.branch}
+                portrait={entry.data.portrait}
               >
                 <Content />
               </TeamCard>

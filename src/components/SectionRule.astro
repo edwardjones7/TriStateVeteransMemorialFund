@@ -1,25 +1,26 @@
 ---
-/** SectionRule — hairline divider, optionally centred with a poppy dot. */
+import StarMark from './StarMark.astro';
+/** SectionRule — hairline divider, centred with a star. */
 interface Props {
   variant?: 'centered' | 'lead';
   class?: string;
-  tone?: 'line' | 'paper';
+  tone?: 'line' | 'bone';
 }
 const { variant = 'centered', class: cls = '', tone = 'line' } = Astro.props;
-const lineColor = tone === 'paper' ? 'bg-paper/25' : 'bg-line';
-const dotColor = tone === 'paper' ? 'bg-paper/60' : 'bg-poppy';
+const lineColor = tone === 'bone' ? 'bg-bone/30' : 'bg-line';
+const starColor = tone === 'bone' ? 'text-bone/70' : 'text-red';
 ---
 
 {
   variant === 'centered' ? (
     <div class:list={['flex items-center gap-4', cls]} aria-hidden="true">
       <span class:list={['h-px flex-1', lineColor]} />
-      <span class:list={['h-1.5 w-1.5 rotate-45', dotColor]} />
+      <StarMark class:list={['w-3.5 shrink-0', starColor]} />
       <span class:list={['h-px flex-1', lineColor]} />
     </div>
   ) : (
     <div class:list={['flex items-center gap-3', cls]} aria-hidden="true">
-      <span class:list={['h-1.5 w-1.5 rotate-45', dotColor]} />
+      <StarMark class:list={['w-3.5 shrink-0', starColor]} />
       <span class:list={['h-px w-16', lineColor]} />
     </div>
   )

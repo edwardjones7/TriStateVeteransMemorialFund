@@ -4,8 +4,9 @@ import PageHeader from '@/components/PageHeader.astro';
 import Section from '@/components/Section.astro';
 import Eyebrow from '@/components/Eyebrow.astro';
 import Reveal from '@/components/Reveal.astro';
-import Plate from '@/components/Plate.astro';
-import LetterCard from '@/components/LetterCard.astro';
+import TreatedImage from '@/components/TreatedImage.astro';
+import boardPhoto from '@/assets/photos/backheadshot.png';
+import QuoteCard from '@/components/QuoteCard.astro';
 import SectionRule from '@/components/SectionRule.astro';
 import Button from '@/components/Button.astro';
 import CallToAction from '@/components/CallToAction.astro';
@@ -49,7 +50,11 @@ const aims = [
   <Section class="py-20 sm:py-24">
     <div class="grid gap-12 lg:grid-cols-12 lg:gap-14">
       <Reveal class="lg:col-span-5">
-        <Plate ratio="3 / 4" tone="field" label="Our board, our neighbors" />
+        <TreatedImage
+          src={boardPhoto}
+          alt="A service member salutes during a remembrance ceremony"
+          ratio="3 / 4"
+        />
       </Reveal>
       <Reveal class="lg:col-span-7" delay={100}>
         <Eyebrow>How it began</Eyebrow>
@@ -83,11 +88,11 @@ const aims = [
   </Section>
 
   {/* Pull quote */}
-  <Section tone="night" class="py-20 text-center sm:py-24">
+  <Section tone="navy-deep" class="py-20 text-center sm:py-24">
     <Reveal class="mx-auto max-w-3xl">
       <Icon
         name="lucide:quote"
-        class="mx-auto size-8 text-poppy-light"
+        class="mx-auto size-8 text-red-light"
         aria-hidden="true"
       />
       <p class="mt-6 font-display text-2xl leading-snug sm:text-3xl">
@@ -95,9 +100,9 @@ const aims = [
         our heroes — and want to give them the help they need to finally find
         peace, and enjoy their lives like you and I do.
       </p>
-      <SectionRule tone="paper" class="mx-auto mt-9 max-w-xs" />
+      <SectionRule tone="bone" class="mx-auto mt-9 max-w-xs" />
       <p
-        class="mt-6 font-typewriter text-sm uppercase tracking-[0.18em] text-paper/70"
+        class="mt-6 font-stencil text-sm uppercase tracking-[0.18em] text-bone/70"
       >
         Don't they deserve this?
       </p>
@@ -117,7 +122,7 @@ const aims = [
         aims.map((aim, i) => (
           <Reveal delay={i * 60}>
             <div class="flex gap-4">
-              <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-line text-poppy">
+              <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-line text-red">
                 <Icon name={`lucide:${aim.icon}`} class="size-5" aria-hidden="true" />
               </span>
               <div>
@@ -132,7 +137,7 @@ const aims = [
   </Section>
 
   {/* ESA highlight */}
-  <Section tone="paper-deep" class="border-y border-line py-20 sm:py-24">
+  <Section tone="bone-deep" class="border-y border-line py-20 sm:py-24">
     <div class="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
       <Reveal>
         <Eyebrow>One of our core services</Eyebrow>
@@ -152,19 +157,19 @@ const aims = [
         <Button href="/services" class="mt-7">Explore our services</Button>
       </Reveal>
       <Reveal delay={100}>
-        <LetterCard tone="paper">
-          <p class="font-typewriter text-sm leading-[1.9]">
+        <QuoteCard tone="bone">
+          <p class="font-display text-xl leading-tight">
             “With a stigma surrounding mental health, we hope the TriState
             Veterans Memorial Fund will help veterans and provide a space of
             belonging. We will let them know they're not alone — and that
             people do care.”
           </p>
           <figcaption
-            class="mt-6 font-typewriter text-xs uppercase tracking-[0.16em] text-ink-soft"
+            class="mt-6 font-stencil text-xs uppercase tracking-[0.16em] text-ink-soft"
           >
             — Al Frattali, President &amp; U.S. Army veteran
           </figcaption>
-        </LetterCard>
+        </QuoteCard>
       </Reveal>
     </div>
   </Section>
@@ -172,7 +177,7 @@ const aims = [
   {/* Honor Roll teaser */}
   <Section class="py-20 sm:py-24">
     <Reveal
-      class="flex flex-col items-start gap-6 border border-line bg-paper p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10"
+      class="flex flex-col items-start gap-6 border border-line bg-bone p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10"
     >
       <div class="max-w-xl">
         <Eyebrow>Lest we forget</Eyebrow>

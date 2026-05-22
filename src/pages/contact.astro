@@ -7,10 +7,10 @@ import Reveal from '@/components/Reveal.astro';
 import { Icon } from 'astro-icon/components';
 import { site } from '@/config/site';
 
-const field =
-  'w-full rounded-[3px] border border-line bg-paper px-4 py-3 text-ink placeholder:text-ink-soft/55 transition-colors focus-visible:border-poppy';
+const navy =
+  'w-full rounded-[3px] border border-line bg-bone px-4 py-3 text-ink placeholder:text-ink-soft/55 transition-colors focus-visible:border-red';
 const label =
-  'block font-typewriter text-xs uppercase tracking-[0.14em] text-ink-soft';
+  'block font-stencil text-xs uppercase tracking-[0.14em] text-ink-soft';
 
 const channels = [
   { icon: 'phone', label: 'Call us', value: site.phone, href: site.phoneHref },
@@ -54,13 +54,13 @@ const mapSrc =
           name="contact"
           method="POST"
           data-netlify="true"
-          netlify-honeypot="bot-field"
+          netlify-honeypot="bot-navy"
           action="/thank-you/"
           class="mt-8 space-y-5"
         >
           <input type="hidden" name="form-name" value="contact" />
           <p hidden>
-            <label>Don't fill this out: <input name="bot-field" /></label>
+            <label>Don't fill this out: <input name="bot-navy" /></label>
           </p>
 
           <div class="grid gap-5 sm:grid-cols-2">
@@ -72,7 +72,7 @@ const mapSrc =
                 type="text"
                 required
                 autocomplete="given-name"
-                class={`mt-2 ${field}`}
+                class={`mt-2 ${navy}`}
               />
             </div>
             <div>
@@ -83,7 +83,7 @@ const mapSrc =
                 type="text"
                 required
                 autocomplete="family-name"
-                class={`mt-2 ${field}`}
+                class={`mt-2 ${navy}`}
               />
             </div>
           </div>
@@ -96,7 +96,7 @@ const mapSrc =
               type="email"
               required
               autocomplete="email"
-              class={`mt-2 ${field}`}
+              class={`mt-2 ${navy}`}
             />
           </div>
 
@@ -107,7 +107,7 @@ const mapSrc =
               name="phone"
               type="tel"
               autocomplete="tel"
-              class={`mt-2 ${field}`}
+              class={`mt-2 ${navy}`}
             />
           </div>
 
@@ -118,12 +118,12 @@ const mapSrc =
               name="message"
               required
               rows="6"
-              class={`mt-2 ${field} resize-y`}></textarea>
+              class={`mt-2 ${navy} resize-y`}></textarea>
           </div>
 
           <button
             type="submit"
-            class="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-[3px] bg-poppy px-7 py-3 font-body font-semibold text-paper shadow-sm transition-[background-color,transform] duration-150 ease-out-soft hover:bg-poppy-deep active:scale-[0.98]"
+            class="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-[3px] bg-red px-7 py-3 font-body font-semibold text-bone shadow-sm transition-[background-color,transform] duration-150 ease-out-soft hover:bg-red-deep active:scale-[0.98]"
           >
             Send message
             <Icon name="lucide:send" class="size-4" aria-hidden="true" />
@@ -133,17 +133,17 @@ const mapSrc =
 
       {/* Details */}
       <Reveal class="lg:col-span-5" delay={100}>
-        <div class="border border-line bg-paper-deep p-7 sm:p-8">
+        <div class="border border-line bg-bone-deep p-7 sm:p-8">
           <Eyebrow>Reach us directly</Eyebrow>
           <ul class="mt-6 space-y-5">
             {
               channels.map((c) => (
                 <li class="flex items-start gap-3.5">
-                  <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-paper text-poppy">
+                  <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-bone text-red">
                     <Icon name={`lucide:${c.icon}`} class="size-4.5" aria-hidden="true" />
                   </span>
                   <span>
-                    <span class="block font-typewriter text-xs uppercase tracking-[0.14em] text-ink-soft">
+                    <span class="block font-stencil text-xs uppercase tracking-[0.14em] text-ink-soft">
                       {c.label}
                     </span>
                     {c.href ? (

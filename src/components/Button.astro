@@ -1,6 +1,6 @@
 ---
 /**
- * Button — rendered as an anchor. One primary CTA per screen (poppy).
+ * Button — rendered as an anchor. One primary CTA per screen (red).
  * Meets the 44px minimum touch target.
  */
 interface Props {
@@ -29,12 +29,12 @@ const sizes = {
 };
 
 const variants = {
-  primary: 'bg-poppy text-paper hover:bg-poppy-deep shadow-sm',
+  primary: 'bg-red text-bone hover:bg-red-deep shadow-sm',
   secondary:
-    'border border-ink/35 text-ink hover:border-ink hover:bg-ink hover:text-paper',
-  ghost: 'text-ink hover:text-poppy px-0',
+    'border border-ink/35 text-ink hover:border-ink hover:bg-ink hover:text-bone',
+  ghost: 'text-ink hover:text-red px-0',
   'on-dark':
-    'border border-paper/40 text-paper hover:bg-paper hover:text-ink',
+    'border border-bone/40 text-bone hover:bg-bone hover:text-ink',
 };
 
 const ext = external

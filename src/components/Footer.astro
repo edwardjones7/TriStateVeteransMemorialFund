@@ -1,31 +1,31 @@
 ---
 import { primaryNav, secondaryNav, site } from '@/config/site';
 import { Icon } from 'astro-icon/components';
-import PostmarkSeal from './PostmarkSeal.astro';
+import Emblem from './Emblem.astro';
 import Button from './Button.astro';
 
 const year = new Date().getFullYear();
 const allLinks = [...primaryNav, ...secondaryNav, { label: 'Donate', href: '/donate' }];
 ---
 
-<footer class="bg-night text-paper texture-night">
+<footer class="bg-navy-deep text-bone texture-navy-deep">
   <div class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-    <div class="grid gap-12 border-b border-paper/15 py-16 md:grid-cols-12">
+    <div class="grid gap-12 border-b border-bone/15 py-16 md:grid-cols-12">
       <!-- Zone 1 — identity + contact -->
       <div class="md:col-span-5">
         <div class="flex items-start gap-5">
-          <PostmarkSeal class="w-24 shrink-0 text-brass" />
+          <Emblem class="w-24 shrink-0 text-gold" />
           <div>
             <p class="font-display text-xl font-semibold">
               TriState Veterans Memorial Fund
             </p>
-            <p class="mt-2 max-w-sm text-sm leading-relaxed text-paper/70">
+            <p class="mt-2 max-w-sm text-sm leading-relaxed text-bone/70">
               Honoring and supporting U.S. military veterans across South
               Jersey, Southeastern Pennsylvania, and Northern Delaware.
             </p>
           </div>
         </div>
-        <address class="mt-7 space-y-1 text-sm not-italic leading-relaxed text-paper/75">
+        <address class="mt-7 space-y-1 text-sm not-italic leading-relaxed text-bone/75">
           <p>{site.address.full}</p>
           <p>Mailing: {site.mailing}</p>
           <p>
@@ -38,7 +38,7 @@ const allLinks = [...primaryNav, ...secondaryNav, { label: 'Donate', href: '/don
           </p>
         </address>
         <div
-          class="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-paper/75"
+          class="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-bone/75"
         >
           <a
             href={site.social.facebook}
@@ -59,7 +59,7 @@ const allLinks = [...primaryNav, ...secondaryNav, { label: 'Donate', href: '/don
       <!-- Zone 2 — sitemap -->
       <nav class="md:col-span-4 md:col-start-7" aria-label="Footer">
         <p
-          class="font-typewriter text-xs uppercase tracking-[0.2em] text-paper/50"
+          class="font-stencil text-xs uppercase tracking-[0.2em] text-bone/50"
         >
           Explore
         </p>
@@ -67,7 +67,7 @@ const allLinks = [...primaryNav, ...secondaryNav, { label: 'Donate', href: '/don
           {
             allLinks.map((item) => (
               <li>
-                <a href={item.href} class="link-underline text-paper/85">
+                <a href={item.href} class="link-underline text-bone/85">
                   {item.label}
                 </a>
               </li>
@@ -79,11 +79,11 @@ const allLinks = [...primaryNav, ...secondaryNav, { label: 'Donate', href: '/don
       <!-- Zone 3 — call to action -->
       <div class="md:col-span-2 md:col-start-11">
         <p
-          class="font-typewriter text-xs uppercase tracking-[0.2em] text-paper/50"
+          class="font-stencil text-xs uppercase tracking-[0.2em] text-bone/50"
         >
           Stand with us
         </p>
-        <p class="mt-4 text-sm leading-relaxed text-paper/75">
+        <p class="mt-4 text-sm leading-relaxed text-bone/75">
           Every gift helps a veteran find peace.
         </p>
         <Button href="/donate" variant="on-dark" class="mt-4 w-full"
@@ -93,7 +93,7 @@ const allLinks = [...primaryNav, ...secondaryNav, { label: 'Donate', href: '/don
     </div>
 
     <div
-      class="flex flex-col gap-3 py-7 text-xs text-paper/55 sm:flex-row sm:items-center sm:justify-between"
+      class="flex flex-col gap-3 py-7 text-xs text-bone/55 sm:flex-row sm:items-center sm:justify-between"
     >
       <p>
         {site.name} is a registered 501(c)(3) nonprofit. Donations are

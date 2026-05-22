@@ -3,6 +3,7 @@ name: James Lee
 role: Advisory Board
 group: advisory
 order: 10
+portrait: ../../assets/photos/team/james-lee.png
 ---
 
 Jim moved to Washington Township in 1974 and graduated from Washington Township High School. He and his wife Bethann have raised five children and have three grandsons.

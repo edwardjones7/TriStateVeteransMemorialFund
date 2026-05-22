@@ -9,9 +9,9 @@ interface Props {
 const { name, branch, era, years } = Astro.props;
 ---
 
-<article class="border-l-2 border-poppy bg-paper-deep py-6 pl-6 pr-6 sm:pl-8">
+<article class="border-l-2 border-red bg-bone-deep py-6 pl-6 pr-6 sm:pl-8">
   <h3 class="font-display text-2xl">{name}</h3>
-  <p class="mt-1 font-typewriter text-xs uppercase tracking-[0.16em] text-ink-soft">
+  <p class="mt-1 font-stencil text-xs uppercase tracking-[0.16em] text-ink-soft">
     {branch} &middot; {era}{years ? ` · ${years}` : ''}
   </p>
   <div class="mt-3 space-y-3 text-[0.95rem] leading-relaxed text-ink-soft [&_p]:m-0">

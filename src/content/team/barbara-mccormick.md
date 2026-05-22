@@ -5,6 +5,7 @@ group: advisory
 order: 11
 isVeteran: true
 branch: U.S. Air Force
+portrait: ../../assets/photos/team/barbara-mccormick.png
 ---
 
 Barbara McCormick, DNP, RN, CEN has over 30 years of nursing experience with Jefferson Health. She earned her doctorate at Drexel University and is an adjunct professor at Thomas Jefferson University.
