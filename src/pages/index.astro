@@ -20,7 +20,7 @@ import { isUpcoming } from '@/lib/format';
 import heroImg from '@/assets/photos/uniform.png';
 import silhouette from '@/assets/photos/silhouette.png';
 import serviceDogs from '@/assets/photos/service-dogs.png';
-import withFamily from '@/assets/photos/with-family.png';
+import cornerEmbrace from '@/assets/photos/veteran-family-embrace.jpg';
 import backHeadshot from '@/assets/photos/backheadshot.png';
 
 const services = (await getCollection('services')).sort(
@@ -38,13 +38,16 @@ const featuredEvent =
 const serviceImg: Record<string, ImageMetadata> = {
   'mental-health-aid': backHeadshot,
   'ptsd-service-dogs': serviceDogs,
-  'veterans-corner': withFamily,
+  'veterans-corner': cornerEmbrace,
 };
 const serviceAlt: Record<string, string> = {
   'mental-health-aid': 'A service member salutes during a ceremony',
   'ptsd-service-dogs': 'A veteran with his service dog',
-  'veterans-corner': 'A veteran walks with his children',
+  'veterans-corner': 'A soldier embraces their spouse and child',
 };
+
+const mapSrc =
+  'https://www.google.com/maps?q=321+Theis+Rd,+Sewell,+NJ+08080&output=embed';
 
 const involve = [
   {
@@ -144,11 +147,12 @@ const involve = [
   {/* ---------- Mission excerpt ---------- */}
   <Section tone="bone-deep" class="border-b border-line py-20 sm:py-24">
     <div class="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
-      <Reveal class="lg:col-span-5 lg:-mt-12 lg:self-start">
+      <Reveal class="lg:col-span-5">
         <TreatedImage
           src={silhouette}
           alt="A veteran stands and salutes at dusk"
           ratio="3 / 4"
+          imgClass="object-[center_25%]"
         />
       </Reveal>
       <div class="lg:col-span-7">
@@ -338,6 +342,14 @@ const involve = [
         Directions &amp; contact
         <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
       </Button>
+    </Reveal>
+    <Reveal class="mt-6 overflow-hidden border border-line" delay={80}>
+      <iframe
+        src={mapSrc}
+        title={`Map to ${site.address.full}`}
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        class="aspect-[16/9] w-full"></iframe>
     </Reveal>
   </Section>
 

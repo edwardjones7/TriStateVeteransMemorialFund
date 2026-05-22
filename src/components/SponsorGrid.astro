@@ -1,38 +1,60 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 /**
- * SponsorGrid — sponsors set typographically (no logo assets yet).
- * Names are treated as the design element, which suits the editorial
- * direction. Drop in real logos later without changing the layout.
+ * SponsorGrid — the sponsor wall. Renders each sponsor's logo on a
+ * white tile; falls back to the name set typographically if a logo
+ * file is missing. Logo files live in src/assets/sponsors/<id>.png.
  */
 interface Props {
   sponsors: CollectionEntry<'sponsors'>[];
 }
 const { sponsors } = Astro.props;
+
+const logos = import.meta.glob<ImageMetadata>('../assets/sponsors/*.png', {
+  eager: true,
+  import: 'default',
+});
+const logoFor = (id: string) => logos[`../assets/sponsors/${id}.png`];
 ---
 
 <ul class="grid grid-cols-2 gap-px bg-line sm:grid-cols-3 lg:grid-cols-4">
   {
-    sponsors.map((s) => (
-      <li>
-        <a
-          href={s.data.url ?? '#'}
-          target={s.data.url ? '_blank' : undefined}
-          rel={s.data.url ? 'noopener noreferrer' : undefined}
-          class="group flex h-full min-h-[7rem] flex-col items-center justify-center gap-1.5 bg-bone px-5 py-7 text-center transition-colors duration-200 hover:bg-bone-deep"
-        >
-          <span class="font-display text-lg leading-tight text-ink group-hover:text-red">
-            {s.data.name}
-          </span>
-          {s.data.url && (
-            <span class="inline-flex items-center gap-1 font-stencil text-[0.6rem] uppercase tracking-[0.16em] text-ink-soft opacity-0 transition-opacity group-hover:opacity-100">
-              Visit
-              <Icon name="lucide:arrow-up-right" class="size-3" aria-hidden="true" />
-            </span>
-          )}
-        </a>
-      </li>
-    ))
+    sponsors.map((s) => {
+      const logo = logoFor(s.id);
+      return (
+        <li>
+          <a
+            href={s.data.url ?? '#'}
+            target={s.data.url ? '_blank' : undefined}
+            rel={s.data.url ? 'noopener noreferrer' : undefined}
+            class="group relative flex h-full min-h-[8.5rem] items-center justify-center bg-white p-6 transition-colors duration-200 hover:bg-bone"
+            aria-label={s.data.url ? `${s.data.name} — visit website` : s.data.name}
+          >
+            {logo ? (
+              <Image
+                src={logo}
+                alt={s.data.name}
+                widths={[180, 360]}
+                sizes="200px"
+                class="max-h-14 w-auto max-w-[78%] object-contain opacity-90 transition-opacity duration-200 group-hover:opacity-100"
+              />
+            ) : (
+              <span class="text-center font-display text-lg leading-tight text-ink group-hover:text-red">
+                {s.data.name}
+              </span>
+            )}
+            {s.data.url && (
+              <Icon
+                name="lucide:arrow-up-right"
+                class="absolute right-2.5 top-2.5 size-3.5 text-ink-soft opacity-0 transition-opacity group-hover:opacity-60"
+                aria-hidden="true"
+              />
+            )}
+          </a>
+        </li>
+      );
+    })
   }
 </ul>

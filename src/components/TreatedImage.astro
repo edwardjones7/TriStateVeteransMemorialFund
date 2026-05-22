@@ -16,6 +16,8 @@ interface Props {
   loading?: 'lazy' | 'eager';
   sizes?: string;
   class?: string;
+  /** Extra classes for the <img> itself — e.g. `object-top` to shift the crop. */
+  imgClass?: string;
 }
 const {
   src,
@@ -27,6 +29,7 @@ const {
   loading = 'lazy',
   sizes = '(min-width: 1024px) 600px, 100vw',
   class: cls = '',
+  imgClass = '',
 } = Astro.props;
 
 const widths = [480, 768, 1100, 1600];
@@ -44,6 +47,7 @@ const widths = [480, 768, 1100, 1600];
         class:list={[
           'treated develop absolute inset-0 h-full w-full object-cover',
           cls,
+          imgClass,
         ]}
       />
     ) : (
@@ -57,7 +61,7 @@ const widths = [480, 768, 1100, 1600];
           loading={loading}
           sizes={sizes}
           widths={widths}
-          class="treated develop h-full w-full object-cover"
+          class:list={['treated develop h-full w-full object-cover', imgClass]}
         />
       </div>
     )
