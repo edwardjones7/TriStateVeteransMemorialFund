@@ -10,7 +10,7 @@ import CallToAction from '@/components/CallToAction.astro';
 import { Icon } from 'astro-icon/components';
 import { site } from '@/config/site';
 
-import uniform from '@/assets/photos/uniform.png';
+import americanFlag from '@/assets/photos/american-flag.jpg';
 import serviceDogs from '@/assets/photos/service-dogs.png';
 import withFamily from '@/assets/photos/with-family.png';
 
@@ -22,12 +22,12 @@ const rendered = await Promise.all(
 );
 
 const img: Record<string, ImageMetadata> = {
-  'mental-health-aid': uniform,
+  'mental-health-aid': americanFlag,
   'ptsd-service-dogs': serviceDogs,
   'veterans-corner': withFamily,
 };
 const alt: Record<string, string> = {
-  'mental-health-aid': 'A soldier in uniform with the American flag patch',
+  'mental-health-aid': 'An American flag flying on a flagpole at sunset',
   'ptsd-service-dogs': 'A veteran beside his service dog',
   'veterans-corner': 'A veteran walking with his children',
 };
@@ -50,15 +50,20 @@ const alt: Record<string, string> = {
       const isCorner = entry.id === 'veterans-corner';
       return (
         <Section tone={tone} class="border-b border-line py-20 sm:py-24">
-          <div class="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
-            <Reveal class={flip ? 'lg:order-2' : ''}>
+          <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+            <Reveal
+              class:list={[
+                'relative aspect-[4/3] lg:aspect-auto',
+                flip && 'lg:order-2',
+              ]}
+            >
               <TreatedImage
                 src={img[entry.id]}
                 alt={alt[entry.id] ?? entry.data.title}
-                ratio="4 / 3"
+                fill
               />
             </Reveal>
-            <Reveal delay={100}>
+            <Reveal delay={100} class="lg:self-center">
               <span class="inline-flex size-12 items-center justify-center rounded-full border border-line text-red">
                 <Icon name={`lucide:${entry.data.icon}`} class="size-6" aria-hidden="true" />
               </span>

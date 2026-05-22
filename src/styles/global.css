@@ -67,6 +67,7 @@
   body {
     margin: 0;
     min-height: 100dvh;
+    overflow-x: clip;
     background-color: var(--color-bone);
     color: var(--color-ink);
     font-family: var(--font-body);
@@ -193,12 +194,60 @@
     background-size: 100% 2px;
   }
 
+  /* Sponsor marquee — two rows scrolling in opposite directions.
+     Each track holds its logo set twice; translateX(-50%) loops it
+     seamlessly. Pauses on hover / keyboard focus. */
+  .marquee {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 6%,
+      #000 94%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 6%,
+      #000 94%,
+      transparent 100%
+    );
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    flex-wrap: nowrap;
+    animation: marquee 64s linear infinite;
+  }
+  .marquee-track--reverse {
+    animation-direction: reverse;
+  }
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .has-js [data-reveal],
     .has-js .develop {
       opacity: 1 !important;
       transform: none !important;
       filter: none !important;
+    }
+    /* Static, gap-free wall — the global rule freezes the animation,
+       so wrap the real logos and drop the duplicated copy. */
+    .marquee {
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .marquee-track {
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    [data-marquee-clone] {
+      display: none !important;
     }
   }
 
@@ -250,6 +299,16 @@
   }
   .rich strong {
     font-weight: 700;
+  }
+}
+
+/* Sponsor marquee loop. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
 
