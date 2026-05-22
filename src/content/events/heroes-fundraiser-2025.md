@@ -1,5 +1,6 @@
 ---
 title: Fundraiser for Our Heroes
+image: ../../assets/photos/community-parade.jpg
 date: 2025-03-15
 startTime: 7:00 PM
 location: Holy Family Aquin Center

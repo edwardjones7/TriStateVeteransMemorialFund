@@ -54,14 +54,20 @@ const testimonials = (await getCollection('testimonials')).sort(
         testimonials.map((t, i) => (
           <Reveal delay={i * 80}>
             <figure class="border border-line bg-bone">
-              <div class="relative">
+              <a
+                href={t.data.videoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group relative block"
+                aria-label={`Watch ${t.data.name}'s testimony on YouTube`}
+              >
                 <Plate ratio="16 / 9" tone="navy-deep" label="Video testimony" />
                 <span class="absolute inset-0 flex items-center justify-center">
-                  <span class="inline-flex size-14 items-center justify-center rounded-full bg-red text-bone">
+                  <span class="inline-flex size-14 items-center justify-center rounded-full bg-red text-bone transition-transform duration-200 group-hover:scale-110">
                     <Icon name="lucide:play" class="size-6" aria-hidden="true" />
                   </span>
                 </span>
-              </div>
+              </a>
               <figcaption class="flex items-center justify-between gap-4 p-6">
                 <div>
                   <p class="font-display text-2xl">{t.data.name}</p>
@@ -70,7 +76,7 @@ const testimonials = (await getCollection('testimonials')).sort(
                   </p>
                 </div>
                 <a
-                  href={site.social.facebook}
+                  href={t.data.videoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   class="link-underline shrink-0 text-sm font-semibold text-ink"
@@ -84,9 +90,15 @@ const testimonials = (await getCollection('testimonials')).sort(
       }
     </div>
     <Reveal class="mt-8">
-      <p class="font-stencil text-xs uppercase tracking-[0.14em] text-ink-soft">
-        Video testimonies are shared on our Facebook page.
-      </p>
+      <a
+        href={site.social.youtube}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="link-underline inline-flex items-center gap-2 font-stencil text-xs uppercase tracking-[0.14em] text-ink-soft"
+      >
+        <Icon name="lucide:youtube" class="size-4" aria-hidden="true" />
+        Watch more testimonies on our YouTube channel
+      </a>
     </Reveal>
   </Section>
 

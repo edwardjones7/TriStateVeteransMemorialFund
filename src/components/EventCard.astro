@@ -1,12 +1,12 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { Icon } from 'astro-icon/components';
-import Plate from './Plate.astro';
+import TreatedImage from './TreatedImage.astro';
 import Button from './Button.astro';
 import { formatDate, dateParts } from '@/lib/format';
 
 /** EventCard — `featured` renders a large two-column card; otherwise a
- *  compact archive row with a date block. */
+ *  compact archive row with a date block and optional thumbnail. */
 interface Props {
   event: CollectionEntry<'events'>;
   status: 'upcoming' | 'past';
@@ -22,7 +22,12 @@ const place = d.address ? `${d.location}, ${d.address}` : d.location;
   featured ? (
     <article class="grid overflow-hidden border border-line bg-bone-deep md:grid-cols-2">
       <div class="relative min-h-[16rem]">
-        <Plate fill label={d.imageLabel ?? 'Event photograph'} />
+        <TreatedImage
+          src={d.image}
+          alt={d.imageLabel ?? d.title}
+          label={d.imageLabel ?? 'Event photograph'}
+          fill
+        />
       </div>
       <div class="flex flex-col justify-center p-8 lg:p-10">
         <p class="font-stencil text-xs uppercase tracking-[0.18em] text-red">
@@ -70,6 +75,11 @@ const place = d.address ? `${d.location}, ${d.address}` : d.location;
           {parts.year}
         </span>
       </div>
+      {d.image && (
+        <div class="hidden w-40 shrink-0 sm:block">
+          <TreatedImage src={d.image} alt={d.imageLabel ?? d.title} ratio="4 / 3" />
+        </div>
+      )}
       <div class="min-w-0">
         <h3 class="font-display text-xl">{d.title}</h3>
         <p class="mt-1 text-sm text-ink-soft">{place}</p>

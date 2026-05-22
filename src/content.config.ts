@@ -4,18 +4,20 @@ import { glob, file } from 'astro/loaders';
 /* Events — one Markdown file per event; the body is the description. */
 const events = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/events' }),
-  schema: z.object({
-    title: z.string(),
-    date: z.coerce.date(),
-    startTime: z.string().optional(),
-    location: z.string(),
-    address: z.string().optional(),
-    entryFee: z.string().optional(),
-    hosts: z.string().optional(),
-    registrationUrl: z.string().url().optional(),
-    featured: z.boolean().default(false),
-    imageLabel: z.string().optional(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      date: z.coerce.date(),
+      startTime: z.string().optional(),
+      location: z.string(),
+      address: z.string().optional(),
+      entryFee: z.string().optional(),
+      hosts: z.string().optional(),
+      registrationUrl: z.string().url().optional(),
+      featured: z.boolean().default(false),
+      imageLabel: z.string().optional(),
+      image: image().optional(),
+    }),
 });
 
 /* Board & advisory members — one Markdown file per person; body is the bio. */

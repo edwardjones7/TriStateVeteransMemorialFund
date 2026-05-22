@@ -1,5 +1,6 @@
 ---
 title: Flags for Forgotten Veterans
+image: ../../assets/photos/event-flags.jpg
 date: 2024-11-10
 startTime: 12:00 PM
 location: Washington Lake Park Amphitheater

@@ -38,6 +38,7 @@ export const site = {
 
   social: {
     facebook: 'https://www.facebook.com/profile.php?id=61553187641153',
+    youtube: 'https://www.youtube.com/@TriStateVeteransMemorialFund',
   },
 
   /* PayPal hosted donation link (PRD §14). */

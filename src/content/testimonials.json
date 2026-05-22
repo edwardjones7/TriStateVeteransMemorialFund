@@ -3,12 +3,14 @@
     "id": "mark-army",
     "name": "Mark",
     "branch": "U.S. Army",
+    "videoUrl": "https://www.youtube.com/watch?v=4qEzQbOrJmw",
     "order": 1
   },
   {
     "id": "bruce-marine-corps",
     "name": "Bruce",
     "branch": "U.S. Marine Corps",
+    "videoUrl": "https://www.youtube.com/watch?v=E-aXIvSbZNU",
     "order": 2
   }
 ]
