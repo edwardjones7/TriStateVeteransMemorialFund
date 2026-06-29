@@ -1,0 +1,120 @@
+---
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Section from '@/components/Section.astro';
+import { site } from '@/config/site';
+
+// Update this when the policy materially changes.
+const lastUpdated = 'June 2026';
+
+const h2 = 'mt-10 font-display text-2xl';
+const p = 'mt-4 leading-relaxed text-ink-soft';
+const ul = 'mt-4 list-disc space-y-2 pl-5 leading-relaxed text-ink-soft';
+const link = 'link-underline font-medium text-ink';
+---
+
+<Base
+  title="Privacy Policy"
+  description="How the TriState Veterans Memorial Fund collects, uses, and protects your information."
+>
+  <PageHeader
+    eyebrow="Privacy"
+    title="Privacy Policy"
+    intro="We keep this simple: we only collect what we need to serve our veterans and our community, and we never sell your information."
+  />
+
+  <Section class="py-16 sm:py-20">
+    <div class="mx-auto max-w-3xl">
+      <p class="text-sm text-ink-soft">Last updated: {lastUpdated}</p>
+
+      <h2 class={h2}>Who we are</h2>
+      <p class={p}>
+        {site.name} is a 501(c)(3) nonprofit based in {site.address.city}, {site.address.state}.
+        This policy explains what information we collect through {site.url} and how we use it.
+        Questions? Email{' '}
+        <a href={`mailto:${site.email}`} class={link}>{site.email}</a> or call{' '}
+        <a href={site.phoneHref} class={link}>{site.phone}</a>.
+      </p>
+
+      <h2 class={h2}>Information we collect</h2>
+      <ul class={ul}>
+        <li>
+          <strong>When you contact us:</strong> the name, email, phone number (optional),
+          and message you submit through our contact form.
+        </li>
+        <li>
+          <strong>When you subscribe:</strong> the email address (and any name) you give us
+          for event reminders and newsletters.
+        </li>
+        <li>
+          <strong>When you browse:</strong> standard analytics data — pages viewed, general
+          location, device and browser type, and how you arrived at the site. This is
+          collected via cookies and similar technologies.
+        </li>
+      </ul>
+
+      <h2 class={h2}>How we use it</h2>
+      <p class={p}>
+        We use your information to respond to your messages, send the updates you asked for,
+        understand which content and events resonate so we can promote them better, and run
+        and improve the website. We do <strong>not</strong> sell or rent your personal
+        information.
+      </p>
+
+      <h2 class={h2}>Cookies & analytics</h2>
+      <p class={p}>
+        We use <strong>Google Analytics 4</strong> to understand site traffic and which events
+        draw interest. It sets cookies that collect anonymized usage data. You can opt out
+        using the{' '}
+        <a
+          href="https://tools.google.com/dlpage/gaoptout"
+          target="_blank"
+          rel="noopener noreferrer"
+          class={link}
+        >
+          Google Analytics opt-out browser add-on
+        </a>, or by blocking cookies in your browser settings.
+      </p>
+
+      <h2 class={h2}>Services we rely on</h2>
+      <p class={p}>
+        We share limited information with trusted providers only as needed to operate the site.
+        Each has its own privacy policy:
+      </p>
+      <ul class={ul}>
+        <li><strong>Vercel</strong> — website hosting.</li>
+        <li><strong>Web3Forms</strong> — delivers contact-form submissions to our inbox.</li>
+        <li><strong>MailerLite</strong> — manages our email list and newsletters.</li>
+        <li><strong>Google Analytics</strong> — website traffic analytics.</li>
+        <li><strong>RunSignup</strong> — handles event (5K) registration off-site.</li>
+        <li><strong>PayPal</strong> — processes donations off-site.</li>
+      </ul>
+      <p class={p}>
+        Donations and event registrations are completed on RunSignup and PayPal directly — we
+        never see or store your full payment details.
+      </p>
+
+      <h2 class={h2}>Your choices</h2>
+      <ul class={ul}>
+        <li>Unsubscribe from emails any time using the link in any message we send.</li>
+        <li>Opt out of analytics cookies as described above.</li>
+        <li>
+          Ask us to access or delete the information we hold about you by emailing{' '}
+          <a href={`mailto:${site.email}`} class={link}>{site.email}</a>.
+        </li>
+      </ul>
+
+      <h2 class={h2}>Children</h2>
+      <p class={p}>
+        Our site is intended for a general audience and is not directed to children under 13.
+        We do not knowingly collect personal information from children.
+      </p>
+
+      <h2 class={h2}>Changes to this policy</h2>
+      <p class={p}>
+        We may update this policy from time to time. When we do, we'll revise the "last updated"
+        date above. Material changes will be noted on this page.
+      </p>
+    </div>
+  </Section>
+</Base>

@@ -31,6 +31,12 @@ const channels = [
 ];
 const mapSrc =
   'https://www.google.com/maps?q=321+Theis+Rd,+Sewell,+NJ+08080&output=embed';
+
+// Web3Forms access key (set PUBLIC_WEB3FORMS_KEY in the Vercel project / .env).
+// When unset, the form renders a configuration notice instead of submitting.
+const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
+// No-JS fallback: Web3Forms redirects here after a successful POST.
+const redirectUrl = `${site.url}/thank-you/`;
 ---
 
 <Base
@@ -50,18 +56,22 @@ const mapSrc =
         <Eyebrow>Send us a message</Eyebrow>
         <h2 class="mt-4 font-display text-3xl">We'll get back to you shortly.</h2>
 
+        {web3formsKey ? (
         <form
-          name="contact"
+          id="contact-form"
           method="POST"
-          data-netlify="true"
-          netlify-honeypot="bot-navy"
-          action="/thank-you/"
+          action="https://api.web3forms.com/submit"
+          data-phone={site.phone}
           class="mt-8 space-y-5"
         >
-          <input type="hidden" name="form-name" value="contact" />
-          <p hidden>
-            <label>Don't fill this out: <input name="bot-navy" /></label>
-          </p>
+          {/* Web3Forms config (https://web3forms.com) */}
+          <input type="hidden" name="access_key" value={web3formsKey} />
+          <input type="hidden" name="subject" value="New message from the TriState VMF website" />
+          <input type="hidden" name="from_name" value={site.name} />
+          {/* No-JS fallback: redirect to the thank-you page after submit. */}
+          <input type="hidden" name="redirect" value={redirectUrl} />
+          {/* Honeypot — bots fill this, humans never see it. */}
+          <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
           <div class="grid gap-5 sm:grid-cols-2">
             <div>
@@ -123,12 +133,27 @@ const mapSrc =
 
           <button
             type="submit"
-            class="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-[3px] bg-red px-7 py-3 font-body font-semibold text-bone shadow-sm transition-[background-color,transform] duration-150 ease-out-soft hover:bg-red-deep active:scale-[0.98]"
+            data-submit
+            class="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-[3px] bg-red px-7 py-3 font-body font-semibold text-bone shadow-sm transition-[background-color,transform] duration-150 ease-out-soft hover:bg-red-deep active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Send message
+            <span data-submit-label>Send message</span>
             <Icon name="lucide:send" class="size-4" aria-hidden="true" />
           </button>
+
+          {/* Submission status — announced to screen readers via the JS handler. */}
+          <p data-form-status role="status" aria-live="polite" class="hidden text-sm font-medium"></p>
         </form>
+        ) : (
+          <div class="mt-8 border border-line bg-bone-deep p-6 text-sm leading-relaxed text-ink-soft">
+            <p class="font-semibold text-ink">The contact form is being configured.</p>
+            <p class="mt-2">
+              In the meantime, please reach us directly by phone at
+              <a href={site.phoneHref} class="link-underline font-medium text-red">{site.phone}</a>
+              or email
+              <a href={`mailto:${site.email}`} class="link-underline font-medium text-red">{site.email}</a>.
+            </p>
+          </div>
+        )}
       </Reveal>
 
       {/* Details */}
@@ -186,4 +211,67 @@ const mapSrc =
       </Reveal>
     </div>
   </Section>
+
+  <script>
+    // Progressive enhancement: submit the contact form via fetch for inline
+    // success/error feedback. Without JS, the form posts directly to Web3Forms
+    // and falls back to the `redirect` hidden field (/thank-you/).
+    function initContactForm() {
+      const form = document.getElementById('contact-form') as HTMLFormElement | null;
+      if (!form || form.dataset.enhanced === 'true') return;
+      form.dataset.enhanced = 'true';
+
+      const status = form.querySelector<HTMLElement>('[data-form-status]');
+      const button = form.querySelector<HTMLButtonElement>('[data-submit]');
+      const label = form.querySelector<HTMLElement>('[data-submit-label]');
+
+      const setStatus = (message: string, ok: boolean) => {
+        if (!status) return;
+        status.textContent = message;
+        status.classList.remove('hidden');
+        status.style.color = ok ? 'var(--color-ink)' : 'var(--color-red)';
+      };
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (!form.reportValidity()) return;
+
+        if (button) button.disabled = true;
+        if (label) label.textContent = 'Sending…';
+        setStatus('', true);
+        status?.classList.add('hidden');
+
+        try {
+          const res = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { Accept: 'application/json' },
+          });
+          const data = await res.json().catch(() => ({}));
+
+          if (res.ok && data.success) {
+            form.reset();
+            setStatus("Thank you — your message is on its way. We'll be in touch shortly.", true);
+            // GA4 conversion (no-op if analytics is disabled).
+            window.gtag?.('event', 'contact_submit', { method: 'contact_form' });
+          } else {
+            setStatus(
+              "Sorry — something went wrong. Please try again, or call us at " +
+                (form.dataset.phone || 'our number') + '.',
+              false,
+            );
+          }
+        } catch {
+          setStatus('Network error — please check your connection and try again.', false);
+        } finally {
+          if (button) button.disabled = false;
+          if (label) label.textContent = 'Send message';
+        }
+      });
+    }
+
+    initContactForm();
+    // Re-bind after client-side (View Transitions) navigation.
+    document.addEventListener('astro:page-load', initContactForm);
+  </script>
 </Base>

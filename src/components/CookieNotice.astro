@@ -1,0 +1,65 @@
+---
+/**
+ * Lightweight cookie/analytics notice (informational, not a consent gate —
+ * appropriate for a US nonprofit audience). Only rendered when analytics is
+ * actually enabled, and only shown until the visitor dismisses it.
+ */
+const gaId = import.meta.env.PUBLIC_GA_ID ?? '';
+---
+
+{
+  gaId && (
+    <div
+      id="cookie-notice"
+      hidden
+      class="fixed inset-x-0 bottom-0 z-[70] border-t border-bone/15 bg-navy-deep/95 text-bone backdrop-blur-sm"
+    >
+      <div class="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-4 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-8">
+        <p class="leading-relaxed text-bone/85">
+          We use cookies to understand site traffic and improve your experience. See our{' '}
+          <a href="/privacy" class="link-underline font-medium text-bone">
+            Privacy Policy
+          </a>
+          .
+        </p>
+        <button
+          type="button"
+          data-cookie-ok
+          class="shrink-0 self-start rounded-[3px] bg-bone px-5 py-2 font-semibold text-navy transition-colors hover:bg-white sm:self-auto"
+        >
+          Got it
+        </button>
+      </div>
+
+      <script is:inline>
+        (function () {
+          function apply() {
+            var el = document.getElementById('cookie-notice');
+            if (!el) return;
+            var dismissed = null;
+            try {
+              dismissed = localStorage.getItem('cookie-notice-dismissed');
+            } catch (e) {}
+            if (dismissed === '1') {
+              el.hidden = true;
+              return;
+            }
+            el.hidden = false;
+            var btn = el.querySelector('[data-cookie-ok]');
+            if (btn && !btn.dataset.bound) {
+              btn.dataset.bound = '1';
+              btn.addEventListener('click', function () {
+                try {
+                  localStorage.setItem('cookie-notice-dismissed', '1');
+                } catch (e) {}
+                el.hidden = true;
+              });
+            }
+          }
+          apply();
+          document.addEventListener('astro:page-load', apply);
+        })();
+      </script>
+    </div>
+  )
+}

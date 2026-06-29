@@ -1,0 +1,203 @@
+---
+/**
+ * Site-wide announcement bar with a live, segmented countdown to the next
+ * event. Driven by the featured upcoming event in the `events` collection
+ * (falls back to the soonest upcoming event), so it updates itself as events
+ * come and go and disappears entirely when nothing is upcoming. Always shown
+ * (not dismissible) so the event stays front-and-center.
+ *
+ * The countdown targets 8:00 AM Eastern on the event date. That exact instant
+ * is resolved to an epoch timestamp here at build time (handling EDT/EST), so
+ * the browser only has to count down to a fixed number.
+ */
+import { getCollection } from 'astro:content';
+import { isUpcoming } from '@/lib/format';
+
+const events = await getCollection('events');
+const upcoming = events
+  .filter((e) => isUpcoming(e.data.date))
+  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+const event = upcoming.find((e) => e.data.featured) ?? upcoming[0] ?? null;
+
+/** Milliseconds that America/New_York wall-clock is ahead of UTC at `at`. */
+function nyAheadMs(at: Date): number {
+  const dtf = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York',
+    hourCycle: 'h23',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
+  const p = Object.fromEntries(
+    dtf.formatToParts(at).map((part) => [part.type, part.value]),
+  );
+  const asUTC = Date.UTC(
+    Number(p.year),
+    Number(p.month) - 1,
+    Number(p.day),
+    Number(p.hour),
+    Number(p.minute),
+    Number(p.second),
+  );
+  return asUTC - at.getTime();
+}
+
+function splitRemaining(ms: number) {
+  if (ms <= 0) return null;
+  let s = Math.floor(ms / 1000);
+  const d = Math.floor(s / 86400);
+  s -= d * 86400;
+  const h = Math.floor(s / 3600);
+  s -= h * 3600;
+  const m = Math.floor(s / 60);
+  s -= m * 60;
+  return { d, h, m, s };
+}
+
+const pad = (n: number) => String(n).padStart(2, '0');
+
+let targetMs: number | null = null;
+let initial: { d: number; h: number; m: number; s: number } | null = null;
+if (event) {
+  const dt = event.data.date;
+  const dayAt8 = Date.UTC(
+    dt.getUTCFullYear(),
+    dt.getUTCMonth(),
+    dt.getUTCDate(),
+    8,
+    0,
+    0,
+  );
+  targetMs = dayAt8 - nyAheadMs(new Date(dayAt8));
+  initial = splitRemaining(targetMs - Date.now());
+}
+
+const units = [
+  { key: 'd', label: 'Days' },
+  { key: 'h', label: 'Hrs' },
+  { key: 'm', label: 'Min' },
+  { key: 's', label: 'Sec' },
+] as const;
+const initialValue = (key: string) => {
+  if (!initial) return '00';
+  const v = initial[key as 'd' | 'h' | 'm' | 's'];
+  return key === 'd' ? String(v) : pad(v);
+};
+---
+
+{
+  event && event.data.registrationUrl && targetMs !== null && (
+    <aside
+      id="event-banner"
+      data-event-id={event.id}
+      data-target={targetMs}
+      class="texture-navy-deep relative z-[60] border-b border-bone/10 bg-navy-deep text-bone"
+    >
+      <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-1.5 px-6 py-1.5 sm:px-8 lg:justify-between lg:px-12">
+        {/* Label + title */}
+        <div class="flex items-center gap-3">
+          <span class="hidden size-1.5 rotate-45 bg-gold sm:block" aria-hidden="true" />
+          <p class="leading-tight">
+            <span class="block font-stencil text-[0.6rem] uppercase tracking-[0.22em] text-gold">
+              Next event
+            </span>
+            <span class="font-display text-sm uppercase tracking-wide text-bone">
+              {event.data.title}
+            </span>
+          </p>
+        </div>
+
+        {/* Countdown */}
+        <div class="flex items-center gap-3">
+          <div data-countdown class="flex items-center gap-2 sm:gap-3" aria-label="Time until the event">
+            {units.map((u, i) => (
+              <>
+                {i > 0 && (
+                  <span class="font-display text-base leading-none text-gold/60" aria-hidden="true">
+                    :
+                  </span>
+                )}
+                <span class="flex w-8 flex-col items-center">
+                  <span
+                    data-unit={u.key}
+                    class="font-display text-xl leading-none tabular-nums text-bone"
+                  >
+                    {initialValue(u.key)}
+                  </span>
+                  <span class="mt-0.5 font-stencil text-[0.5rem] uppercase tracking-[0.16em] text-bone/55">
+                    {u.label}
+                  </span>
+                </span>
+              </>
+            ))}
+          </div>
+          <span
+            data-done
+            hidden
+            class="font-display text-lg uppercase tracking-wide text-gold"
+          >
+            It&rsquo;s race day!
+          </span>
+
+          <a
+            href={event.data.registrationUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-track="register_click"
+            class="group inline-flex shrink-0 items-center gap-1.5 rounded-full bg-red px-3.5 py-1 text-[0.8rem] font-semibold text-bone shadow-sm transition-[background-color,transform] duration-150 ease-out-soft hover:bg-red-deep active:scale-[0.98]"
+          >
+            Register
+            <span
+              class="transition-transform duration-150 ease-out-soft group-hover:translate-x-0.5"
+              aria-hidden="true"
+            >
+              &rarr;
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <script is:inline>
+        (function () {
+          function tick() {
+            var b = document.getElementById('event-banner');
+            if (!b) return;
+            var target = parseInt(b.getAttribute('data-target'), 10);
+            if (isNaN(target)) return;
+            var rem = target - Date.now();
+            var cd = b.querySelector('[data-countdown]');
+            var done = b.querySelector('[data-done]');
+            if (rem <= 0) {
+              if (cd) cd.hidden = true;
+              if (done) done.hidden = false;
+              return;
+            }
+            var s = Math.floor(rem / 1000);
+            var d = Math.floor(s / 86400);
+            s -= d * 86400;
+            var h = Math.floor(s / 3600);
+            s -= h * 3600;
+            var m = Math.floor(s / 60);
+            s -= m * 60;
+            function p2(n) {
+              return n < 10 ? '0' + n : '' + n;
+            }
+            var vals = { d: '' + d, h: p2(h), m: p2(m), s: p2(s) };
+            for (var key in vals) {
+              var el = b.querySelector('[data-unit="' + key + '"]');
+              if (el && el.textContent !== vals[key]) el.textContent = vals[key];
+            }
+          }
+          tick();
+          if (!window.__evtCountdown) {
+            window.__evtCountdown = setInterval(tick, 1000);
+          }
+          document.addEventListener('astro:page-load', tick);
+        })();
+      </script>
+    </aside>
+  )
+}

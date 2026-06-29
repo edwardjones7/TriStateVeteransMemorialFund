@@ -1,0 +1,42 @@
+---
+/**
+ * Google Analytics 4 (gtag.js). Renders nothing unless PUBLIC_GA_ID is set,
+ * so dev/preview builds stay clean. Page views are sent manually — including
+ * after client-side (View Transitions) navigation — so SPA-style route changes
+ * are counted.
+ */
+const gaId = import.meta.env.PUBLIC_GA_ID ?? '';
+---
+
+{
+  gaId && (
+    <>
+      <script
+        is:inline
+        async
+        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+      />
+      <script is:inline define:vars={{ gaId }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', gaId, { send_page_view: false });
+
+        function sendPageView() {
+          gtag('event', 'page_view', {
+            page_path: location.pathname + location.search,
+            page_location: location.href,
+            page_title: document.title,
+          });
+        }
+
+        sendPageView();
+        // Count route changes made via Astro View Transitions.
+        document.addEventListener('astro:page-load', sendPageView);
+      </script>
+    </>
+  )
+}

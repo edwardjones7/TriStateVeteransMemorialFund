@@ -219,6 +219,11 @@
     width: max-content;
     flex-wrap: nowrap;
     animation: marquee 64s linear infinite;
+    /* Promote to its own compositor layer so the scroll runs entirely
+       on the GPU thread — no main-thread jank. */
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
   }
   .marquee-track--reverse {
     animation-direction: reverse;
@@ -305,10 +310,10 @@
 /* Sponsor marquee loop. */
 @keyframes marquee {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 

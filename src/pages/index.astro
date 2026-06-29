@@ -34,6 +34,12 @@ const upcoming = events
   .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
 const featuredEvent =
   upcoming.find((e) => e.data.featured) ?? upcoming[0] ?? null;
+// Hero registration CTA — only shown when the next event takes sign-ups.
+const heroRegisterUrl = featuredEvent?.data.registrationUrl ?? null;
+const heroRegisterLabel =
+  featuredEvent && /5k/i.test(featuredEvent.data.title)
+    ? 'Register for the 5K'
+    : 'Register now';
 
 const serviceImg: Record<string, ImageMetadata> = {
   'mental-health-aid': backHeadshot,
@@ -124,7 +130,16 @@ const involve = [
       </Reveal>
       <Reveal delay={210}>
         <div class="mt-9 flex flex-wrap justify-center gap-4">
-          <Button href="/donate" size="lg">Donate</Button>
+          {heroRegisterUrl && (
+            <Button href={heroRegisterUrl} size="lg" external>
+              {heroRegisterLabel}
+            </Button>
+          )}
+          <Button
+            href="/donate"
+            variant={heroRegisterUrl ? 'light' : 'primary'}
+            size="lg">Donate</Button
+          >
           <Button href="/mission" variant="on-dark" size="lg"
             >Our mission</Button
           >

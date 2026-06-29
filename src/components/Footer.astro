@@ -3,6 +3,7 @@ import { primaryNav, secondaryNav, site } from '@/config/site';
 import { Icon } from 'astro-icon/components';
 import Emblem from './Emblem.astro';
 import Button from './Button.astro';
+import NewsletterSignup from './NewsletterSignup.astro';
 
 const year = new Date().getFullYear();
 const allLinks = [...primaryNav, ...secondaryNav, { label: 'Donate', href: '/donate' }];
@@ -10,6 +11,8 @@ const allLinks = [...primaryNav, ...secondaryNav, { label: 'Donate', href: '/don
 
 <footer class="bg-navy-deep text-bone texture-navy-deep">
   <div class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+    <NewsletterSignup class="border-b border-bone/15 py-14" />
+
     <div class="grid gap-12 border-b border-bone/15 py-16 md:grid-cols-12">
       <!-- Zone 1 — identity + contact -->
       <div class="md:col-span-5">
@@ -108,7 +111,21 @@ const allLinks = [...primaryNav, ...secondaryNav, { label: 'Donate', href: '/don
         {site.name} is a registered 501(c)(3) nonprofit. Donations are
         tax-deductible to the extent allowed by law.
       </p>
-      <p>&copy; {year} {site.name}. All rights reserved.</p>
+      <p class="flex items-center gap-3">
+        <a href="/privacy" class="link-underline">Privacy Policy</a>
+        <span aria-hidden="true">&middot;</span>
+        <span>&copy; {year} {site.name}. All rights reserved.</span>
+        <span aria-hidden="true">&middot;</span>
+        <span>
+          Powered by
+          <a
+            href="https://elenos.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link-underline">Elenos</a
+          >
+        </span>
+      </p>
     </div>
   </div>
 </footer>
