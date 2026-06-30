@@ -16,6 +16,7 @@ import CallToAction from '@/components/CallToAction.astro';
 import { Icon } from 'astro-icon/components';
 import { site } from '@/config/site';
 import { isUpcoming } from '@/lib/format';
+import { eventPath } from '@/lib/eventSchema';
 
 import heroImg from '@/assets/photos/uniform.png';
 import missionImg from '@/assets/photos/salute.jpg';
@@ -80,7 +81,10 @@ const involve = [
 ];
 ---
 
-<Base title={site.name} description={site.description}>
+<Base
+  title="Veteran Support & 5K Run in Sewell, NJ"
+  description="A Sewell, NJ 501(c)(3) honoring U.S. military veterans across the tri-state area — mental-health aid, PTSD service dogs, and our annual 5K run/walk. Register or donate today."
+>
   {/* ---------- Hero ---------- */}
   <section
     class="relative isolate flex min-h-[88vh] flex-col items-center justify-center overflow-hidden bg-navy-deep"
@@ -270,7 +274,12 @@ const involve = [
           </Button>
         </Reveal>
         <Reveal delay={100}>
-          <EventCard event={featuredEvent} status="upcoming" featured />
+          <EventCard
+            event={featuredEvent}
+            status="upcoming"
+            featured
+            href={eventPath(featuredEvent)}
+          />
         </Reveal>
       </Section>
     )
