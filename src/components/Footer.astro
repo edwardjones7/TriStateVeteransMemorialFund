@@ -3,7 +3,6 @@ import { primaryNav, secondaryNav, site } from '@/config/site';
 import { Icon } from 'astro-icon/components';
 import Emblem from './Emblem.astro';
 import Button from './Button.astro';
-import NewsletterSignup from './NewsletterSignup.astro';
 
 const year = new Date().getFullYear();
 const allLinks = [...primaryNav, ...secondaryNav, { label: 'Donate', href: '/donate' }];
@@ -11,8 +10,6 @@ const allLinks = [...primaryNav, ...secondaryNav, { label: 'Donate', href: '/don
 
 <footer class="bg-navy-deep text-bone texture-navy-deep">
   <div class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-    <NewsletterSignup class="border-b border-bone/15 py-14" />
-
     <div class="grid gap-12 border-b border-bone/15 py-16 md:grid-cols-12">
       <!-- Zone 1 — identity + contact -->
       <div class="md:col-span-5">

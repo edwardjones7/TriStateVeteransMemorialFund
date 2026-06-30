@@ -10,7 +10,7 @@ import CallToAction from '@/components/CallToAction.astro';
 import { Icon } from 'astro-icon/components';
 import { site } from '@/config/site';
 
-import americanFlag from '@/assets/photos/american-flag.jpg';
+import mentalHealth from '@/assets/photos/mental-health-support.jpg';
 import serviceDogs from '@/assets/photos/service-dogs.png';
 import withFamily from '@/assets/photos/with-family.png';
 
@@ -22,12 +22,12 @@ const rendered = await Promise.all(
 );
 
 const img: Record<string, ImageMetadata> = {
-  'mental-health-aid': americanFlag,
+  'mental-health-aid': mentalHealth,
   'ptsd-service-dogs': serviceDogs,
   'veterans-corner': withFamily,
 };
 const alt: Record<string, string> = {
-  'mental-health-aid': 'An American flag flying on a flagpole at sunset',
+  'mental-health-aid': 'A U.S. Navy veteran stands with calm, quiet pride against a brick wall',
   'ptsd-service-dogs': 'A veteran beside his service dog',
   'veterans-corner': 'A veteran walking with his children',
 };

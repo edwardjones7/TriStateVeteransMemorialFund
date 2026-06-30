@@ -3,7 +3,7 @@
  *   - register_click  → outbound clicks to RunSignup (5K registration)
  *   - donate_click    → clicks to the PayPal donation link
  *   - plus any element with an explicit `data-track="event_name"` attribute
- *     (e.g. newsletter_signup, the event banner CTA).
+ *     (e.g. the event banner CTA).
  *
  * A single document-level listener (attached once) survives View Transitions,
  * so it covers elements added by client-side navigation too. No-ops when
@@ -32,13 +32,3 @@ function handleTrack(event: Event): void {
 }
 
 document.addEventListener('click', handleTrack, { capture: true });
-
-// Newsletter signups — fire on submit of the MailerLite embedded form.
-function handleSubmit(event: Event): void {
-  const form = event.target;
-  if (form instanceof HTMLFormElement && form.closest('.ml-embedded')) {
-    window.gtag?.('event', 'newsletter_signup');
-  }
-}
-
-document.addEventListener('submit', handleSubmit, { capture: true });

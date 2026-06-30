@@ -11,8 +11,9 @@ interface Props {
   event: CollectionEntry<'events'>;
   status: 'upcoming' | 'past';
   featured?: boolean;
+  hideImage?: boolean;
 }
-const { event, status, featured = false } = Astro.props;
+const { event, status, featured = false, hideImage = false } = Astro.props;
 const d = event.data;
 const parts = dateParts(d.date);
 const place = d.address ? `${d.location}, ${d.address}` : d.location;
@@ -20,15 +21,17 @@ const place = d.address ? `${d.location}, ${d.address}` : d.location;
 
 {
   featured ? (
-    <article class="grid overflow-hidden border border-line bg-bone-deep md:grid-cols-2">
-      <div class="relative min-h-[16rem]">
-        <TreatedImage
-          src={d.image}
-          alt={d.imageLabel ?? d.title}
-          label={d.imageLabel ?? 'Event photograph'}
-          fill
-        />
-      </div>
+    <article class={`grid overflow-hidden border border-line bg-bone-deep ${hideImage ? '' : 'md:grid-cols-2'}`}>
+      {!hideImage && (
+        <div class="relative min-h-[16rem]">
+          <TreatedImage
+            src={d.image}
+            alt={d.imageLabel ?? d.title}
+            label={d.imageLabel ?? 'Event photograph'}
+            fill
+          />
+        </div>
+      )}
       <div class="flex flex-col justify-center p-8 lg:p-10">
         <p class="font-stencil text-xs uppercase tracking-[0.18em] text-red">
           {status === 'upcoming' ? 'Our next event' : 'From the archive'}
@@ -75,7 +78,7 @@ const place = d.address ? `${d.location}, ${d.address}` : d.location;
           {parts.year}
         </span>
       </div>
-      {d.image && (
+      {!hideImage && d.image && (
         <div class="hidden w-40 shrink-0 sm:block">
           <TreatedImage src={d.image} alt={d.imageLabel ?? d.title} ratio="4 / 3" />
         </div>

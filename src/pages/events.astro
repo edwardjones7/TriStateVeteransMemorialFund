@@ -56,13 +56,13 @@ const eventLd = upcoming.map((e) => ({
       upcoming.length > 0 ? (
         <div class="space-y-6">
           <Reveal>
-            <EventCard event={upcoming[0]!} status="upcoming" featured />
+            <EventCard event={upcoming[0]!} status="upcoming" featured hideImage />
           </Reveal>
           {upcoming.length > 1 && (
             <div>
               {upcoming.slice(1).map((e, i) => (
                 <Reveal delay={i * 50}>
-                  <EventCard event={e} status="upcoming" />
+                  <EventCard event={e} status="upcoming" hideImage />
                 </Reveal>
               ))}
             </div>
@@ -99,7 +99,7 @@ const eventLd = upcoming.map((e) => ({
         <div>
           {past.map((e, i) => (
             <Reveal delay={Math.min(i, 6) * 40}>
-              <EventCard event={e} status="past" />
+              <EventCard event={e} status="past" hideImage />
             </Reveal>
           ))}
         </div>
