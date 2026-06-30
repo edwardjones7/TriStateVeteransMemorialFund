@@ -32,9 +32,11 @@ const channels = [
 const mapSrc =
   'https://www.google.com/maps?q=321+Theis+Rd,+Sewell,+NJ+08080&output=embed';
 
-// Web3Forms access key (set PUBLIC_WEB3FORMS_KEY in the Vercel project / .env).
-// When unset, the form renders a configuration notice instead of submitting.
-const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
+// Web3Forms access key — registered to tristatevmf@gmail.com. This is a PUBLIC
+// (non-secret) key inlined into the client bundle, so it's safe as a default.
+// PUBLIC_WEB3FORMS_KEY (Vercel project / .env) overrides it when set.
+const web3formsKey =
+  import.meta.env.PUBLIC_WEB3FORMS_KEY || '85742a81-c592-404b-89e6-63fcf1593f32';
 // No-JS fallback: Web3Forms redirects here after a successful POST.
 const redirectUrl = `${site.url}/thank-you/`;
 ---
