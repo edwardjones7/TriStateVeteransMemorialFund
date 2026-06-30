@@ -15,6 +15,22 @@ const modules = import.meta.glob<{ default: ImageMetadata }>(
 const photos = Object.entries(modules)
   .sort(([a], [b]) => a.localeCompare(b))
   .map(([, mod]) => mod.default);
+
+// Self-hosted clips live in /public/videos; YouTube clips embed by id.
+type Video =
+  | { kind: 'file'; src: string; title: string }
+  | { kind: 'youtube'; id: string; title: string };
+
+const videos: Video[] = [
+  { kind: 'file', src: '/videos/6abc.mp4', title: 'Featured on 6abc' },
+  {
+    kind: 'file',
+    src: '/videos/honoring-veterans.mp4',
+    title: 'Honoring Our Veterans',
+  },
+  { kind: 'youtube', id: 'BD9h0t7h9RU', title: 'Second Annual 5K' },
+  { kind: 'youtube', id: 'xNgKeG1ekNU', title: 'First Annual 5K' },
+];
 ---
 
 <Base
@@ -27,8 +43,52 @@ const photos = Object.entries(modules)
     intro="The events, the ceremonies, and the community behind our work — captured along the way."
   />
 
+  <Section class="border-b border-line py-20 sm:py-24">
+    <Reveal class="max-w-2xl">
+      <h2 class="font-display text-3xl sm:text-4xl">Watch</h2>
+      <p class="mt-3 text-ink-soft">
+        Stories and highlights from our events and the veterans we serve.
+      </p>
+    </Reveal>
+    <div class="mt-10 grid gap-6 sm:grid-cols-2">
+      {
+        videos.map((video, i) => (
+          <Reveal delay={(i % 2) * 80}>
+            <figure>
+              <div class="aspect-video overflow-hidden border border-line bg-navy-deep">
+                {video.kind === 'file' ? (
+                  <video
+                    src={video.src}
+                    controls
+                    preload="metadata"
+                    class="h-full w-full object-cover"
+                  />
+                ) : (
+                  <iframe
+                    src={`https://www.youtube-nocookie.com/embed/${video.id}`}
+                    title={video.title}
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    class="h-full w-full"
+                  />
+                )}
+              </div>
+              <figcaption class="mt-2.5 font-stencil text-xs uppercase tracking-[0.18em] text-ink-soft">
+                {video.title}
+              </figcaption>
+            </figure>
+          </Reveal>
+        ))
+      }
+    </div>
+  </Section>
+
   <Section class="py-20 sm:py-24">
-    <div class="columns-1 gap-5 sm:columns-2 lg:columns-3">
+    <Reveal class="max-w-2xl">
+      <h2 class="font-display text-3xl sm:text-4xl">Photos</h2>
+    </Reveal>
+    <div class="mt-10 columns-1 gap-5 sm:columns-2 lg:columns-3">
       {
         photos.map((photo, i) => (
           <Reveal class="mb-5 break-inside-avoid" delay={(i % 3) * 70}>
