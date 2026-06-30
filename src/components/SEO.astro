@@ -1,9 +1,9 @@
 ---
-import { site } from '@/config/site';
+import { site, primaryNav, secondaryNav } from '@/config/site';
 /**
  * SEO — meta tags, Open Graph, Twitter card, and JSON-LD.
- * Organization structured data is emitted on every page; pages may
- * pass extra structured data (e.g. Event) via `jsonLd`.
+ * Organization + breadcrumb structured data are emitted automatically;
+ * pages may pass extra structured data (e.g. Event) via `jsonLd`.
  */
 interface Props {
   title: string;
@@ -14,6 +14,8 @@ interface Props {
   ogType?: string;
   noindex?: boolean;
   jsonLd?: Record<string, unknown>[];
+  /** Override the final breadcrumb crumb's label (e.g. an event's name). */
+  breadcrumbLabel?: string;
 }
 const {
   title,
@@ -24,12 +26,50 @@ const {
   ogType = 'website',
   noindex = false,
   jsonLd = [],
+  breadcrumbLabel,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const ogImage = new URL(image, site.url).href;
 const fullTitle =
   title === site.name ? title : `${title} — ${site.name}`;
+
+/*
+ * BreadcrumbList — derived from the URL path so every interior page gets a
+ * trail without per-page wiring. Segment labels come from the nav config
+ * where possible; the leaf can be overridden via `breadcrumbLabel`.
+ */
+const navLabels = new Map(
+  [...primaryNav, ...secondaryNav].map((n) => [n.href, n.label]),
+);
+const titleCase = (s: string) =>
+  s.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
+const segments = Astro.url.pathname.split('/').filter(Boolean);
+let breadcrumbLd: Record<string, unknown> | null = null;
+if (segments.length > 0) {
+  const crumbs = [{ name: 'Home', url: `${site.url}/` }];
+  let acc = '';
+  segments.forEach((seg, i) => {
+    acc += `/${seg}`;
+    const isLast = i === segments.length - 1;
+    const name =
+      isLast && breadcrumbLabel
+        ? breadcrumbLabel
+        : (navLabels.get(acc) ?? titleCase(seg));
+    crumbs.push({ name, url: new URL(`${acc}/`, site.url).href });
+  });
+  breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: crumbs.map((c, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 1,
+      name: c.name,
+      item: c.url,
+    })),
+  };
+}
 
 const orgLd = {
   '@context': 'https://schema.org',
@@ -80,6 +120,11 @@ const orgLd = {
   type="application/ld+json"
   set:html={JSON.stringify(orgLd)}
 />
+{
+  breadcrumbLd && (
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+  )
+}
 {
   jsonLd.map((block) => (
     <script type="application/ld+json" set:html={JSON.stringify(block)} />

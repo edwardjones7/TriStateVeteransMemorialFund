@@ -17,9 +17,19 @@ interface Props {
   ogType?: string;
   noindex?: boolean;
   jsonLd?: Record<string, unknown>[];
+  breadcrumbLabel?: string;
 }
-const { title, description, image, imageWidth, imageHeight, ogType, noindex, jsonLd } =
-  Astro.props;
+const {
+  title,
+  description,
+  image,
+  imageWidth,
+  imageHeight,
+  ogType,
+  noindex,
+  jsonLd,
+  breadcrumbLabel,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -38,6 +48,7 @@ const { title, description, image, imageWidth, imageHeight, ogType, noindex, jso
       ogType={ogType}
       noindex={noindex}
       jsonLd={jsonLd}
+      breadcrumbLabel={breadcrumbLabel}
     />
     <Analytics />
     <ClientRouter />
