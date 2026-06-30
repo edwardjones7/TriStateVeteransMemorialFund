@@ -10,13 +10,9 @@ export const site = {
   url: 'https://www.tristateveteransmemorialfund.org',
   description:
     'A 501(c)(3) nonprofit honoring and supporting U.S. military veterans across South Jersey, Southeastern Pennsylvania, and Northern Delaware — through mental-health aid, PTSD service dogs, and community.',
-  founded: 2023, // OPEN ITEM: confirm founding year with client (PRD §15.2).
+  founded: 2023, // Confirmed with client.
 
-  /*
-   * OPEN ITEM (PRD §15.1) — phone number conflict.
-   * The website lists (856) 270-8440; Facebook lists (856) 370-8440.
-   * Using the website number until the client confirms. Do NOT ship both.
-   */
+  // Confirmed with client: (856) 270-8440 is correct (Facebook's 370 listing is wrong).
   phone: '(856) 270-8440',
   phoneHref: 'tel:+18562708440',
 
