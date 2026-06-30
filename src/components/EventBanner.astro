@@ -116,14 +116,14 @@ const initialValue = (key: string) => {
             {units.map((u, i) => (
               <>
                 {i > 0 && (
-                  <span class="font-display text-base leading-none text-gold/60" aria-hidden="true">
+                  <span class="font-display text-sm leading-none text-gold/60 sm:text-base" aria-hidden="true">
                     :
                   </span>
                 )}
-                <span class="flex w-8 flex-col items-center">
+                <span class="flex w-6 flex-col items-center sm:w-8">
                   <span
                     data-unit={u.key}
-                    class="font-display text-xl leading-none tabular-nums text-bone"
+                    class="font-display text-base leading-none tabular-nums text-bone sm:text-xl"
                   >
                     {initialValue(u.key)}
                   </span>

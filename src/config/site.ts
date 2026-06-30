@@ -41,8 +41,14 @@ export const site = {
     youtube: 'https://www.youtube.com/@TriStateVeteransMemorialFund',
   },
 
-  /* PayPal hosted donation link (PRD §14). */
-  donateUrl: 'https://www.paypal.com/ncp/payment/QAZ7643MBCKLS',
+  /*
+   * PayPal donation link. Built from the org's PayPal email so the donor
+   * chooses the amount (no amount param) and may opt into a recurring gift
+   * (no_recurring=0). This replaces the old Wix-generated, single-use,
+   * dated "Bob Pantano" checkout links, which expired and can't be reused.
+   */
+  donateUrl:
+    'https://www.paypal.com/donate/?business=TriStatevmf%40gmail.com&item_name=TriState+Veterans+Memorial+Fund&currency_code=USD&no_recurring=0',
 } as const;
 
 /** Primary navigation (header). Donate is rendered separately as the CTA. */
