@@ -2,7 +2,6 @@
 import Base from '@/layouts/Base.astro';
 import PageHeader from '@/components/PageHeader.astro';
 import Section from '@/components/Section.astro';
-import Eyebrow from '@/components/Eyebrow.astro';
 import Reveal from '@/components/Reveal.astro';
 import Plate from '@/components/Plate.astro';
 import Button from '@/components/Button.astro';
@@ -10,44 +9,81 @@ import CallToAction from '@/components/CallToAction.astro';
 import { Icon } from 'astro-icon/components';
 
 /*
- * Lightweight merch (PRD §9.6 / §15.3). When products are ready, each
- * card below becomes an embedded buy-button (Shopify / Printful) — the
- * layout does not need to change.
+ * Merchandise is sold through the fund's third-party Spiritsale store.
+ * Each card links out to the product; add new items to `products` as the
+ * store grows. `type` drives the placeholder label and the card icon.
  */
-const previews = [
-  { label: 'Commemorative apparel', caption: 'Tees & hats' },
-  { label: 'Remembrance red pin', caption: 'Wear it proudly' },
-  { label: 'Event keepsakes', caption: 'From our 5K & ceremonies' },
+const storeUrl = 'https://tristateveterans.spiritsale.com';
+
+const products = [
+  {
+    name: "Men's Advantage Snag Protection Plus Polo",
+    type: 'Polo',
+    icon: 'lucide:shirt',
+    url: 'https://tristateveterans.spiritsale.com/products/men-s-advantage-snag-protection-plus-polo-4bcf561a-49f2-4e50-8209-c5fc30326342',
+  },
+  {
+    name: 'Adult PCH Pullover Hoodie',
+    type: 'Hoodie',
+    icon: 'lucide:shirt',
+    url: 'https://tristateveterans.spiritsale.com/products/adult-pch-pullover-hoodie',
+  },
+  {
+    name: 'Unisex CVC Crewneck T-Shirt',
+    type: 'T-Shirt',
+    icon: 'lucide:shirt',
+    url: 'https://tristateveterans.spiritsale.com/products/unisex-cvc-crewneck-t-shirt-37b5087b-d26f-4850-8fee-3d9fb39d9530',
+  },
+  {
+    name: 'Veil® Retro Trucker Cap',
+    type: 'Cap',
+    icon: 'lucide:crown',
+    url: 'https://tristateveterans.spiritsale.com/products/veil-retro-trucker-cap',
+  },
 ];
 ---
 
 <Base
   title="Shop"
-  description="Merchandise from the TriState Veterans Memorial Fund — every purchase supports programs that benefit veterans."
+  description="Shop official TriState Veterans Memorial Fund apparel — polos, hoodies, tees, and caps. Every purchase supports programs that benefit veterans."
 >
   <PageHeader
     eyebrow="Shop"
     title="Wear your support."
-    intro="Every purchase supports programs that benefit veterans. Our store is being prepared — here is a first look at what's coming."
+    intro="Every purchase from our store supports programs that benefit veterans. Browse our gear below — checkout is handled securely through our Spiritsale store."
   />
 
   <Section class="py-20 sm:py-24">
     <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
       {
-        previews.map((item, i) => (
+        products.map((item, i) => (
           <Reveal delay={i * 70}>
-            <figure class="border border-line bg-bone">
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group flex h-full flex-col border border-line bg-bone transition-[border-color,box-shadow] hover:border-ink hover:shadow-sm"
+            >
               <div class="relative">
-                <Plate ratio="1 / 1" tone="navy" label={item.label} />
-                <span class="absolute left-4 top-4 bg-red px-2.5 py-1 font-stencil text-[0.6rem] uppercase tracking-[0.16em] text-bone">
-                  Coming soon
-                </span>
+                <Plate ratio="1 / 1" tone="navy" label={item.type} />
+                <Icon
+                  name={item.icon}
+                  class="absolute right-4 top-4 size-6 text-bone/70"
+                  aria-hidden="true"
+                />
               </div>
-              <figcaption class="p-5">
-                <p class="font-display text-xl">{item.label}</p>
-                <p class="mt-1 text-sm text-ink-soft">{item.caption}</p>
+              <figcaption class="flex flex-1 flex-col p-5">
+                <p class="font-display text-xl">{item.name}</p>
+                <span class="mt-4 inline-flex items-center gap-1.5 font-semibold text-red">
+                  Shop on Spiritsale
+                  <Icon
+                    name="lucide:arrow-up-right"
+                    class="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    aria-hidden="true"
+                  />
+                </span>
               </figcaption>
-            </figure>
+            </a>
           </Reveal>
         ))
       }
@@ -57,15 +93,15 @@ const previews = [
       class="mt-14 flex flex-col items-center gap-4 border border-line bg-bone-deep px-6 py-12 text-center"
     >
       <Icon name="lucide:store" class="size-8 text-red" aria-hidden="true" />
-      <h2 class="font-display text-2xl">The store is on its way.</h2>
+      <h2 class="font-display text-2xl">See the full store.</h2>
       <p class="max-w-md leading-relaxed text-ink-soft">
-        We're putting the finishing touches on our merchandise. Until then,
-        the most direct way to help is a donation — it goes straight to work
-        for our veterans.
+        Sizes, colors, and more designs are available on our Spiritsale store.
+        Every order helps fund mental-health care, PTSD service dogs, and
+        outreach for our veterans.
       </p>
       <div class="mt-2 flex flex-wrap justify-center gap-3">
-        <Button href="/donate">Make a donation</Button>
-        <Button href="/events" variant="secondary">See upcoming events</Button>
+        <Button href={storeUrl} external>Visit the store</Button>
+        <Button href="/donate" variant="secondary">Make a donation</Button>
       </div>
     </Reveal>
   </Section>
