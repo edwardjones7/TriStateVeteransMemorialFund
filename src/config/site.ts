@@ -51,6 +51,7 @@ export const primaryNav = [
   { label: 'Services', href: '/services' },
   { label: 'Events', href: '/events' },
   { label: "Veterans Corner", href: '/veterans-corner' },
+  { label: 'Gallery', href: '/gallery' },
   { label: 'Meet the Team', href: '/team' },
 ] as const;
 
@@ -58,7 +59,6 @@ export const primaryNav = [
 export const secondaryNav = [
   { label: 'Honor Roll', href: '/honor' },
   { label: 'Shop', href: '/shop' },
-  { label: 'Gallery', href: '/gallery' },
   { label: 'Contact', href: '/contact' },
 ] as const;
 

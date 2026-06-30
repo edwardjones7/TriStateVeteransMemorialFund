@@ -1,79 +1,45 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '@/layouts/Base.astro';
 import PageHeader from '@/components/PageHeader.astro';
 import Section from '@/components/Section.astro';
 import Reveal from '@/components/Reveal.astro';
-import TreatedImage from '@/components/TreatedImage.astro';
 import CallToAction from '@/components/CallToAction.astro';
 
-import uniform from '@/assets/photos/uniform.png';
-import silhouette from '@/assets/photos/silhouette.png';
-import serviceDogs from '@/assets/photos/service-dogs.png';
-import withFamily from '@/assets/photos/with-family.png';
-import flagCloseup from '@/assets/photos/flag-closeup.png';
-import backHeadshot from '@/assets/photos/backheadshot.png';
-
-const photos = [
-  {
-    src: uniform,
-    alt: 'A soldier in uniform with the American flag patch on the shoulder',
-    caption: 'Always ready',
-    ratio: '13 / 12',
-  },
-  {
-    src: silhouette,
-    alt: 'A veteran salutes at dusk, silhouetted against the sky',
-    caption: 'The salute',
-    ratio: '1 / 2',
-  },
-  {
-    src: serviceDogs,
-    alt: 'A veteran shares a quiet moment with his service dog',
-    caption: 'A loyal companion',
-    ratio: '4 / 7',
-  },
-  {
-    src: flagCloseup,
-    alt: 'A close view of the American flag',
-    caption: 'Our colors',
-    ratio: '2 / 3',
-  },
-  {
-    src: withFamily,
-    alt: 'A veteran walks hand in hand with his two children',
-    caption: 'Coming home',
-    ratio: '4 / 7',
-  },
-  {
-    src: backHeadshot,
-    alt: 'A service member salutes during a remembrance ceremony',
-    caption: 'Lest we forget',
-    ratio: '3 / 5',
-  },
-];
+// Auto-load every photo in src/assets/gallery — drop a new .avif/.jpg/.png
+// in that folder and it appears here on the next build, no edits needed.
+const modules = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/gallery/*.{avif,jpg,jpeg,png,webp}',
+  { eager: true },
+);
+const photos = Object.entries(modules)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([, mod]) => mod.default);
 ---
 
 <Base
   title="Gallery"
-  description="Images honoring those who served — the people, the duty, and the homecoming behind the TriState Veterans Memorial Fund's mission."
+  description="Photos from the TriState Veterans Memorial Fund — our events, ceremonies, and the community we are proud to stand beside."
 >
   <PageHeader
     eyebrow="Gallery"
-    title="The faces of the mission."
-    intro="The service, the sacrifice, and the homecoming — the people our work is built around, and the community we are proud to stand beside."
+    title="Moments from the mission."
+    intro="The events, the ceremonies, and the community behind our work — captured along the way."
   />
 
   <Section class="py-20 sm:py-24">
-    <div class="columns-1 gap-6 sm:columns-2 lg:columns-3">
+    <div class="columns-1 gap-5 sm:columns-2 lg:columns-3">
       {
         photos.map((photo, i) => (
-          <Reveal class="mb-6 break-inside-avoid" delay={(i % 3) * 70}>
-            <figure>
-              <TreatedImage src={photo.src} alt={photo.alt} ratio={photo.ratio} />
-              <figcaption class="mt-2.5 font-stencil text-xs uppercase tracking-[0.18em] text-ink-soft">
-                {photo.caption}
-              </figcaption>
-            </figure>
+          <Reveal class="mb-5 break-inside-avoid" delay={(i % 3) * 70}>
+            <Image
+              src={photo}
+              alt="TriState Veterans Memorial Fund photo"
+              widths={[480, 768, 1100]}
+              sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"
+              loading="lazy"
+              class="treated develop w-full border border-line"
+            />
           </Reveal>
         ))
       }
