@@ -30,13 +30,13 @@ const isActive = (href: string) =>
       />
     </a>
 
-    <nav aria-label="Primary" class="hidden items-center gap-7 lg:flex">
+    <nav aria-label="Primary" class="hidden items-center gap-x-4 lg:flex xl:gap-x-6">
       {
         primaryNav.map((item) => (
           <a
             href={item.href}
             class:list={[
-              'link-underline py-1 font-stencil text-[0.95rem] font-bold uppercase tracking-[0.06em]',
+              'link-underline whitespace-nowrap py-1 font-stencil text-[0.95rem] font-bold uppercase tracking-[0.06em]',
               isActive(item.href) ? 'text-white' : 'text-bone/80',
             ]}
             aria-current={isActive(item.href) ? 'page' : undefined}

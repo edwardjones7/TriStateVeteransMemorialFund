@@ -1,17 +1,22 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '@/layouts/Base.astro';
 import PageHeader from '@/components/PageHeader.astro';
 import Section from '@/components/Section.astro';
 import Reveal from '@/components/Reveal.astro';
-import Plate from '@/components/Plate.astro';
 import Button from '@/components/Button.astro';
 import CallToAction from '@/components/CallToAction.astro';
 import { Icon } from 'astro-icon/components';
 
+import polo from '@/assets/shop/polo.png';
+import hoodie from '@/assets/shop/hoodie.png';
+import tshirt from '@/assets/shop/tshirt.png';
+import cap from '@/assets/shop/cap.png';
+
 /*
  * Merchandise is sold through the fund's third-party Spiritsale store.
  * Each card links out to the product; add new items to `products` as the
- * store grows. `type` drives the placeholder label and the card icon.
+ * store grows (drop the render in src/assets/shop and import it here).
  */
 const storeUrl = 'https://tristateveterans.spiritsale.com';
 
@@ -19,25 +24,25 @@ const products = [
   {
     name: "Men's Advantage Snag Protection Plus Polo",
     type: 'Polo',
-    icon: 'lucide:shirt',
+    img: polo,
     url: 'https://tristateveterans.spiritsale.com/products/men-s-advantage-snag-protection-plus-polo-4bcf561a-49f2-4e50-8209-c5fc30326342',
   },
   {
     name: 'Adult PCH Pullover Hoodie',
     type: 'Hoodie',
-    icon: 'lucide:shirt',
+    img: hoodie,
     url: 'https://tristateveterans.spiritsale.com/products/adult-pch-pullover-hoodie',
   },
   {
     name: 'Unisex CVC Crewneck T-Shirt',
     type: 'T-Shirt',
-    icon: 'lucide:shirt',
+    img: tshirt,
     url: 'https://tristateveterans.spiritsale.com/products/unisex-cvc-crewneck-t-shirt-37b5087b-d26f-4850-8fee-3d9fb39d9530',
   },
   {
     name: 'Veil® Retro Trucker Cap',
     type: 'Cap',
-    icon: 'lucide:crown',
+    img: cap,
     url: 'https://tristateveterans.spiritsale.com/products/veil-retro-trucker-cap',
   },
 ];
@@ -54,7 +59,7 @@ const products = [
   />
 
   <Section class="py-20 sm:py-24">
-    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
       {
         products.map((item, i) => (
           <Reveal delay={i * 70}>
@@ -64,17 +69,21 @@ const products = [
               rel="noopener noreferrer"
               class="group flex h-full flex-col border border-line bg-bone transition-[border-color,box-shadow] hover:border-ink hover:shadow-sm"
             >
-              <div class="relative">
-                <Plate ratio="1 / 1" tone="navy" label={item.type} />
-                <Icon
-                  name={item.icon}
-                  class="absolute right-4 top-4 size-6 text-bone/70"
-                  aria-hidden="true"
+              <div class="relative bg-white">
+                <Image
+                  src={item.img}
+                  alt={item.name}
+                  width={600}
+                  height={600}
+                  class="aspect-square w-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
                 />
+                <span class="absolute left-3 top-3 bg-navy-deep px-2.5 py-1 font-stencil text-[0.6rem] uppercase tracking-[0.16em] text-bone">
+                  {item.type}
+                </span>
               </div>
               <figcaption class="flex flex-1 flex-col p-5">
-                <p class="font-display text-xl">{item.name}</p>
-                <span class="mt-4 inline-flex items-center gap-1.5 font-semibold text-red">
+                <p class="font-display text-lg leading-snug">{item.name}</p>
+                <span class="mt-3 inline-flex items-center gap-1.5 font-semibold text-red">
                   Shop on Spiritsale
                   <Icon
                     name="lucide:arrow-up-right"

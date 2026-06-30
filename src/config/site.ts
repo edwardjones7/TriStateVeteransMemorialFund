@@ -53,12 +53,12 @@ export const primaryNav = [
   { label: "Veterans Corner", href: '/veterans-corner' },
   { label: 'Gallery', href: '/gallery' },
   { label: 'Meet the Team', href: '/team' },
+  { label: 'Shop', href: '/shop' },
 ] as const;
 
 /** Secondary links surfaced in the footer + mobile menu. */
 export const secondaryNav = [
   { label: 'Honor Roll', href: '/honor' },
-  { label: 'Shop', href: '/shop' },
   { label: 'Contact', href: '/contact' },
 ] as const;
 

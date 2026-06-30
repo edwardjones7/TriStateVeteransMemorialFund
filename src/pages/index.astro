@@ -23,6 +23,7 @@ import missionImg from '@/assets/photos/salute.jpg';
 import serviceDogs from '@/assets/photos/service-dogs.png';
 import cornerEmbrace from '@/assets/photos/veteran-family-embrace.jpg';
 import backHeadshot from '@/assets/photos/backheadshot.png';
+import abcLogo from '@/assets/press/6abc-logo.png';
 
 const services = (await getCollection('services')).sort(
   (a, b) => a.data.order - b.data.order,
@@ -324,12 +325,14 @@ const involve = [
       >
         As featured on
       </p>
-      <span
-        class="inline-flex items-center gap-1.5 rounded-md bg-navy-deep px-3 py-1.5 font-display text-2xl leading-none text-bone"
-        aria-label="6abc Action News"
-      >
-        <span class="text-red-light">6</span><span>abc</span>
-      </span>
+      <Image
+        src={abcLogo}
+        alt="6abc Action News"
+        widths={[120, 240]}
+        sizes="120px"
+        class="h-14 w-auto"
+      />
+
       <p class="text-sm text-ink-soft sm:border-l sm:border-line sm:pl-6">
         Our work honoring local veterans was spotlighted on Philadelphia&rsquo;s
         6abc Action News.
