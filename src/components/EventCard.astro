@@ -12,8 +12,10 @@ interface Props {
   status: 'upcoming' | 'past';
   featured?: boolean;
   hideImage?: boolean;
+  /** When set, the event title links to its detail page. */
+  href?: string;
 }
-const { event, status, featured = false, hideImage = false } = Astro.props;
+const { event, status, featured = false, hideImage = false, href } = Astro.props;
 const d = event.data;
 const parts = dateParts(d.date);
 const place = d.address ? `${d.location}, ${d.address}` : d.location;
@@ -36,7 +38,9 @@ const place = d.address ? `${d.location}, ${d.address}` : d.location;
         <p class="font-stencil text-xs uppercase tracking-[0.18em] text-red">
           {status === 'upcoming' ? 'Our next event' : 'From the archive'}
         </p>
-        <h3 class="mt-3 font-display text-3xl">{d.title}</h3>
+        <h3 class="mt-3 font-display text-3xl">
+          {href ? <a href={href} class="link-underline">{d.title}</a> : d.title}
+        </h3>
         <ul class="mt-5 space-y-2 text-sm text-ink-soft">
           <li class="flex items-start gap-2.5">
             <Icon name="lucide:calendar" class="mt-0.5 size-4 shrink-0 text-red" aria-hidden="true" />
@@ -84,7 +88,9 @@ const place = d.address ? `${d.location}, ${d.address}` : d.location;
         </div>
       )}
       <div class="min-w-0">
-        <h3 class="font-display text-xl">{d.title}</h3>
+        <h3 class="font-display text-xl">
+          {href ? <a href={href} class="link-underline">{d.title}</a> : d.title}
+        </h3>
         <p class="mt-1 text-sm text-ink-soft">{place}</p>
         {d.startTime && <p class="text-sm text-ink-soft">{d.startTime}</p>}
         <p class="mt-2 text-[0.95rem] leading-relaxed">{event.body}</p>

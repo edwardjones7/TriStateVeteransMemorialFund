@@ -1,0 +1,129 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Section from '@/components/Section.astro';
+import Reveal from '@/components/Reveal.astro';
+import EventCard from '@/components/EventCard.astro';
+import CallToAction from '@/components/CallToAction.astro';
+import Button from '@/components/Button.astro';
+import { isUpcoming, formatDate } from '@/lib/format';
+import {
+  eventSchema,
+  eventFaqs,
+  faqSchema,
+  eventLocale,
+} from '@/lib/eventSchema';
+
+export const getStaticPaths = (async () => {
+  const events = await getCollection('events');
+  return events.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  entry: CollectionEntry<'events'>;
+}
+const { entry } = Astro.props;
+const d = entry.data;
+const upcoming = isUpcoming(d.date);
+const place = d.address ? `${d.location}, ${d.address}` : d.location;
+const locale = eventLocale(entry); // "Sewell, NJ"
+const isRun = /5k|run|walk/i.test(d.title);
+
+// Meta title leads with the local + run intent ("5K Run/Walk in Sewell, NJ");
+// the visible <h1> keeps the full event name. SEO.astro appends the brand.
+const metaTitle = isRun
+  ? `5K Run/Walk in ${locale} · ${d.date.getUTCFullYear()}`
+  : `${d.title} · ${locale}`;
+const metaDescription = `${d.title} — ${formatDate(d.date)} at ${place}. ${
+  d.registrationUrl
+    ? 'Register for the run/walk; all proceeds support local veterans.'
+    : 'A TriState Veterans Memorial Fund event supporting local veterans.'
+}`;
+const intro = isRun
+  ? `A 5K run/walk in ${locale} — every step raises real support for our veterans.`
+  : place;
+
+const faqs = eventFaqs(entry);
+const jsonLd = [eventSchema(entry), faqSchema(faqs)].filter(
+  (b): b is Record<string, unknown> => b !== null,
+);
+
+const ogImage = d.image?.src;
+---
+
+<Base
+  title={metaTitle}
+  description={metaDescription}
+  image={ogImage}
+  imageWidth={d.image?.width}
+  imageHeight={d.image?.height}
+  ogType="event"
+  jsonLd={jsonLd}
+>
+  <PageHeader
+    eyebrow={upcoming ? 'Upcoming event' : 'Past event'}
+    title={d.title}
+    intro={intro}
+  />
+
+  <Section class="py-16 sm:py-20">
+    <Reveal>
+      <EventCard
+        event={entry}
+        status={upcoming ? 'upcoming' : 'past'}
+        featured
+        hideImage={!d.image}
+      />
+    </Reveal>
+
+    {
+      upcoming && d.registrationUrl && (
+        <Reveal class="mt-8 flex flex-wrap items-center gap-4">
+          <Button href={d.registrationUrl} external size="lg" data-track="register_click">
+            Register on RunSignup
+          </Button>
+          <a href="/events" class="link-underline font-semibold text-ink-soft">
+            &larr; All events
+          </a>
+        </Reveal>
+      )
+    }
+    {
+      !(upcoming && d.registrationUrl) && (
+        <Reveal class="mt-8">
+          <a href="/events" class="link-underline font-semibold text-ink-soft">
+            &larr; All events
+          </a>
+        </Reveal>
+      )
+    }
+  </Section>
+
+  {
+    faqs.length > 0 && (
+      <Section tone="bone-deep" class="border-t border-line py-16 sm:py-20">
+        <Reveal class="mb-8">
+          <h2 class="font-display text-3xl sm:text-4xl">Good to know.</h2>
+        </Reveal>
+        <dl class="max-w-2xl space-y-7">
+          {faqs.map((f) => (
+            <Reveal>
+              <dt class="font-display text-xl">{f.question}</dt>
+              <dd class="mt-2 leading-relaxed text-ink-soft">{f.answer}</dd>
+            </Reveal>
+          ))}
+        </dl>
+      </Section>
+    )
+  }
+
+  <CallToAction
+    heading="Can't make it this time?"
+    body="You can still stand with our veterans. Every gift funds mental-health care, PTSD service dogs, and the outreach that helps a veteran find peace."
+  />
+</Base>

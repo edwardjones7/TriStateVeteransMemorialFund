@@ -12,10 +12,14 @@ interface Props {
   title: string;
   description?: string;
   image?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  ogType?: string;
   noindex?: boolean;
   jsonLd?: Record<string, unknown>[];
 }
-const { title, description, image, noindex, jsonLd } = Astro.props;
+const { title, description, image, imageWidth, imageHeight, ogType, noindex, jsonLd } =
+  Astro.props;
 ---
 
 <!doctype html>
@@ -29,6 +33,9 @@ const { title, description, image, noindex, jsonLd } = Astro.props;
       title={title}
       description={description}
       image={image}
+      imageWidth={imageWidth}
+      imageHeight={imageHeight}
+      ogType={ogType}
       noindex={noindex}
       jsonLd={jsonLd}
     />

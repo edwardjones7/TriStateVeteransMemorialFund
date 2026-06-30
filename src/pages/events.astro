@@ -11,6 +11,7 @@ import Button from '@/components/Button.astro';
 import CallToAction from '@/components/CallToAction.astro';
 import { isUpcoming } from '@/lib/format';
 import { site } from '@/config/site';
+import { eventSchema, eventPath } from '@/lib/eventSchema';
 
 const events = await getCollection('events');
 const upcoming = events
@@ -20,19 +21,7 @@ const past = events
   .filter((e) => !isUpcoming(e.data.date))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-const eventLd = upcoming.map((e) => ({
-  '@context': 'https://schema.org',
-  '@type': 'Event',
-  name: e.data.title,
-  startDate: e.data.date.toISOString().slice(0, 10),
-  eventStatus: 'https://schema.org/EventScheduled',
-  location: {
-    '@type': 'Place',
-    name: e.data.location,
-    address: e.data.address ?? e.data.location,
-  },
-  organizer: { '@type': 'Organization', name: site.name, url: site.url },
-}));
+const eventLd = upcoming.map(eventSchema);
 ---
 
 <Base
@@ -56,13 +45,19 @@ const eventLd = upcoming.map((e) => ({
       upcoming.length > 0 ? (
         <div class="space-y-6">
           <Reveal>
-            <EventCard event={upcoming[0]!} status="upcoming" featured hideImage />
+            <EventCard
+              event={upcoming[0]!}
+              status="upcoming"
+              featured
+              hideImage
+              href={eventPath(upcoming[0]!)}
+            />
           </Reveal>
           {upcoming.length > 1 && (
             <div>
               {upcoming.slice(1).map((e, i) => (
                 <Reveal delay={i * 50}>
-                  <EventCard event={e} status="upcoming" hideImage />
+                  <EventCard event={e} status="upcoming" hideImage href={eventPath(e)} />
                 </Reveal>
               ))}
             </div>
@@ -99,7 +94,7 @@ const eventLd = upcoming.map((e) => ({
         <div>
           {past.map((e, i) => (
             <Reveal delay={Math.min(i, 6) * 40}>
-              <EventCard event={e} status="past" hideImage />
+              <EventCard event={e} status="past" hideImage href={eventPath(e)} />
             </Reveal>
           ))}
         </div>
