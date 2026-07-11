@@ -17,6 +17,8 @@ const events = defineCollection({
       featured: z.boolean().default(false),
       imageLabel: z.string().optional(),
       image: image().optional(),
+      /** Root-relative URL of a shareable flyer in public/ (stable across builds). */
+      flyerUrl: z.string().optional(),
     }),
 });
 

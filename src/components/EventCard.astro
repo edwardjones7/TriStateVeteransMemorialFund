@@ -19,18 +19,22 @@ const { event, status, featured = false, hideImage = false, href } = Astro.props
 const d = event.data;
 const parts = dateParts(d.date);
 const place = d.address ? `${d.location}, ${d.address}` : d.location;
+/* Portrait images (e.g. event flyers) are letterboxed instead of cropped —
+ * cropping would cut off flyer text. */
+const isPortrait = !!d.image && d.image.height > d.image.width;
 ---
 
 {
   featured ? (
     <article class={`grid overflow-hidden border border-line bg-bone-deep ${hideImage ? '' : 'md:grid-cols-2'}`}>
       {!hideImage && (
-        <div class="relative min-h-[16rem]">
+        <div class={`relative ${isPortrait ? 'min-h-[24rem] md:min-h-0' : 'min-h-[16rem]'}`}>
           <TreatedImage
             src={d.image}
             alt={d.imageLabel ?? d.title}
             label={d.imageLabel ?? 'Event photograph'}
             fill
+            imgClass={isPortrait ? 'object-contain!' : ''}
           />
         </div>
       )}
