@@ -13,8 +13,10 @@ interface Props {
   url: string;
   /** Root-relative URL of the flyer in public/, e.g. /flyer-5k.png. */
   flyerUrl: string;
+  /** Smaller buttons with short labels — for inline placement next to a CTA. */
+  compact?: boolean;
 }
-const { title, url, flyerUrl } = Astro.props;
+const { title, url, flyerUrl, compact = false } = Astro.props;
 
 const absoluteFlyerUrl = new URL(flyerUrl, url).href;
 const emailBody = `Join us! ${title}\n\nDetails & registration: ${url}\nFlyer: ${absoluteFlyerUrl}`;
@@ -22,11 +24,15 @@ const mailto = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURICom
 
 // Mirrors Button.astro's secondary variant (that component only renders
 // anchors; two of these controls must be real <button>s).
-const btn =
-  'inline-flex min-h-[44px] items-center justify-center gap-2 rounded-[3px] border border-ink/35 px-4 py-2 text-sm font-body font-semibold tracking-tight text-ink transition-[background-color,color,transform] duration-150 ease-out-soft hover:border-ink hover:bg-ink hover:text-bone active:scale-[0.98]';
+const btnBase =
+  'inline-flex items-center justify-center rounded-[3px] border border-ink/35 font-body font-semibold tracking-tight text-ink transition-[background-color,color,transform] duration-150 ease-out-soft hover:border-ink hover:bg-ink hover:text-bone active:scale-[0.98]';
+const btn = compact
+  ? `${btnBase} min-h-[36px] gap-1.5 px-3 py-1.5 text-xs`
+  : `${btnBase} min-h-[44px] gap-2 px-4 py-2 text-sm`;
+const icon = compact ? 'size-3.5' : 'size-4';
 ---
 
-<div class="flex flex-wrap items-center gap-3">
+<div class={`flex flex-wrap items-center ${compact ? 'gap-2' : 'gap-3'}`}>
   <button
     type="button"
     class={btn}
@@ -36,20 +42,20 @@ const btn =
     data-share-url={url}
     data-track="share_click"
   >
-    <Icon name="lucide:share-2" class="size-4" aria-hidden="true" />
+    <Icon name="lucide:share-2" class={icon} aria-hidden="true" />
     Share
   </button>
   <a href={mailto} class={btn} data-track="share_click">
-    <Icon name="lucide:mail" class="size-4" aria-hidden="true" />
-    Email the flyer
+    <Icon name="lucide:mail" class={icon} aria-hidden="true" />
+    {compact ? 'Email' : 'Email the flyer'}
   </a>
   <button type="button" class={btn} data-share-copy data-share-url={url} data-track="share_click">
-    <Icon name="lucide:link" class="size-4" aria-hidden="true" />
+    <Icon name="lucide:link" class={icon} aria-hidden="true" />
     <span data-copy-label>Copy link</span>
   </button>
   <a href={flyerUrl} download="tristate-vmf-5k-flyer.png" class={btn} data-track="share_click">
-    <Icon name="lucide:download" class="size-4" aria-hidden="true" />
-    Download flyer
+    <Icon name="lucide:download" class={icon} aria-hidden="true" />
+    {compact ? 'Flyer' : 'Download flyer'}
   </a>
 </div>
 
