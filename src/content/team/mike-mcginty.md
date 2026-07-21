@@ -2,7 +2,7 @@
 name: Mike McGinty
 role: Advisory Board
 group: advisory
-order: 7
+order: 8
 portrait: ../../assets/photos/team/mike-mcginty.png
 ---
 

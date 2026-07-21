@@ -2,7 +2,7 @@
 name: Robert E. Timmons
 role: Advisory Board
 group: advisory
-order: 9
+order: 10
 isVeteran: true
 branch: U.S. Army
 portrait: ../../assets/photos/team/robert-timmons.png

@@ -2,7 +2,7 @@
 name: Peter Del Borrello, III
 role: Founder & Honorary Member
 group: leadership
-order: 5
+order: 6
 portrait: ../../assets/photos/team/peter-del-borrello.png
 ---
 

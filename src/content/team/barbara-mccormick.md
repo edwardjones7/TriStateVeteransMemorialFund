@@ -2,7 +2,7 @@
 name: Barbara McCormick
 role: Advisory Board
 group: advisory
-order: 11
+order: 12
 isVeteran: true
 branch: U.S. Air Force
 portrait: ../../assets/photos/team/barbara-mccormick.png

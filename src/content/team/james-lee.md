@@ -2,7 +2,7 @@
 name: James Lee
 role: Advisory Board
 group: advisory
-order: 10
+order: 11
 portrait: ../../assets/photos/team/james-lee.png
 ---
 
