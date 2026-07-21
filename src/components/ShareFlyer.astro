@@ -1,0 +1,95 @@
+---
+import { Icon } from 'astro-icon/components';
+
+/**
+ * ShareFlyer — share row for events with a flyer. Native share (revealed
+ * only where the Web Share API exists), plus email / copy-link / download
+ * fallbacks that work without JS.
+ */
+interface Props {
+  /** Event title, used as the share/email subject. */
+  title: string;
+  /** Absolute URL of the event page. */
+  url: string;
+  /** Root-relative URL of the flyer in public/, e.g. /flyer-5k.png. */
+  flyerUrl: string;
+  /** Smaller buttons with short labels — for inline placement next to a CTA. */
+  compact?: boolean;
+}
+const { title, url, flyerUrl, compact = false } = Astro.props;
+
+const absoluteFlyerUrl = new URL(flyerUrl, url).href;
+const emailBody = `Join us! ${title}\n\nDetails & registration: ${url}\nFlyer: ${absoluteFlyerUrl}`;
+const mailto = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(emailBody)}`;
+
+// Mirrors Button.astro's secondary variant (that component only renders
+// anchors; two of these controls must be real <button>s).
+const btnBase =
+  'inline-flex items-center justify-center rounded-[3px] border border-ink/35 font-body font-semibold tracking-tight text-ink transition-[background-color,color,transform] duration-150 ease-out-soft hover:border-ink hover:bg-ink hover:text-bone active:scale-[0.98]';
+const btn = compact
+  ? `${btnBase} min-h-[36px] gap-1.5 px-3 py-1.5 text-xs`
+  : `${btnBase} min-h-[44px] gap-2 px-4 py-2 text-sm`;
+const icon = compact ? 'size-3.5' : 'size-4';
+---
+
+<div class={`flex flex-wrap items-center ${compact ? 'gap-2' : 'gap-3'}`}>
+  <button
+    type="button"
+    class={btn}
+    hidden
+    data-share-native
+    data-share-title={title}
+    data-share-url={url}
+    data-track="share_click"
+  >
+    <Icon name="lucide:share-2" class={icon} aria-hidden="true" />
+    Share
+  </button>
+  <a href={mailto} class={btn} data-track="share_click">
+    <Icon name="lucide:mail" class={icon} aria-hidden="true" />
+    {compact ? 'Email' : 'Email the flyer'}
+  </a>
+  <button type="button" class={btn} data-share-copy data-share-url={url} data-track="share_click">
+    <Icon name="lucide:link" class={icon} aria-hidden="true" />
+    <span data-copy-label>Copy link</span>
+  </button>
+  <a href={flyerUrl} download="tristate-vmf-5k-flyer.png" class={btn} data-track="share_click">
+    <Icon name="lucide:download" class={icon} aria-hidden="true" />
+    {compact ? 'Flyer' : 'Download flyer'}
+  </a>
+</div>
+
+<script>
+  // Document-level listeners (same pattern as track.ts) so the buttons keep
+  // working after ClientRouter view transitions.
+  function revealNativeShare() {
+    if (!navigator.share) return;
+    document
+      .querySelectorAll<HTMLElement>('[data-share-native]')
+      .forEach((btn) => (btn.hidden = false));
+  }
+  revealNativeShare();
+  document.addEventListener('astro:page-load', revealNativeShare);
+
+  document.addEventListener('click', async (e) => {
+    const el = (e.target as HTMLElement | null)?.closest<HTMLElement>(
+      '[data-share-native], [data-share-copy]',
+    );
+    if (!el) return;
+    const url = el.dataset.shareUrl ?? location.href;
+    if (el.matches('[data-share-native]')) {
+      try {
+        await navigator.share({ title: el.dataset.shareTitle, url });
+      } catch {
+        /* user dismissed the share sheet */
+      }
+    } else {
+      await navigator.clipboard.writeText(url);
+      const label = el.querySelector('[data-copy-label]');
+      if (label) {
+        label.textContent = 'Copied!';
+        setTimeout(() => (label.textContent = 'Copy link'), 2000);
+      }
+    }
+  });
+</script>

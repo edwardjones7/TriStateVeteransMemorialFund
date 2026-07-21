@@ -8,12 +8,14 @@ import Reveal from '@/components/Reveal.astro';
 import EventCard from '@/components/EventCard.astro';
 import CallToAction from '@/components/CallToAction.astro';
 import Button from '@/components/Button.astro';
+import ShareFlyer from '@/components/ShareFlyer.astro';
 import { isUpcoming, formatDate } from '@/lib/format';
 import {
   eventSchema,
   eventFaqs,
   faqSchema,
   eventLocale,
+  eventUrl,
 } from '@/lib/eventSchema';
 
 export const getStaticPaths = (async () => {
@@ -100,6 +102,16 @@ const ogImage = d.image?.src;
           <a href="/events" class="link-underline font-semibold text-ink-soft">
             &larr; All events
           </a>
+        </Reveal>
+      )
+    }
+    {
+      d.flyerUrl && (
+        <Reveal class="mt-6">
+          <p class="mb-3 font-stencil text-xs uppercase tracking-[0.18em] text-ink-soft">
+            Spread the word
+          </p>
+          <ShareFlyer title={d.title} url={eventUrl(entry)} flyerUrl={d.flyerUrl} />
         </Reveal>
       )
     }
