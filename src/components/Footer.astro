@@ -1,11 +1,18 @@
 ---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import { primaryNav, secondaryNav, site } from '@/config/site';
 import { Icon } from 'astro-icon/components';
+import { sponsorLogo } from '@/lib/sponsorLogos';
 import Emblem from './Emblem.astro';
 import Button from './Button.astro';
 
 const year = new Date().getFullYear();
 const allLinks = [...primaryNav, ...secondaryNav, { label: 'Donate', href: '/donate' }];
+
+const footerSponsors = (await getCollection('sponsors')).filter((s) =>
+  sponsorLogo(s.id),
+);
 ---
 
 <footer class="bg-navy-deep text-bone texture-navy-deep">
@@ -99,6 +106,48 @@ const allLinks = [...primaryNav, ...secondaryNav, { label: 'Donate', href: '/don
           >Donate</Button
         >
       </div>
+    </div>
+
+    <!-- Sponsor strip — white chips so light-background logos stay legible on navy -->
+    <div class="border-b border-bone/15 py-8">
+      <p
+        class="text-center font-stencil text-xs font-bold uppercase tracking-[0.2em] text-bone/50"
+      >
+        Proudly supported by
+      </p>
+      <!-- The logo set is output twice; the second copy is aria-hidden
+           and exists only so the loop wraps seamlessly (see global.css). -->
+      <div class="marquee mt-5">
+        <div class="marquee-track">
+          {
+            [false, true].map((isClone) =>
+              footerSponsors.map((s) => (
+                <a
+                  href="/sponsors"
+                  title={isClone ? undefined : s.data.name}
+                  aria-hidden={isClone ? 'true' : undefined}
+                  tabindex={isClone ? -1 : undefined}
+                  data-marquee-clone={isClone ? '' : undefined}
+                  class="mr-2.5 flex h-12 w-28 shrink-0 items-center justify-center bg-white px-3 opacity-90 transition-opacity duration-200 hover:opacity-100"
+                >
+                  <Image
+                    src={sponsorLogo(s.id)!}
+                    alt={isClone ? '' : s.data.name}
+                    widths={[120, 240]}
+                    sizes="100px"
+                    class="max-h-8 w-auto max-w-full object-contain"
+                  />
+                </a>
+              )),
+            )
+          }
+        </div>
+      </div>
+      <p class="mt-5 text-center">
+        <a href="/sponsors" class="link-underline text-sm text-bone/75"
+          >See all sponsors &rarr;</a
+        >
+      </p>
     </div>
 
     <div

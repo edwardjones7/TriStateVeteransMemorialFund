@@ -55,6 +55,7 @@ export const primaryNav = [
   { label: "Veterans Corner", href: '/veterans-corner' },
   { label: 'Gallery', href: '/gallery' },
   { label: 'Meet the Team', href: '/team' },
+  { label: 'Sponsors', href: '/sponsors' },
   { label: 'Shop', href: '/shop' },
 ] as const;
 

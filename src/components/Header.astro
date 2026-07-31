@@ -30,7 +30,7 @@ const isActive = (href: string) =>
       />
     </a>
 
-    <nav aria-label="Primary" class="hidden items-center gap-x-4 lg:flex xl:gap-x-6">
+    <nav aria-label="Primary" class="hidden items-center gap-x-4 xl:flex">
       {
         primaryNav.map((item) => (
           <a
@@ -50,7 +50,7 @@ const isActive = (href: string) =>
     <div class="flex items-center gap-2 sm:gap-3">
       <a
         href={site.phoneHref}
-        class="link-underline hidden items-center gap-2 text-sm font-medium text-bone/70 xl:inline-flex"
+        class="link-underline hidden items-center gap-2 whitespace-nowrap text-sm font-medium text-bone/70 2xl:inline-flex"
       >
         <Icon name="lucide:phone" class="size-4" aria-hidden="true" />
         {site.phone}
@@ -59,7 +59,7 @@ const isActive = (href: string) =>
       <button
         type="button"
         data-menu-open
-        class="inline-flex size-11 items-center justify-center text-bone lg:hidden"
+        class="inline-flex size-11 items-center justify-center text-bone xl:hidden"
         aria-label="Open menu"
         aria-expanded="false"
         aria-controls="mobile-menu"
@@ -75,7 +75,7 @@ const isActive = (href: string) =>
   id="mobile-menu"
   data-mobile-menu
   hidden
-  class="fixed inset-0 z-[70] flex flex-col bg-navy-deep text-bone lg:hidden"
+  class="fixed inset-0 z-[70] flex flex-col bg-navy-deep text-bone xl:hidden"
 >
   <div
     class="flex items-center justify-between border-b border-bone/15 px-6 py-3"

@@ -19,5 +19,8 @@
   { "id": "two-sweet-boutique", "name": "Two Sweet Boutique", "url": "https://www.facebook.com/twosweetboutiquenj/", "tier": "supporter" },
   { "id": "kadar", "name": "Kadar", "url": "https://gokadar.com/", "tier": "sponsor" },
   { "id": "pops-ice", "name": "Pop's Italian Water Ice", "url": "https://www.popsice.com/", "tier": "supporter" },
-  { "id": "mitchell-funeral-support", "name": "Mitchell Funeral Support", "url": "http://mitchellfuneralsupport.com/", "tier": "sponsor" }
+  { "id": "mitchell-funeral-support", "name": "Mitchell Funeral Support", "url": "http://mitchellfuneralsupport.com/", "tier": "sponsor" },
+  { "id": "boilermakers-local-28", "name": "Boilermakers Local 28", "url": "https://boilermakerslocal28.com/", "tier": "supporter" },
+  { "id": "grassos-landscape-service", "name": "Grasso's Landscape Service", "url": "https://share.google/eYhieldR7FITLvqSM", "tier": "sponsor" },
+  { "id": "pest-professionals", "name": "The Pest Professionals", "url": "https://www.thepestprofessionals.com/", "tier": "sponsor" }
 ]

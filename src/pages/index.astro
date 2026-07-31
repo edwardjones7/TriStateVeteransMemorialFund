@@ -252,6 +252,31 @@ const involve = [
     </div>
   </Section>
 
+  {/* ---------- Sponsors ---------- */}
+  <Section class="border-t border-line py-20 sm:py-24">
+    <Reveal class="mx-auto max-w-2xl text-center">
+      <Eyebrow class="justify-center">Our sponsors</Eyebrow>
+      <h2 class="mt-4 font-display text-3xl sm:text-4xl">
+        A community of dedicated professionals.
+      </h2>
+      <p class="mt-4 text-ink-soft">
+        These local businesses and trade organizations keep our mission
+        moving. We are grateful for every one of them.
+      </p>
+      <SectionRule class="mx-auto mt-8 max-w-xs" />
+    </Reveal>
+    <Reveal class="mt-12" delay={80}>
+      <SponsorGrid sponsors={sponsors} />
+    </Reveal>
+    <Reveal class="mt-10 flex flex-wrap justify-center gap-4" delay={120}>
+      <Button href="/contact" variant="secondary">Become a sponsor</Button>
+      <Button href="/sponsors" variant="ghost">
+        All sponsors
+        <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+      </Button>
+    </Reveal>
+  </Section>
+
   {/* ---------- Featured event ---------- */}
   {
     featuredEvent && (
@@ -292,27 +317,6 @@ const involve = [
     lede="Twenty-two veterans a day. That figure is why our founders refused to stay silent — and why this Fund exists."
     source="Honor their service · End the silence"
   />
-
-  {/* ---------- Sponsors ---------- */}
-  <Section class="py-20 sm:py-24">
-    <Reveal class="mx-auto max-w-2xl text-center">
-      <Eyebrow class="justify-center">Our sponsors</Eyebrow>
-      <h2 class="mt-4 font-display text-3xl sm:text-4xl">
-        A community of dedicated professionals.
-      </h2>
-      <p class="mt-4 text-ink-soft">
-        These local businesses and trade organizations keep our mission
-        moving. We are grateful for every one of them.
-      </p>
-      <SectionRule class="mx-auto mt-8 max-w-xs" />
-    </Reveal>
-    <Reveal class="mt-12" delay={80}>
-      <SponsorGrid sponsors={sponsors} />
-    </Reveal>
-    <Reveal class="mt-10 text-center" delay={120}>
-      <Button href="/contact" variant="secondary">Become a sponsor</Button>
-    </Reveal>
-  </Section>
 
   {/* ---------- Press / As featured on ---------- */}
   <section class="border-t border-line bg-bone">

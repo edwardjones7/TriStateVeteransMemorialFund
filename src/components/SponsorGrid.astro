@@ -1,71 +1,81 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { Image } from 'astro:assets';
+import { sponsorLogo } from '@/lib/sponsorLogos';
 /**
- * SponsorGrid — the sponsor wall, rendered as a two-row marquee.
- * Each row scrolls in the opposite direction and loops seamlessly
- * (the logo set is output twice; the second copy is aria-hidden).
- * Pauses on hover/focus; collapses to a static grid under
- * prefers-reduced-motion (see global.css). Logo files live in
- * src/assets/sponsors/<id>.png.
+ * SponsorGrid — the sponsor wall, a static uniform grid. Every sponsor
+ * gets the same-size card: logo in a fixed-height box, name caption
+ * beneath. Cards link out when the sponsor has a url. `size` picks the
+ * compact homepage density or the large /sponsors-page treatment.
  */
 interface Props {
   sponsors: CollectionEntry<'sponsors'>[];
+  size?: 'compact' | 'large';
 }
-const { sponsors } = Astro.props;
-
-const logos = import.meta.glob<ImageMetadata>('../assets/sponsors/*.png', {
-  eager: true,
-  import: 'default',
-});
-const logoFor = (id: string) => logos[`../assets/sponsors/${id}.png`];
-
-const mid = Math.ceil(sponsors.length / 2);
-const rows = [sponsors.slice(0, mid), sponsors.slice(mid)];
+const { sponsors, size = 'compact' } = Astro.props;
+const compact = size === 'compact';
 ---
 
-<div class="relative left-1/2 w-screen -translate-x-1/2 space-y-3">
+<ul
+  class:list={[
+    'grid gap-3 sm:gap-4',
+    compact
+      ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6'
+      : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4',
+  ]}
+>
   {
-    rows.map((row, r) => (
-      <div class="marquee">
-        <div
-          class:list={['marquee-track', r === 1 && 'marquee-track--reverse']}
-        >
-          {
-            [false, true].map((isClone) =>
-              row.map((s) => {
-                const logo = logoFor(s.id);
-                return (
-                  <a
-                    href={s.data.url ?? '#'}
-                    target={s.data.url ? '_blank' : undefined}
-                    rel={s.data.url ? 'noopener noreferrer' : undefined}
-                    aria-label={isClone ? undefined : `${s.data.name} — visit website`}
-                    aria-hidden={isClone ? 'true' : undefined}
-                    tabindex={isClone ? -1 : undefined}
-                    data-marquee-clone={isClone ? '' : undefined}
-                    class="group mr-3 inline-flex h-24 shrink-0 items-center justify-center border border-line bg-white px-8 transition-colors duration-200 hover:bg-bone"
-                  >
-                    {logo ? (
-                      <Image
-                        src={logo}
-                        alt={isClone ? '' : s.data.name}
-                        widths={[200, 400]}
-                        sizes="(min-width: 640px) 240px, 200px"
-                        class="h-14 w-auto object-contain transition-transform duration-200 group-hover:scale-105 sm:h-16"
-                      />
-                    ) : (
-                      <span class="whitespace-nowrap font-display text-lg text-ink">
-                        {s.data.name}
-                      </span>
-                    )}
-                  </a>
-                );
-              }),
-            )
-          }
-        </div>
-      </div>
-    ))
+    sponsors.map((s) => {
+      const logo = sponsorLogo(s.id);
+      const Tag = s.data.url ? 'a' : 'div';
+      return (
+        <li>
+          <Tag
+            href={s.data.url}
+            target={s.data.url ? '_blank' : undefined}
+            rel={s.data.url ? 'noopener noreferrer' : undefined}
+            class:list={[
+              'flex h-full flex-col items-center justify-center gap-3 border border-line bg-white text-center',
+              compact ? 'p-4' : 'p-6 sm:p-8',
+              s.data.url &&
+                'transition-[transform,border-color] duration-200 ease-out-soft hover:-translate-y-1 hover:border-red/45',
+            ]}
+          >
+            <span
+              class:list={[
+                'flex w-full items-center justify-center',
+                compact ? 'h-14 sm:h-16' : 'h-20 sm:h-24',
+              ]}
+            >
+              {logo ? (
+                <Image
+                  src={logo}
+                  alt=""
+                  widths={[200, 400]}
+                  sizes={
+                    compact
+                      ? '(min-width: 1280px) 150px, (min-width: 640px) 30vw, 45vw'
+                      : '(min-width: 1024px) 240px, (min-width: 640px) 30vw, 45vw'
+                  }
+                  class="max-h-full w-auto max-w-full object-contain"
+                />
+              ) : (
+                <span class="font-display text-xl text-ink">{s.data.name}</span>
+              )}
+            </span>
+            <span
+              class:list={[
+                'font-stencil font-bold uppercase text-ink-soft',
+                compact
+                  ? 'text-[0.65rem] tracking-[0.08em]'
+                  : 'text-xs tracking-[0.1em]',
+              ]}
+            >
+              {s.data.name}
+            </span>
+          </Tag>
+        </li>
+      );
+    })
   }
-</div>
+</ul>

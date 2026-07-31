@@ -194,9 +194,9 @@
     background-size: 100% 2px;
   }
 
-  /* Sponsor marquee — two rows scrolling in opposite directions.
-     Each track holds its logo set twice; translateX(-50%) loops it
-     seamlessly. Pauses on hover / keyboard focus. */
+  /* Sponsor marquee — a single row scrolling continuously. The track
+     holds its logo set twice; translateX(-50%) loops it seamlessly.
+     Pauses on hover / keyboard focus. */
   .marquee {
     overflow: hidden;
     -webkit-mask-image: linear-gradient(
@@ -225,9 +225,6 @@
     backface-visibility: hidden;
     transform: translateZ(0);
   }
-  .marquee-track--reverse {
-    animation-direction: reverse;
-  }
   .marquee:hover .marquee-track,
   .marquee:focus-within .marquee-track {
     animation-play-state: paused;
@@ -240,7 +237,7 @@
       transform: none !important;
       filter: none !important;
     }
-    /* Static, gap-free wall — the global rule freezes the animation,
+    /* Static, gap-free strip — the global rule freezes the animation,
        so wrap the real logos and drop the duplicated copy. */
     .marquee {
       -webkit-mask-image: none;
@@ -250,6 +247,7 @@
       width: 100%;
       flex-wrap: wrap;
       justify-content: center;
+      row-gap: 0.625rem;
     }
     [data-marquee-clone] {
       display: none !important;

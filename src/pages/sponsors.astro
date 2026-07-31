@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Section from '@/components/Section.astro';
+import Reveal from '@/components/Reveal.astro';
+import Button from '@/components/Button.astro';
+import SponsorGrid from '@/components/SponsorGrid.astro';
+import CallToAction from '@/components/CallToAction.astro';
+import { Icon } from 'astro-icon/components';
+
+const sponsors = await getCollection('sponsors');
+---
+
+<Base
+  title="Our Sponsors"
+  description="The local businesses, unions, and organizations whose support keeps the TriState Veterans Memorial Fund's mission moving."
+>
+  <PageHeader
+    eyebrow="Our Sponsors"
+    title="The community behind the mission."
+    intro="Every event we run and every veteran we help is made possible by these local businesses and trade organizations. We are grateful for every one of them."
+  />
+
+  <Section class="py-20 sm:py-24">
+    <Reveal>
+      <SponsorGrid sponsors={sponsors} size="large" />
+    </Reveal>
+
+    <Reveal
+      class="mt-14 flex flex-col items-center gap-4 border border-line bg-bone-deep px-6 py-10 text-center"
+      delay={80}
+    >
+      <h2 class="font-display text-2xl sm:text-3xl">
+        Stand with our veterans.
+      </h2>
+      <p class="max-w-lg text-ink-soft">
+        Sponsorship puts your business beside a mission that matters — and in
+        front of the community that supports it.
+      </p>
+      <Button href="/contact" class="mt-2">
+        Become a sponsor
+        <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+      </Button>
+    </Reveal>
+  </Section>
+
+  <CallToAction />
+</Base>
