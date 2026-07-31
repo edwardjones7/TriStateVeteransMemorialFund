@@ -10,11 +10,30 @@ import CallToAction from '@/components/CallToAction.astro';
 import { Icon } from 'astro-icon/components';
 
 const sponsors = await getCollection('sponsors');
+
+/* ItemList of sponsor organizations — lets search engines associate each
+   sponsor (name + site) with the Fund's sponsors page. */
+const sponsorListLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'TriState Veterans Memorial Fund — Sponsors & Community Partners',
+  numberOfItems: sponsors.length,
+  itemListElement: sponsors.map((s, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'Organization',
+      name: s.data.name,
+      ...(s.data.url && { url: s.data.url }),
+    },
+  })),
+};
 ---
 
 <Base
-  title="Our Sponsors"
-  description="The local businesses, unions, and organizations whose support keeps the TriState Veterans Memorial Fund's mission moving."
+  title="Our Sponsors & Community Partners"
+  description="Meet the sponsors of the TriState Veterans Memorial Fund — the South Jersey businesses, trade unions, and local organizations whose support funds mental-health aid, PTSD service dogs, and veteran outreach across the tri-state area."
+  jsonLd={[sponsorListLd]}
 >
   <PageHeader
     eyebrow="Our Sponsors"

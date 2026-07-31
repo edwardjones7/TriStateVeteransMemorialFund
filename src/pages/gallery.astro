@@ -111,3 +111,15 @@ const videos: Video[] = [
     body="Join us at an event, or support the work — and help us carry this mission forward."
   />
 </Base>
+
+<script>
+  // ClientRouter view transitions adopt <video> elements into the document
+  // without running the browser's media resource selection, so local clips
+  // stay blank until a hard refresh. Kick any video that never started
+  // loading (NETWORK_EMPTY) after each swap.
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll('video').forEach((video) => {
+      if (video.networkState === HTMLMediaElement.NETWORK_EMPTY) video.load();
+    });
+  });
+</script>
