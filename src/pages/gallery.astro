@@ -16,20 +16,12 @@ const photos = Object.entries(modules)
   .sort(([a], [b]) => a.localeCompare(b))
   .map(([, mod]) => mod.default);
 
-// Self-hosted clips live in /public/videos; YouTube clips embed by id.
-type Video =
-  | { kind: 'file'; src: string; title: string }
-  | { kind: 'youtube'; id: string; title: string };
-
-const videos: Video[] = [
-  { kind: 'file', src: '/videos/6abc.mp4', title: 'Featured on 6abc' },
-  {
-    kind: 'file',
-    src: '/videos/honoring-veterans.mp4',
-    title: 'Honoring Our Veterans',
-  },
-  { kind: 'youtube', id: 'BD9h0t7h9RU', title: 'Second Annual 5K' },
-  { kind: 'youtube', id: 'xNgKeG1ekNU', title: 'First Annual 5K' },
+// Every clip is a YouTube embed — `id` is the code after youtu.be/.
+const videos = [
+  { id: 'h8X1aPzVC9Q', title: 'Featured on 6abc' },
+  { id: 'RsOro6KpYko', title: 'Honoring Our Veterans' },
+  { id: 'BD9h0t7h9RU', title: 'Second Annual 5K' },
+  { id: 'xNgKeG1ekNU', title: 'First Annual 5K' },
 ];
 ---
 
@@ -56,23 +48,14 @@ const videos: Video[] = [
           <Reveal delay={(i % 2) * 80}>
             <figure>
               <div class="aspect-video overflow-hidden border border-line bg-navy-deep">
-                {video.kind === 'file' ? (
-                  <video
-                    src={video.src}
-                    controls
-                    preload="metadata"
-                    class="h-full w-full object-cover"
-                  />
-                ) : (
-                  <iframe
-                    src={`https://www.youtube-nocookie.com/embed/${video.id}`}
-                    title={video.title}
-                    loading="lazy"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                    class="h-full w-full"
-                  />
-                )}
+                <iframe
+                  src={`https://www.youtube-nocookie.com/embed/${video.id}`}
+                  title={video.title}
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                  class="h-full w-full"
+                />
               </div>
               <figcaption class="mt-2.5 font-stencil text-xs uppercase tracking-[0.18em] text-ink-soft">
                 {video.title}
@@ -111,15 +94,3 @@ const videos: Video[] = [
     body="Join us at an event, or support the work — and help us carry this mission forward."
   />
 </Base>
-
-<script>
-  // ClientRouter view transitions adopt <video> elements into the document
-  // without running the browser's media resource selection, so local clips
-  // stay blank until a hard refresh. Kick any video that never started
-  // loading (NETWORK_EMPTY) after each swap.
-  document.addEventListener('astro:page-load', () => {
-    document.querySelectorAll('video').forEach((video) => {
-      if (video.networkState === HTMLMediaElement.NETWORK_EMPTY) video.load();
-    });
-  });
-</script>
