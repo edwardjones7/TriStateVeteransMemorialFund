@@ -22,5 +22,16 @@
   { "id": "mitchell-funeral-support", "name": "Mitchell Funeral Support", "url": "http://mitchellfuneralsupport.com/", "tier": "sponsor" },
   { "id": "boilermakers-local-28", "name": "Boilermakers Local 28", "url": "https://boilermakerslocal28.com/", "tier": "supporter" },
   { "id": "grassos-landscape-service", "name": "Grasso's Landscape Service", "url": "https://share.google/eYhieldR7FITLvqSM", "tier": "sponsor" },
-  { "id": "pest-professionals", "name": "The Pest Professionals", "url": "https://www.thepestprofessionals.com/", "tier": "sponsor" }
+  { "id": "pest-professionals", "name": "The Pest Professionals", "url": "https://www.thepestprofessionals.com/", "tier": "sponsor" },
+  { "id": "ap-construction", "name": "A.P. Construction", "url": "https://www.apconstruction.com/", "tier": "sponsor" },
+  { "id": "ironworkers-399", "name": "Iron Workers Local 399", "url": "https://www.ironworkers399.org/", "tier": "supporter" },
+  { "id": "iuoe-825", "name": "Operating Engineers Local 825", "url": "https://www.iuoe825.org/", "tier": "supporter" },
+  { "id": "roofers-30", "name": "Roofers Local 30", "url": "https://www.rooferslocal30.com/", "tier": "supporter" },
+  {
+    "id": "united-building-trades",
+    "name": "United Building Trades Council of Southern New Jersey, AFL-CIO",
+    "url": "https://njaflcio.org/",
+    "tier": "supporter",
+    "wordmark": ["United", "Building Trades", "Council"]
+  }
 ]

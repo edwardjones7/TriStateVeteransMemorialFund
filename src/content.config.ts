@@ -82,6 +82,9 @@ const sponsors = defineCollection({
     name: z.string(),
     url: z.string().url().optional(),
     tier: z.enum(['partner', 'sponsor', 'supporter']).default('sponsor'),
+    /** Sponsors with no logo file: the short form set as a stacked
+        typographic mark, one array entry per line. Falls back to `name`. */
+    wordmark: z.array(z.string()).optional(),
   }),
 });
 

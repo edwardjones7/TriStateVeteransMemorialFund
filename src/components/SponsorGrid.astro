@@ -3,10 +3,15 @@ import type { CollectionEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import { sponsorLogo } from '@/lib/sponsorLogos';
 /**
- * SponsorGrid — the sponsor wall, a static uniform grid. Every sponsor
- * gets the same-size card: logo in a fixed-height box, name caption
- * beneath. Cards link out when the sponsor has a url. `size` picks the
- * compact homepage density or the large /sponsors-page treatment.
+ * SponsorGrid — the sponsor wall, a static uniform wall of cards. Every
+ * sponsor gets the same-size card: logo in a fixed-height box, name
+ * caption beneath. Cards link out when the sponsor has a url. `size`
+ * picks the compact homepage density or the large /sponsors-page
+ * treatment; both lay out via .sponsor-wall in global.css, which centers
+ * a final short row rather than leaving a gap.
+ * A sponsor with no logo file gets a set typographic mark instead —
+ * `wordmark` in sponsors.json breaks it across lines so it stacks inside
+ * the logo box rather than running past the card.
  */
 interface Props {
   sponsors: CollectionEntry<'sponsors'>[];
@@ -16,20 +21,13 @@ const { sponsors, size = 'compact' } = Astro.props;
 const compact = size === 'compact';
 ---
 
-<ul
-  class:list={[
-    'grid gap-3 sm:gap-4',
-    compact
-      ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6'
-      : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4',
-  ]}
->
+<ul class:list={['sponsor-wall', compact && 'sponsor-wall--compact']}>
   {
     sponsors.map((s) => {
       const logo = sponsorLogo(s.id);
       const Tag = s.data.url ? 'a' : 'div';
       return (
-        <li>
+        <li class="min-w-0">
           <Tag
             href={s.data.url}
             target={s.data.url ? '_blank' : undefined}
@@ -60,7 +58,16 @@ const compact = size === 'compact';
                   class="max-h-full w-auto max-w-full object-contain"
                 />
               ) : (
-                <span class="font-display text-xl text-ink">{s.data.name}</span>
+                <span
+                  class:list={[
+                    'font-display uppercase leading-[1.05] text-ink',
+                    compact ? 'text-base sm:text-lg' : 'text-xl sm:text-2xl',
+                  ]}
+                >
+                  {(s.data.wordmark ?? [s.data.name]).map((line) => (
+                    <span class="block">{line}</span>
+                  ))}
+                </span>
               )}
             </span>
             <span

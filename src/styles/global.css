@@ -194,6 +194,41 @@
     background-size: 100% 2px;
   }
 
+  /* Sponsor wall — flex, not grid, so a final row that does not fill
+     centers itself instead of leaving a hole at the end. The sponsor
+     count is arbitrary and rarely divides evenly by any column count.
+     Each basis reproduces the column widths a grid would give; the
+     0.5px trim absorbs sub-pixel rounding so a full row can never
+     overflow and wrap. */
+  .sponsor-wall {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+  .sponsor-wall > * {
+    flex: 0 0 calc((100% - 0.75rem) / 2 - 0.5px);
+  }
+  @media (min-width: 640px) {
+    .sponsor-wall {
+      gap: 1rem;
+    }
+    .sponsor-wall > * {
+      flex-basis: calc((100% - 2rem) / 3 - 0.5px);
+    }
+  }
+  @media (min-width: 1024px) {
+    .sponsor-wall > * {
+      flex-basis: calc((100% - 3rem) / 4 - 0.5px);
+    }
+  }
+  /* The homepage density goes one step wider; /sponsors stops at four. */
+  @media (min-width: 1280px) {
+    .sponsor-wall--compact > * {
+      flex-basis: calc((100% - 5rem) / 6 - 0.5px);
+    }
+  }
+
   /* Sponsor marquee — a single row scrolling continuously. The track
      holds its logo set twice; translateX(-50%) loops it seamlessly.
      Pauses on hover / keyboard focus. */
