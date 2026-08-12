@@ -29,6 +29,8 @@
   { "id": "roofers-30", "name": "Roofers Local 30", "url": "https://www.rooferslocal30.com/", "tier": "supporter" },
   { "id": "bac-nj", "name": "Bricklayers & Allied Craftworkers ADC of NJ", "url": "https://bacnj.com/", "tier": "supporter" },
   { "id": "ritas-italian-ice", "name": "Rita's Italian Ice", "url": "https://www.ritasice.com/", "tier": "supporter" },
+  { "id": "wash-twp-rotary", "name": "Rotary Club of Washington Township", "url": "https://wtrotary.org/", "tier": "supporter" },
+  { "id": "michaels-agency", "name": "The Michaels Agency", "url": "https://michaelsagency.net/", "tier": "sponsor" },
   {
     "id": "united-building-trades",
     "name": "United Building Trades Council of Southern New Jersey, AFL-CIO",
