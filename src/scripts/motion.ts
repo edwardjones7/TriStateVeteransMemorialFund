@@ -81,6 +81,16 @@ function setupMobileNav(): void {
   });
 }
 
+function setupVideos(): void {
+  // Videos adopted during a ClientRouter swap run their resource selection
+  // while the incoming document is still inert, fail with NETWORK_NO_SOURCE
+  // (empty currentSrc), and stay blank until a hard refresh. load() re-runs
+  // the selection now that the element is live.
+  document.querySelectorAll<HTMLVideoElement>('video').forEach((video) => {
+    if (!video.currentSrc) video.load();
+  });
+}
+
 function init(): void {
   document.documentElement.classList.add('has-js');
   document.body.style.overflow = '';
@@ -88,6 +98,7 @@ function init(): void {
   setupDevelop();
   setupHeader();
   setupMobileNav();
+  setupVideos();
 }
 
 // Fires on first load and after each view transition.
