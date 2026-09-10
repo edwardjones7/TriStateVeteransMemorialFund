@@ -12,6 +12,7 @@
  */
 import { getCollection } from 'astro:content';
 import { isUpcoming } from '@/lib/format';
+import { eventLink } from '@/lib/eventSchema';
 
 const events = await getCollection('events');
 const upcoming = events
@@ -86,10 +87,19 @@ const initialValue = (key: string) => {
   const v = initial[key as 'd' | 'h' | 'm' | 's'];
   return key === 'd' ? String(v) : pad(v);
 };
+
+// CTA goes straight to sign-up/payment, falling back to the event's own
+// page — so the bar shows for every upcoming event, not just 5Ks.
+const cta = event ? eventLink(event) : null;
+// "Race day" only reads right for a run.
+const dayOfMessage =
+  event && /5k|run|walk/i.test(event.data.title)
+    ? "It's race day!"
+    : "It's today!";
 ---
 
 {
-  event && event.data.registrationUrl && targetMs !== null && (
+  event && cta && targetMs !== null && (
     <aside
       id="event-banner"
       data-event-id={event.id}
@@ -139,17 +149,17 @@ const initialValue = (key: string) => {
             hidden
             class="font-display text-lg uppercase tracking-wide text-gold"
           >
-            It&rsquo;s race day!
+            {dayOfMessage}
           </span>
 
           <a
-            href={event.data.registrationUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-track="register_click"
+            href={cta.href}
+            target={cta.external ? '_blank' : undefined}
+            rel={cta.external ? 'noopener noreferrer' : undefined}
+            data-track={cta.track}
             class="group inline-flex shrink-0 items-center gap-1.5 rounded-full bg-red px-3.5 py-1 text-[0.8rem] font-semibold text-bone shadow-sm transition-[background-color,transform] duration-150 ease-out-soft hover:bg-red-deep active:scale-[0.98]"
           >
-            Register
+            {cta.label}
             <span
               class="transition-transform duration-150 ease-out-soft group-hover:translate-x-0.5"
               aria-hidden="true"

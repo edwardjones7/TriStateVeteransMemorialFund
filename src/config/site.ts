@@ -38,13 +38,12 @@ export const site = {
   },
 
   /*
-   * PayPal donation link. Built from the org's PayPal email so the donor
-   * chooses the amount (no amount param) and may opt into a recurring gift
-   * (no_recurring=0). This replaces the old Wix-generated, single-use,
-   * dated "Bob Pantano" checkout links, which expired and can't be reused.
+   * PayPal Giving Fund charity page for the Fund. Replaces the earlier
+   * /donate/?business=… checkout link, which was broken. PayPal hosts the
+   * page, so the donor picks the amount and PayPal passes on 100% of it —
+   * nothing here to keep in sync but the charity id.
    */
-  donateUrl:
-    'https://www.paypal.com/donate/?business=TriStatevmf%40gmail.com&item_name=TriState+Veterans+Memorial+Fund&currency_code=USD&no_recurring=0',
+  donateUrl: 'https://www.paypal.com/US/fundraiser/charity/5282334',
 } as const;
 
 /** Primary navigation (header). Donate is rendered separately as the CTA. */

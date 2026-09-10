@@ -9,7 +9,7 @@ import EventCard from '@/components/EventCard.astro';
 import StarMark from '@/components/StarMark.astro';
 import Button from '@/components/Button.astro';
 import CallToAction from '@/components/CallToAction.astro';
-import { isUpcoming } from '@/lib/format';
+import { isUpcoming, formatDate } from '@/lib/format';
 import { site } from '@/config/site';
 import { eventSchema, eventPath } from '@/lib/eventSchema';
 
@@ -22,11 +22,18 @@ const past = events
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 const eventLd = upcoming.map(eventSchema);
+
+// The flyer QR code points here, so the meta leads with whatever is next
+// rather than naming one event that will go stale.
+const next = upcoming[0];
+const metaDescription = next
+  ? `Next up: ${next.data.title}, ${formatDate(next.data.date)} at ${next.data.location} in ${site.address.city}, ${site.address.state}. See all upcoming and past ${site.shortName} events.`
+  : `Upcoming and past events from the ${site.name} in ${site.address.city}, ${site.address.state} — our annual 5K run/walk, ceremonies, and fundraisers that support local veterans.`;
 ---
 
 <Base
-  title="Veterans 5K Run & Events in Sewell, NJ"
-  description="Upcoming and past events from the TriState Veterans Memorial Fund in Sewell, NJ — our annual 5K run/walk, ceremonies, and fundraisers that support local veterans."
+  title="Veterans Events in Sewell, NJ — Dances, 5K Run & Fundraisers"
+  description={metaDescription}
   jsonLd={eventLd}
 >
   <PageHeader

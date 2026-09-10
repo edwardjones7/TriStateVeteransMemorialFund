@@ -13,7 +13,14 @@ const events = defineCollection({
       address: z.string().optional(),
       entryFee: z.string().optional(),
       hosts: z.string().optional(),
+      /** External sign-up site (e.g. RunSignup) for events that take
+       *  online registration. */
       registrationUrl: z.string().url().optional(),
+      /** For events with no online registration: where to reserve a spot.
+       *  May be a `mailto:`/`tel:` URL. Only surfaced on the event's own page. */
+      rsvpUrl: z.string().url().optional(),
+      /** Label for the RSVP button (defaults to "Reserve your spot"). */
+      rsvpLabel: z.string().optional(),
       featured: z.boolean().default(false),
       imageLabel: z.string().optional(),
       image: image().optional(),

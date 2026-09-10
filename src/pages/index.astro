@@ -16,7 +16,7 @@ import CallToAction from '@/components/CallToAction.astro';
 import { Icon } from 'astro-icon/components';
 import { site } from '@/config/site';
 import { isUpcoming } from '@/lib/format';
-import { eventPath } from '@/lib/eventSchema';
+import { eventPath, eventLink } from '@/lib/eventSchema';
 
 import heroImg from '@/assets/photos/uniform.png';
 import missionImg from '@/assets/photos/salute.jpg';
@@ -36,12 +36,13 @@ const upcoming = events
   .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
 const featuredEvent =
   upcoming.find((e) => e.data.featured) ?? upcoming[0] ?? null;
-// Hero registration CTA — only shown when the next event takes sign-ups.
-const heroRegisterUrl = featuredEvent?.data.registrationUrl ?? null;
-const heroRegisterLabel =
-  featuredEvent && /5k/i.test(featuredEvent.data.title)
+// Hero CTA for the next event — the sign-up site when it takes registrations,
+// otherwise its own page. Null when nothing is upcoming.
+const heroCta = featuredEvent ? eventLink(featuredEvent) : null;
+const heroCtaLabel =
+  featuredEvent?.data.registrationUrl && /5k/i.test(featuredEvent.data.title)
     ? 'Register for the 5K'
-    : 'Register now';
+    : (heroCta?.label ?? '');
 
 const serviceImg: Record<string, ImageMetadata> = {
   'mental-health-aid': backHeadshot,
@@ -135,14 +136,19 @@ const involve = [
       </Reveal>
       <Reveal delay={210}>
         <div class="mt-9 flex flex-wrap justify-center gap-4">
-          {heroRegisterUrl && (
-            <Button href={heroRegisterUrl} size="lg" external>
-              {heroRegisterLabel}
+          {heroCta && (
+            <Button
+              href={heroCta.href}
+              size="lg"
+              external={heroCta.external}
+              data-track={heroCta.track}
+            >
+              {heroCtaLabel}
             </Button>
           )}
           <Button
             href="/donate"
-            variant={heroRegisterUrl ? 'light' : 'primary'}
+            variant={heroCta ? 'light' : 'primary'}
             size="lg">Donate</Button
           >
           <Button href="/mission" variant="on-dark" size="lg"

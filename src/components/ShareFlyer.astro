@@ -19,6 +19,8 @@ interface Props {
 const { title, url, flyerUrl, compact = false } = Astro.props;
 
 const absoluteFlyerUrl = new URL(flyerUrl, url).href;
+// Save as the flyer's own filename rather than a hardcoded one.
+const downloadName = flyerUrl.split('/').pop() || 'flyer';
 const emailBody = `Join us! ${title}\n\nDetails & registration: ${url}\nFlyer: ${absoluteFlyerUrl}`;
 const mailto = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(emailBody)}`;
 
@@ -53,7 +55,7 @@ const icon = compact ? 'size-3.5' : 'size-4';
     <Icon name="lucide:link" class={icon} aria-hidden="true" />
     <span data-copy-label>Copy link</span>
   </button>
-  <a href={flyerUrl} download="tristate-vmf-5k-flyer.png" class={btn} data-track="share_click">
+  <a href={flyerUrl} download={downloadName} class={btn} data-track="share_click">
     <Icon name="lucide:download" class={icon} aria-hidden="true" />
     {compact ? 'Flyer' : 'Download flyer'}
   </a>

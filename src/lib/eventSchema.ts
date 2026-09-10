@@ -17,6 +17,77 @@ export function eventUrl(entry: CollectionEntry<'events'>): string {
   return new URL(eventPath(entry), site.url).href;
 }
 
+export type EventCta = {
+  href: string;
+  label: string;
+  external: boolean;
+  /** GA4 event name; omitted for plain internal navigation. */
+  track?: string;
+};
+
+/** True for URLs that leave the site in a new tab (http/https, not mailto/tel). */
+const isExternal = (href: string) => /^https?:/i.test(href);
+
+/**
+ * Where a banner, card, or teaser should send someone: straight to the place
+ * they sign up or pay, so a CTA is never answered with another CTA. Falls back
+ * to the event's own page only when there is nowhere better — including a
+ * `mailto:` RSVP, which has no business opening from a site-wide banner.
+ */
+export function eventLink(entry: CollectionEntry<'events'>): EventCta {
+  const d = entry.data;
+  if (d.registrationUrl) {
+    return {
+      href: d.registrationUrl,
+      // Kept short — this label sits in a narrow bar and on cards.
+      label: 'Register',
+      external: true,
+      track: 'register_click',
+    };
+  }
+  if (isExternal(d.rsvpUrl ?? '')) {
+    return {
+      href: d.rsvpUrl!,
+      label: d.rsvpLabel ?? 'Reserve your spot',
+      external: true,
+      track: 'reserve_click',
+    };
+  }
+  return {
+    href: eventPath(entry),
+    label: d.rsvpLabel ?? 'Event details',
+    external: false,
+  };
+}
+
+/**
+ * The primary action on the event's own page, where linking back to itself
+ * would be useless: the sign-up site, or the RSVP contact for events that
+ * take reservations instead. Null when neither is set.
+ */
+export function eventAction(entry: CollectionEntry<'events'>): EventCta | null {
+  const d = entry.data;
+  if (d.registrationUrl) {
+    return {
+      href: d.registrationUrl,
+      label: /runsignup\.com/i.test(d.registrationUrl)
+        ? 'Register on RunSignup'
+        : 'Register',
+      external: true,
+      track: 'register_click',
+    };
+  }
+  if (d.rsvpUrl) {
+    return {
+      href: d.rsvpUrl,
+      label: d.rsvpLabel ?? 'Reserve your spot',
+      external: isExternal(d.rsvpUrl),
+      track: 'reserve_click',
+    };
+  }
+  return null;
+}
+
 /** Clean a Markdown body into a single-line plain-text description. */
 function bodyText(entry: CollectionEntry<'events'>): string {
   return (entry.body ?? '').replace(/\s+/g, ' ').trim();
@@ -86,12 +157,16 @@ export function eventSchema(entry: CollectionEntry<'events'>): Record<string, un
 
   if (image) schema.image = image;
 
-  if (d.registrationUrl) {
+  // Emit an Offer when there is somewhere to sign up or a stated price —
+  // events taking reservations point at their own page.
+  if (d.registrationUrl || price !== null) {
     const offer: Record<string, unknown> = {
       '@type': 'Offer',
-      url: d.registrationUrl,
+      url:
+        d.registrationUrl ??
+        (isExternal(d.rsvpUrl ?? '') ? d.rsvpUrl! : eventUrl(entry)),
       availability: 'https://schema.org/InStock',
-      category: 'Registration',
+      category: d.registrationUrl ? 'Registration' : 'Admission',
     };
     if (price !== null) {
       offer.price = price;
@@ -106,17 +181,19 @@ export function eventSchema(entry: CollectionEntry<'events'>): Record<string, un
 export type Faq = { question: string; answer: string };
 
 /**
- * Question/answer pairs runners actually search for. Generated only from
- * data we can state truthfully (when/where, how to register, proceeds) plus
+ * Question/answer pairs attendees actually search for. Generated only from
+ * data we can state truthfully (when/where, how to take part, proceeds) plus
  * the run/walk note for 5Ks — venue-specific details (parking, packet pickup)
- * are intentionally omitted until confirmed. Returns [] for non-registerable
- * events (e.g. past archive entries).
+ * are intentionally omitted until confirmed. Returns [] for events with no
+ * way to take part (e.g. past archive entries).
  */
 export function eventFaqs(entry: CollectionEntry<'events'>): Faq[] {
   const d = entry.data;
-  if (!d.registrationUrl) return [];
+  const action = eventAction(entry);
+  if (!action) return [];
 
   const where = d.address ? `${d.location} (${d.address})` : d.location;
+  const fee = d.entryFee ? ` Entry is ${d.entryFee}.` : '';
   const faqs: Faq[] = [
     {
       question: `When and where is the ${d.title}?`,
@@ -124,12 +201,27 @@ export function eventFaqs(entry: CollectionEntry<'events'>): Faq[] {
         `${d.title} takes place on ${formatDate(d.date)} at ${where}.` +
         (d.startTime ? ` ${d.startTime}.` : ''),
     },
-    {
-      question: 'How do I register?',
-      answer:
-        `Register online through RunSignup at ${d.registrationUrl}.` +
-        (d.entryFee ? ` Entry is ${d.entryFee}.` : ''),
-    },
+    d.registrationUrl
+      ? {
+          question: 'How do I register?',
+          answer:
+            `Register online${
+              /runsignup\.com/i.test(d.registrationUrl) ? ' through RunSignup' : ''
+            } at ${d.registrationUrl}.` + fee,
+        }
+      : isExternal(d.rsvpUrl ?? '')
+        ? {
+            question: 'How do I reserve a spot?',
+            answer:
+              `Reserve your spot online at ${d.rsvpUrl}.${fee} You can also ` +
+              `contact ${site.name} at ${site.email} or ${site.phone}.`,
+          }
+        : {
+            question: 'How do I reserve a spot?',
+            answer:
+              `Reserve your spot by contacting ${site.name} at ${site.email} ` +
+              `or ${site.phone}.` + fee,
+          },
   ];
 
   if (/5k|run|walk/i.test(d.title)) {

@@ -2,6 +2,8 @@
  * Lightweight GA4 event tracking for the conversions that matter:
  *   - register_click  → outbound clicks to RunSignup (5K registration)
  *   - donate_click    → clicks to the PayPal donation link
+ *   - reserve_click   → event reservations (also PayPal, tagged explicitly
+ *     so they don't disappear into donate_click)
  *   - plus any element with an explicit `data-track="event_name"` attribute
  *     (e.g. the event banner CTA).
  *

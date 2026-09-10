@@ -10,6 +10,8 @@ interface Props {
   class?: string;
   external?: boolean;
   'aria-label'?: string;
+  /** Explicit GA4 event name; overrides what track.ts infers from the href. */
+  'data-track'?: string;
 }
 const {
   href,
@@ -18,6 +20,7 @@ const {
   class: cls = '',
   external = false,
   'aria-label': ariaLabel,
+  'data-track': dataTrack,
 } = Astro.props;
 
 const base =
@@ -47,6 +50,7 @@ const ext = external
   href={href}
   class:list={[base, sizes[size], variants[variant], cls]}
   aria-label={ariaLabel}
+  data-track={dataTrack}
   {...ext}
 >
   <slot />

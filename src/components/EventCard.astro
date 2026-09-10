@@ -5,7 +5,7 @@ import TreatedImage from './TreatedImage.astro';
 import Button from './Button.astro';
 import ShareFlyer from './ShareFlyer.astro';
 import { formatDate, dateParts } from '@/lib/format';
-import { eventUrl } from '@/lib/eventSchema';
+import { eventUrl, eventLink } from '@/lib/eventSchema';
 
 /** EventCard — `featured` renders a large two-column card; otherwise a
  *  compact archive row with a date block and optional thumbnail. */
@@ -18,6 +18,8 @@ interface Props {
   href?: string;
   /** Show compact share options next to the register button (needs flyerUrl). */
   showShare?: boolean;
+  /** Suppress the card's CTA — for the event's own page, which supplies its own. */
+  hideCta?: boolean;
 }
 const {
   event,
@@ -26,8 +28,11 @@ const {
   hideImage = false,
   href,
   showShare = false,
+  hideCta = false,
 } = Astro.props;
 const d = event.data;
+// Straight to sign-up/payment when the event has one — no stop-off page.
+const cta = status === 'upcoming' && !hideCta ? eventLink(event) : null;
 const parts = dateParts(d.date);
 const place = d.address ? `${d.location}, ${d.address}` : d.location;
 /* Portrait images (e.g. event flyers) are letterboxed instead of cropped —
@@ -79,10 +84,10 @@ const isPortrait = !!d.image && d.image.height > d.image.width;
           )}
         </ul>
         <p class="mt-4 text-[0.95rem] leading-relaxed">{event.body}</p>
-        {d.registrationUrl && status === 'upcoming' && (
+        {cta && (
           <div class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-3 self-start">
-            <Button href={d.registrationUrl} external>
-              Register on RunSignup
+            <Button href={cta.href} external={cta.external} data-track={cta.track}>
+              {cta.label}
             </Button>
             {showShare && d.flyerUrl && (
               <ShareFlyer
@@ -122,14 +127,15 @@ const isPortrait = !!d.image && d.image.height > d.image.width;
         <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
           {d.entryFee && <span class="text-ink-soft">{d.entryFee}</span>}
           {d.hosts && <span class="text-ink-soft">{d.hosts}</span>}
-          {d.registrationUrl && status === 'upcoming' && (
+          {cta && (
             <a
-              href={d.registrationUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={cta.href}
+              target={cta.external ? '_blank' : undefined}
+              rel={cta.external ? 'noopener noreferrer' : undefined}
+              data-track={cta.track}
               class="link-underline font-semibold text-red"
             >
-              Register &rarr;
+              {cta.label} &rarr;
             </a>
           )}
         </div>

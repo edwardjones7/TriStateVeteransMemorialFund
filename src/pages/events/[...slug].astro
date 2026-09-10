@@ -16,6 +16,7 @@ import {
   faqSchema,
   eventLocale,
   eventUrl,
+  eventAction,
 } from '@/lib/eventSchema';
 
 export const getStaticPaths = (async () => {
@@ -41,10 +42,13 @@ const isRun = /5k|run|walk/i.test(d.title);
 const metaTitle = isRun
   ? `5K Run/Walk in ${locale} · ${d.date.getUTCFullYear()}`
   : `${d.title} · ${locale}`;
+const action = upcoming ? eventAction(entry) : null;
 const metaDescription = `${d.title} — ${formatDate(d.date)} at ${place}. ${
   d.registrationUrl
     ? 'Register for the run/walk; all proceeds support local veterans.'
-    : 'A TriState Veterans Memorial Fund event supporting local veterans.'
+    : action
+      ? 'Reserve your spot; all proceeds support local veterans.'
+      : 'A TriState Veterans Memorial Fund event supporting local veterans.'
 }`;
 const intro = isRun
   ? `A 5K run/walk in ${locale} — every step raises real support for our veterans.`
@@ -81,14 +85,20 @@ const ogImage = d.image?.src;
         status={upcoming ? 'upcoming' : 'past'}
         featured
         hideImage={!d.image}
+        hideCta
       />
     </Reveal>
 
     {
-      upcoming && d.registrationUrl && (
+      action && (
         <Reveal class="mt-8 flex flex-wrap items-center gap-4">
-          <Button href={d.registrationUrl} external size="lg">
-            Register on RunSignup
+          <Button
+            href={action.href}
+            external={action.external}
+            size="lg"
+            data-track={action.track}
+          >
+            {action.label}
           </Button>
           <a href="/events" class="link-underline font-semibold text-ink-soft">
             &larr; All events
@@ -97,7 +107,7 @@ const ogImage = d.image?.src;
       )
     }
     {
-      !(upcoming && d.registrationUrl) && (
+      !action && (
         <Reveal class="mt-8">
           <a href="/events" class="link-underline font-semibold text-ink-soft">
             &larr; All events
