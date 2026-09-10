@@ -1,0 +1,32 @@
+---
+/**
+ * VideoEmbed — a privacy-friendly YouTube embed with a caption.
+ * `id` is the code after youtu.be/.
+ */
+interface Props {
+  id: string;
+  title: string;
+  /** Hide the caption when a surrounding heading already names the clip. */
+  showCaption?: boolean;
+}
+const { id, title, showCaption = true } = Astro.props;
+---
+
+<figure>
+  <div class="aspect-video overflow-hidden border border-line bg-navy-deep">
+    <iframe
+      src={`https://www.youtube-nocookie.com/embed/${id}`}
+      title={title}
+      loading="lazy"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      class="h-full w-full"></iframe>
+  </div>
+  {
+    showCaption && (
+      <figcaption class="mt-2.5 font-stencil text-xs uppercase tracking-[0.18em] text-ink-soft">
+        {title}
+      </figcaption>
+    )
+  }
+</figure>

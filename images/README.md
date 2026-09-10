@@ -17,11 +17,17 @@ the asset built from it:
 | `photos/`              | `src/assets/photos/`          |
 | `photos/event-flyers/` | `src/assets/photos/` (flyers) |
 | `photos/team/`         | `src/assets/photos/team/`     |
+| `photos/5k-photos/`    | `src/assets/gallery/5k-2026/` |
 | `sponsors/`            | `src/assets/sponsors/`        |
 | `press/`               | `src/assets/press/`           |
 
 `photos/event-flyers/` also keeps the print-resolution PDF each flyer image
 was exported from, under the same basename.
+
+`photos/5k-photos/` holds the camera originals from the 2026 5K (~82 MB). The
+web copies in `src/assets/gallery/5k-2026/` are rotated upright, resized to
+1600px and re-encoded as AVIF (~3.9 MB), and are renumbered by EXIF capture
+time — the original filenames are not in chronological order.
 
 `photos/STOCK-CREDITS.txt` records the license and source of the stock
 photography in `photos/`.

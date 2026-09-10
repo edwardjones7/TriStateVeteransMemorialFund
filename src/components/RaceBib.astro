@@ -1,0 +1,96 @@
+---
+/**
+ * RaceBib — an album date card styled as a runner's race bib, echoing the
+ * numbered bibs worn in the photos it sits beside. The "bib number" is the
+ * date itself, so the thing a visitor reads first is when the race happened.
+ *
+ * Decorative by nature: the pin holes and tear strip are aria-hidden, and the
+ * date is exposed once to assistive tech via a <time> element.
+ */
+import StarMark from './StarMark.astro';
+
+interface Props {
+  /** ISO date — drives both the machine-readable value and the digits. */
+  date: string;
+  eventName: string;
+  /** e.g. "3rd Annual 5K Run & Walk" */
+  subtitle: string;
+  /** Bottom strip, e.g. "Washington Lake Park · Sewell, NJ" */
+  venue: string;
+  class?: string;
+}
+const { date, eventName, subtitle, venue, class: cls = '' } = Astro.props;
+
+const d = new Date(`${date}T00:00:00Z`);
+const fmt = (opts: Intl.DateTimeFormatOptions) =>
+  new Intl.DateTimeFormat('en-US', { ...opts, timeZone: 'UTC' }).format(d);
+
+const weekday = fmt({ weekday: 'long' });
+const month = fmt({ month: 'short' }).toUpperCase();
+const day = fmt({ day: 'numeric' });
+const year = fmt({ year: 'numeric' });
+// The bib number: month.day.yy — reads as a race number, scans as a date.
+const bibNumber = `${d.getUTCMonth() + 1}.${d.getUTCDate()}.${year.slice(2)}`;
+const longDate = `${weekday}, ${fmt({ month: 'long' })} ${day}, ${year}`;
+
+const pin = 'absolute size-2.5 rounded-full bg-bone-deep ring-1 ring-line/80';
+---
+
+<figure
+  class:list={[
+    'relative w-full max-w-[19rem] rotate-[-1.5deg] border border-line bg-bone px-6 pb-0 pt-7 shadow-[0_10px_30px_-12px_rgba(22,24,29,0.35)] transition-transform duration-300 ease-out-soft hover:rotate-0',
+    cls,
+  ]}
+>
+  {/* Safety-pin holes, as on a real bib */}
+  <span class={`${pin} left-3 top-3`} aria-hidden="true"></span>
+  <span class={`${pin} right-3 top-3`} aria-hidden="true"></span>
+  <span class={`${pin} bottom-3 left-3`} aria-hidden="true"></span>
+  <span class={`${pin} bottom-3 right-3`} aria-hidden="true"></span>
+
+  <figcaption class="text-center">
+    <p class="font-stencil text-[0.6rem] uppercase leading-tight tracking-[0.2em] text-red">
+      {eventName}
+    </p>
+    <p class="mt-1 font-stencil text-[0.6rem] uppercase tracking-[0.16em] text-ink-soft">
+      {subtitle}
+    </p>
+
+    {/* The logo star, the way it divides headings elsewhere */}
+    <span class="mt-2.5 flex items-center justify-center gap-1.5 text-red/70" aria-hidden="true">
+      <StarMark class="w-2" />
+      <StarMark class="w-2.5" />
+      <StarMark class="w-2" />
+    </span>
+
+    {/* The date as the bib number */}
+    <p
+      class="mt-2 font-display text-[3.75rem] leading-[0.85] tabular-nums text-navy"
+      aria-hidden="true"
+    >
+      {bibNumber}
+    </p>
+
+    {/* Month / day / year, the way the event cards elsewhere stack a date */}
+    <div
+      class="mt-3 flex items-end justify-center gap-2 border-t border-line pt-3"
+      aria-hidden="true"
+    >
+      <span class="font-stencil text-xs uppercase tracking-[0.18em] text-red">{month}</span>
+      <span class="font-display text-3xl leading-none text-ink">{day}</span>
+      <span class="font-stencil text-xs uppercase tracking-[0.15em] text-ink-soft">{year}</span>
+    </div>
+    <p class="mt-1.5 font-stencil text-[0.6rem] uppercase tracking-[0.16em] text-ink-soft">
+      {weekday}
+    </p>
+
+    {/* Tear-off strip */}
+    <p
+      class="mt-4 border-t border-dashed border-line py-3 font-stencil text-[0.58rem] uppercase leading-relaxed tracking-[0.14em] text-ink-soft"
+    >
+      {venue}
+    </p>
+
+    <time datetime={date} class="sr-only">{longDate}</time>
+  </figcaption>
+</figure>

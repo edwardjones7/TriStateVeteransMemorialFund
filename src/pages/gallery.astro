@@ -5,6 +5,10 @@ import PageHeader from '@/components/PageHeader.astro';
 import Section from '@/components/Section.astro';
 import Reveal from '@/components/Reveal.astro';
 import CallToAction from '@/components/CallToAction.astro';
+import Eyebrow from '@/components/Eyebrow.astro';
+import VideoEmbed from '@/components/VideoEmbed.astro';
+import RaceBib from '@/components/RaceBib.astro';
+import { album5k2026 } from '@/lib/album5k2026';
 
 // Auto-load every photo in src/assets/gallery — drop a new .avif/.jpg/.png
 // in that folder and it appears here on the next build, no edits needed.
@@ -16,14 +20,48 @@ const photos = Object.entries(modules)
   .sort(([a], [b]) => a.localeCompare(b))
   .map(([, mod]) => mod.default);
 
+/* 5K album — the folder is ordered "NN-slug.avif", so strip the numeric
+ * prefix to key each file by slug and let album5k2026 supply the captions
+ * and chapter breaks. Mismatches fail the build rather than dropping a
+ * photo quietly. */
+const albumModules = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/gallery/5k-2026/*.{avif,jpg,jpeg,png,webp}',
+  { eager: true },
+);
+const bySlug = new Map(
+  Object.entries(albumModules).map(([file, mod]) => [
+    file.replace(/^.*\/\d+-/, '').replace(/\.[^.]+$/, ''),
+    mod.default,
+  ]),
+);
+const albumChapters = album5k2026.chapters.map((chapter) => ({
+  ...chapter,
+  photos: chapter.photos.map(({ slug, caption }) => {
+    const image = bySlug.get(slug);
+    if (!image) throw new Error(`5K album: no image file for slug "${slug}"`);
+    bySlug.delete(slug);
+    return { image, caption };
+  }),
+}));
+if (bySlug.size) {
+  throw new Error(
+    `5K album: image(s) not listed in album5k2026: ${[...bySlug.keys()].join(', ')}`,
+  );
+}
+const albumCount = albumChapters.reduce((n, c) => n + c.photos.length, 0);
+
 // Every clip is a YouTube embed — `id` is the code after youtu.be/.
+// `album` pins a clip to the photo album it belongs with; the rest collect
+// under "More from the mission".
 const videos = [
-  { id: 'rTzuliRQMVY', title: 'Third Annual 5K' },
+  { id: 'rTzuliRQMVY', title: 'Third Annual 5K', album: '5k-2026' },
   { id: 'h8X1aPzVC9Q', title: 'Featured on 6abc' },
   { id: 'RsOro6KpYko', title: 'Honoring Our Veterans' },
   { id: 'BD9h0t7h9RU', title: 'Second Annual 5K' },
   { id: 'xNgKeG1ekNU', title: 'First Annual 5K' },
 ];
+const albumVideo = videos.find((v) => v.album === '5k-2026') ?? null;
+const otherVideos = videos.filter((v) => v.album !== '5k-2026');
 ---
 
 <Base
@@ -36,43 +74,98 @@ const videos = [
     intro="The events, the ceremonies, and the community behind our work — captured along the way."
   />
 
+  {/* ---------- 5K album, in the order the morning happened ---------- */}
   <Section class="border-b border-line py-20 sm:py-24">
+    <div class="flex flex-col gap-10 md:flex-row md:items-start md:justify-between md:gap-14">
+      <Reveal class="max-w-2xl">
+        <Eyebrow>{album5k2026.title}</Eyebrow>
+        <h2 class="mt-4 font-display text-3xl sm:text-4xl">
+          Race morning, start to finish.
+        </h2>
+        <p class="mt-3 text-ink-soft">{album5k2026.intro}</p>
+        <p class="mt-2 font-stencil text-xs uppercase tracking-[0.18em] text-ink-soft">
+          {albumCount} photos
+        </p>
+      </Reveal>
+      <Reveal class="self-center md:shrink-0 md:self-start" delay={100}>
+        <RaceBib
+          date={album5k2026.date}
+          eventName="TriState Veterans Memorial Fund"
+          subtitle={album5k2026.title}
+          venue={album5k2026.venue}
+        />
+      </Reveal>
+    </div>
+
+    {
+      albumVideo && (
+        <Reveal class="mt-10 max-w-3xl" delay={80}>
+          <VideoEmbed id={albumVideo.id} title={albumVideo.title} showCaption={false} />
+          <p class="mt-2.5 font-stencil text-xs uppercase tracking-[0.18em] text-ink-soft">
+            Watch the recap
+          </p>
+        </Reveal>
+      )
+    }
+
+    {
+      albumChapters.map((chapter) => (
+        <div class="mt-14 first:mt-12">
+          <Reveal class="flex items-baseline gap-4 border-b border-line pb-3">
+            <span class="font-stencil text-xs uppercase tracking-[0.18em] text-red">
+              {chapter.time}
+            </span>
+            <h3 class="font-display text-2xl sm:text-3xl">{chapter.title}</h3>
+          </Reveal>
+          <div class="mt-7 columns-1 gap-5 sm:columns-2 lg:columns-3">
+            {chapter.photos.map((photo, i) => (
+              <Reveal class="mb-5 break-inside-avoid" delay={(i % 3) * 70}>
+                <figure>
+                  <Image
+                    src={photo.image}
+                    alt={photo.caption}
+                    widths={[480, 768, 1100]}
+                    sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"
+                    loading="lazy"
+                    class="treated develop w-full border border-line"
+                  />
+                  <figcaption class="mt-2 text-sm leading-snug text-ink-soft">
+                    {photo.caption}
+                  </figcaption>
+                </figure>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </Section>
+
+  <Section tone="bone-deep" class="py-20 sm:py-24">
     <Reveal class="max-w-2xl">
-      <h2 class="font-display text-3xl sm:text-4xl">Watch</h2>
+      <h2 class="font-display text-3xl sm:text-4xl">More from the mission</h2>
       <p class="mt-3 text-ink-soft">
-        Stories and highlights from our events and the veterans we serve.
+        Ceremonies, fundraisers, and moments from across our events.
       </p>
     </Reveal>
-    <div class="mt-10 grid gap-6 sm:grid-cols-2">
+
+    <Reveal class="mt-12 border-b border-line pb-3">
+      <h3 class="font-display text-2xl sm:text-3xl">Watch</h3>
+    </Reveal>
+    <div class="mt-7 grid gap-6 sm:grid-cols-2">
       {
-        videos.map((video, i) => (
+        otherVideos.map((video, i) => (
           <Reveal delay={(i % 2) * 80}>
-            <figure>
-              <div class="aspect-video overflow-hidden border border-line bg-navy-deep">
-                <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${video.id}`}
-                  title={video.title}
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen
-                  class="h-full w-full"
-                />
-              </div>
-              <figcaption class="mt-2.5 font-stencil text-xs uppercase tracking-[0.18em] text-ink-soft">
-                {video.title}
-              </figcaption>
-            </figure>
+            <VideoEmbed id={video.id} title={video.title} />
           </Reveal>
         ))
       }
     </div>
-  </Section>
 
-  <Section class="py-20 sm:py-24">
-    <Reveal class="max-w-2xl">
-      <h2 class="font-display text-3xl sm:text-4xl">Photos</h2>
+    <Reveal class="mt-14 border-b border-line pb-3">
+      <h3 class="font-display text-2xl sm:text-3xl">Photos</h3>
     </Reveal>
-    <div class="mt-10 columns-1 gap-5 sm:columns-2 lg:columns-3">
+    <div class="mt-7 columns-1 gap-5 sm:columns-2 lg:columns-3">
       {
         photos.map((photo, i) => (
           <Reveal class="mb-5 break-inside-avoid" delay={(i % 3) * 70}>
