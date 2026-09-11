@@ -114,7 +114,14 @@ const isPortrait = !!d.image && d.image.height > d.image.width;
       </div>
       {!hideImage && d.image && (
         <div class="hidden w-40 shrink-0 sm:block">
-          <TreatedImage src={d.image} alt={d.imageLabel ?? d.title} ratio="4 / 3" />
+          <TreatedImage
+            src={d.image}
+            alt={d.imageLabel ?? d.title}
+            ratio={isPortrait ? '3 / 4' : '4 / 3'}
+            imgClass={isPortrait ? 'object-contain!' : ''}
+            class={isPortrait ? 'border border-line' : ''}
+            sizes="160px"
+          />
         </div>
       )}
       <div class="min-w-0">

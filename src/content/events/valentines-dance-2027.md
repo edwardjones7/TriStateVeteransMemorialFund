@@ -9,7 +9,6 @@ entryFee: $40 donation
 hosts: TriState Veterans Memorial Fund · Featuring Bob Pantano
 rsvpUrl: https://www.paypal.com/US/fundraiser/charity/5282334
 rsvpLabel: Reserve your seats
-featured: true
 imageLabel: Save the Date flyer for the 2027 Valentine's Day Dance Party Fundraiser
 flyerUrl: /flyer-valentines-dance-2027.jpg
 ---

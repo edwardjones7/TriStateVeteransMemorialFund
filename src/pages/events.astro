@@ -64,7 +64,7 @@ const metaDescription = next
             <div>
               {upcoming.slice(1).map((e, i) => (
                 <Reveal delay={i * 50}>
-                  <EventCard event={e} status="upcoming" hideImage href={eventPath(e)} />
+                  <EventCard event={e} status="upcoming" href={eventPath(e)} />
                 </Reveal>
               ))}
             </div>
