@@ -53,9 +53,9 @@ const groups = [
           <Eyebrow>{group.eyebrow}</Eyebrow>
           <h2 class="mt-4 font-display text-3xl sm:text-4xl">{group.title}</h2>
         </Reveal>
-        <div class="grid gap-x-12 gap-y-14 lg:grid-cols-2">
+        <div class="columns-1 gap-x-12 lg:columns-2">
           {group.members.map(({ entry, Content }, i) => (
-            <Reveal delay={(i % 2) * 80}>
+            <Reveal class="mb-14 break-inside-avoid" delay={(i % 2) * 80}>
               <TeamCard
                 name={entry.data.name}
                 role={entry.data.role}
