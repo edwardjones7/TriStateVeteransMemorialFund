@@ -1,7 +1,7 @@
 ---
 name: Dominic "Dom" Renzi
 role: Distinguished Past Treasurer & Advisor
-group: advisory
+group: leadership
 order: 7
 portrait: ../../assets/photos/team/dom-renzi.png
 ---
