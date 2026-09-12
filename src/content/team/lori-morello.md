@@ -2,7 +2,7 @@
 name: Lori Morello
 role: Advisory Board
 group: advisory
-order: 7
+order: 8
 portrait: ../../assets/photos/team/lori-morello.png
 ---
 

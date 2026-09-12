@@ -2,7 +2,7 @@
 name: Frank Pontelandolfo
 role: Advisory Board
 group: advisory
-order: 13
+order: 14
 isVeteran: true
 branch: U.S. Air Force
 portrait: ../../assets/photos/team/frank-pontelandolfo.png

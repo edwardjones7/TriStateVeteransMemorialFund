@@ -2,7 +2,7 @@
 name: Jeffrey DiNoto
 role: Advisory Board
 group: advisory
-order: 9
+order: 10
 portrait: ../../assets/photos/team/jeffrey-dinoto.png
 ---
 
