@@ -7,15 +7,20 @@ interface Props {
   as?: 'div' | 'li' | 'section' | 'article' | 'figure' | 'header';
   class?: string;
   delay?: number;
+  /** Extra inline style — e.g. `order:3` to place the item in a flex flow. */
+  style?: string;
 }
-const { as = 'div', class: cls = '', delay } = Astro.props;
+const { as = 'div', class: cls = '', delay, style } = Astro.props;
 const Tag = as;
+const inline = [delay ? `transition-delay:${delay}ms` : '', style ?? '']
+  .filter(Boolean)
+  .join(';');
 ---
 
 <Tag
   class:list={[cls]}
   data-reveal
-  style={delay ? `transition-delay:${delay}ms` : undefined}
+  style={inline || undefined}
 >
   <slot />
 </Tag>

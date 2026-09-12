@@ -53,19 +53,29 @@ const groups = [
           <Eyebrow>{group.eyebrow}</Eyebrow>
           <h2 class="mt-4 font-display text-3xl sm:text-4xl">{group.title}</h2>
         </Reveal>
-        <div class="columns-1 gap-x-12 lg:columns-2">
-          {group.members.map(({ entry, Content }, i) => (
-            <Reveal class="mb-14 break-inside-avoid" delay={(i % 2) * 80}>
-              <TeamCard
-                name={entry.data.name}
-                role={entry.data.role}
-                isVeteran={entry.data.isVeteran}
-                branch={entry.data.branch}
-                portrait={entry.data.portrait}
-              >
-                <Content />
-              </TeamCard>
-            </Reveal>
+        {/* Two independently-flowing columns: odd ranks left, even ranks
+            right, so the pairing reads in rank order without a shared row
+            height forcing a gap under the shorter bio. Below `lg` the
+            columns collapse (`contents`) and `order` restores 1..n flow. */}
+        <div class="flex flex-col gap-14 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-12">
+          {[0, 1].map((col) => (
+            <div class="contents lg:flex lg:flex-col lg:gap-14">
+              {group.members.map(({ entry, Content }, i) =>
+                i % 2 === col ? (
+                  <Reveal delay={col * 80} style={`order:${i + 1}`}>
+                    <TeamCard
+                      name={entry.data.name}
+                      role={entry.data.role}
+                      isVeteran={entry.data.isVeteran}
+                      branch={entry.data.branch}
+                      portrait={entry.data.portrait}
+                    >
+                      <Content />
+                    </TeamCard>
+                  </Reveal>
+                ) : null,
+              )}
+            </div>
           ))}
         </div>
       </Section>
