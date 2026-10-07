@@ -16,7 +16,7 @@ const sponsors = await getCollection('sponsors');
 const sponsorListLd = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
-  name: 'TriState Veterans Memorial Fund — Sponsors & Community Partners',
+  name: 'TriState Veterans Memorial Fund: Sponsors & Community Partners',
   numberOfItems: sponsors.length,
   itemListElement: sponsors.map((s, i) => ({
     '@type': 'ListItem',
@@ -32,7 +32,7 @@ const sponsorListLd = {
 
 <Base
   title="Our Sponsors & Community Partners"
-  description="Meet the sponsors of the TriState Veterans Memorial Fund — the South Jersey businesses, trade unions, and local organizations whose support funds mental-health aid, PTSD service dogs, and veteran outreach across the tri-state area."
+  description="Meet the sponsors of the TriState Veterans Memorial Fund: the South Jersey businesses, trade unions, and local organizations whose support funds mental-health aid, PTSD service dogs, and veteran outreach across the tri-state area."
   jsonLd={[sponsorListLd]}
 >
   <PageHeader
@@ -54,7 +54,7 @@ const sponsorListLd = {
         Stand with our veterans.
       </h2>
       <p class="max-w-lg text-ink-soft">
-        Sponsorship puts your business beside a mission that matters — and in
+        Sponsorship puts your business beside a mission that matters, and in
         front of the community that supports it.
       </p>
       <Button href="/contact" class="mt-2">

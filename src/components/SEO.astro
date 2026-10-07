@@ -32,7 +32,7 @@ const {
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const ogImage = new URL(image, site.url).href;
 const fullTitle =
-  title === site.name ? title : `${title} — ${site.name}`;
+  title === site.name ? title : `${title} | ${site.name}`;
 
 /*
  * BreadcrumbList — derived from the URL path so every interior page gets a

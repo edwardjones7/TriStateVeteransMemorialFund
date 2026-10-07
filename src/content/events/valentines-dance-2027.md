@@ -13,4 +13,4 @@ imageLabel: Save the Date flyer for the 2027 Valentine's Day Dance Party Fundrai
 flyerUrl: /flyer-valentines-dance-2027.jpg
 ---
 
-Save the date and support our veterans. Join us for a Valentine's evening of dancing with Bob Pantano, a buffet by Aversa's, raffles, and a 50/50 — all in support of programs that benefit veterans across the tri-state area. BYOB, and bring the people you love.
+Save the date and support our veterans. Join us for a Valentine's evening of dancing with Bob Pantano, a buffet by Aversa's, raffles, and a 50/50. All in support of programs that benefit veterans across the tri-state area. BYOB, and bring the people you love.

@@ -43,7 +43,7 @@ const metaTitle = isRun
   ? `5K Run/Walk in ${locale} · ${d.date.getUTCFullYear()}`
   : `${d.title} · ${locale}`;
 const action = upcoming ? eventAction(entry) : null;
-const metaDescription = `${d.title} — ${formatDate(d.date)} at ${place}. ${
+const metaDescription = `${d.title}: ${formatDate(d.date)} at ${place}. ${
   d.registrationUrl
     ? 'Register for the run/walk; all proceeds support local veterans.'
     : action
@@ -51,7 +51,7 @@ const metaDescription = `${d.title} — ${formatDate(d.date)} at ${place}. ${
       : 'A TriState Veterans Memorial Fund event supporting local veterans.'
 }`;
 const intro = isRun
-  ? `A 5K run/walk in ${locale} — every step raises real support for our veterans.`
+  ? `A 5K run/walk in ${locale}. Every step raises real support for our veterans.`
   : place;
 
 const faqs = eventFaqs(entry);

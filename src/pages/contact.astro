@@ -48,7 +48,7 @@ const redirectUrl = `${site.url}/thank-you/`;
   <PageHeader
     eyebrow="Contact"
     title="Your voice matters. We're listening."
-    intro="Whether you need help, want to volunteer, or simply have a question — send us a message and one of our members will reach out."
+    intro="Whether you need help, want to volunteer, or simply have a question, send us a message and one of our members will reach out."
   />
 
   <Section class="py-20 sm:py-24">
@@ -253,18 +253,18 @@ const redirectUrl = `${site.url}/thank-you/`;
 
           if (res.ok && data.success) {
             form.reset();
-            setStatus("Thank you — your message is on its way. We'll be in touch shortly.", true);
+            setStatus("Thank you. Your message is on its way. We'll be in touch shortly.", true);
             // GA4 conversion (no-op if analytics is disabled).
             window.gtag?.('event', 'contact_submit', { method: 'contact_form' });
           } else {
             setStatus(
-              "Sorry — something went wrong. Please try again, or call us at " +
+              "Sorry, something went wrong. Please try again, or call us at " +
                 (form.dataset.phone || 'our number') + '.',
               false,
             );
           }
         } catch {
-          setStatus('Network error — please check your connection and try again.', false);
+          setStatus('Network error. Please check your connection and try again.', false);
         } finally {
           if (button) button.disabled = false;
           if (label) label.textContent = 'Send message';

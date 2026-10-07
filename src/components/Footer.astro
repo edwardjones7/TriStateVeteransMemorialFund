@@ -18,7 +18,7 @@ const footerSponsors = (await getCollection('sponsors')).filter((s) =>
 <footer class="bg-navy-deep text-bone texture-navy-deep">
   <div class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
     <div class="grid gap-12 border-b border-bone/15 py-16 md:grid-cols-12">
-      <!-- Zone 1 — identity + contact -->
+      <!-- Zone 1: identity + contact -->
       <div class="md:col-span-5">
         <div class="flex items-start gap-5">
           <Emblem class="w-24 shrink-0 text-gold" />
@@ -72,7 +72,7 @@ const footerSponsors = (await getCollection('sponsors')).filter((s) =>
         </div>
       </div>
 
-      <!-- Zone 2 — sitemap -->
+      <!-- Zone 2: sitemap -->
       <nav class="md:col-span-4 md:col-start-7" aria-label="Footer">
         <p
           class="font-stencil text-xs uppercase tracking-[0.2em] text-bone/50"
@@ -92,7 +92,7 @@ const footerSponsors = (await getCollection('sponsors')).filter((s) =>
         </ul>
       </nav>
 
-      <!-- Zone 3 — call to action -->
+      <!-- Zone 3: call to action -->
       <div class="md:col-span-2 md:col-start-11">
         <p
           class="font-stencil text-xs uppercase tracking-[0.2em] text-bone/50"
@@ -108,7 +108,7 @@ const footerSponsors = (await getCollection('sponsors')).filter((s) =>
       </div>
     </div>
 
-    <!-- Sponsor strip — white chips so light-background logos stay legible on navy -->
+    <!-- Sponsor strip: white chips so light-background logos stay legible on navy -->
     <div class="border-b border-bone/15 py-8">
       <p
         class="text-center font-stencil text-xs font-bold uppercase tracking-[0.2em] text-bone/50"

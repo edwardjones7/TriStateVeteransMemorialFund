@@ -14,4 +14,4 @@ imageLabel: Flyer for the November 2026 Dance, Buffet & More Fundraiser at Adelp
 flyerUrl: /flyer-dance-buffet-2026.jpg
 ---
 
-Spend two hours and support our veterans. Join us at Adelphia for an evening of dancing with Bob Pantano, a buffet, and a cash bar — all in support of programs that benefit veterans across the tri-state area, including PTSD service dogs and Flags for Forgotten Veterans.
+Spend two hours and support our veterans. Join us at Adelphia for an evening of dancing with Bob Pantano, a buffet, and a cash bar. All in support of programs that benefit veterans across the tri-state area, including PTSD service dogs and Flags for Forgotten Veterans.

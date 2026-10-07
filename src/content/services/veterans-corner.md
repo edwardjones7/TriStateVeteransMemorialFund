@@ -1,6 +1,6 @@
 ---
 title: Veterans Corner
-summary: A safe place for veterans and their families to share their stories — reducing isolation and building a community that heals.
+summary: A safe place for veterans and their families to share their stories, reducing isolation and building a community that heals.
 icon: messages-square
 order: 3
 imageLabel: Veterans sharing their stories

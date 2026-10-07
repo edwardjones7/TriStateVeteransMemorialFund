@@ -9,4 +9,4 @@ hosts: TriState Veterans Memorial Fund
 imageLabel: A night of dancing and good food
 ---
 
-A night of dancing, good food, and good company — all in support of programs that benefit veterans.
+A night of dancing, good food, and good company. All in support of programs that benefit veterans.

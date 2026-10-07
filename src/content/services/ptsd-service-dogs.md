@@ -1,6 +1,6 @@
 ---
 title: PTSD Service Dogs
-summary: Helping place highly trained service and emotional-support dogs with veterans — companions that calm, steady, and save lives.
+summary: Helping place highly trained service and emotional-support dogs with veterans. Companions that calm, steady, and save lives.
 icon: dog
 order: 2
 imageLabel: A veteran and a service dog

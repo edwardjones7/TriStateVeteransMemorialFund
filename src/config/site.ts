@@ -9,7 +9,7 @@ export const site = {
   shortName: 'TriState VMF',
   url: 'https://www.tristateveteransmemorialfund.org',
   description:
-    'A 501(c)(3) nonprofit honoring and supporting U.S. military veterans across South Jersey, Southeastern Pennsylvania, and Northern Delaware — through mental-health aid, PTSD service dogs, and community.',
+    'A 501(c)(3) nonprofit honoring and supporting U.S. military veterans across South Jersey, Southeastern Pennsylvania, and Northern Delaware through mental-health aid, PTSD service dogs, and community.',
   founded: 2023, // Confirmed with client.
 
   // Confirmed with client: (856) 270-8440 is correct (Facebook's 370 listing is wrong).

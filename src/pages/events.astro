@@ -28,18 +28,18 @@ const eventLd = upcoming.map(eventSchema);
 const next = upcoming[0];
 const metaDescription = next
   ? `Next up: ${next.data.title}, ${formatDate(next.data.date)} at ${next.data.location} in ${site.address.city}, ${site.address.state}. See all upcoming and past ${site.shortName} events.`
-  : `Upcoming and past events from the ${site.name} in ${site.address.city}, ${site.address.state} — our annual 5K run/walk, ceremonies, and fundraisers that support local veterans.`;
+  : `Upcoming and past events from the ${site.name} in ${site.address.city}, ${site.address.state}: our annual 5K run/walk, ceremonies, and fundraisers that support local veterans.`;
 ---
 
 <Base
-  title="Veterans Events in Sewell, NJ — Dances, 5K Run & Fundraisers"
+  title="Veterans Events in Sewell, NJ: Dances, 5K Run & Fundraisers"
   description={metaDescription}
   jsonLd={eventLd}
 >
   <PageHeader
     eyebrow="Events"
     title="Gather with us."
-    intro="Every run, every ceremony, every evening of dancing raises real support for veterans — and reminds them their community has not forgotten."
+    intro="Every run, every ceremony, every evening of dancing raises real support for veterans, and reminds them their community has not forgotten."
   />
 
   {/* Upcoming */}
@@ -111,6 +111,6 @@ const metaDescription = next
 
   <CallToAction
     heading="Bring the whole family."
-    body="Our events are for everyone who wants to stand with our veterans. Come for the cause — stay for the community."
+    body="Our events are for everyone who wants to stand with our veterans. Come for the cause. Stay for the community."
   />
 </Base>

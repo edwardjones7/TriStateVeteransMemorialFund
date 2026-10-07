@@ -1,6 +1,6 @@
 ---
 title: Veteran Mental Health Aid
-summary: Connecting veterans to counseling, peer support, and crisis resources — and working to lift the stigma around asking for help.
+summary: Connecting veterans to counseling, peer support, and crisis resources, while working to lift the stigma around asking for help.
 icon: brain
 order: 1
 imageLabel: Veteran mental-health support

@@ -10,4 +10,4 @@ hosts: TriState Veterans Memorial Fund
 imageLabel: Placing flags for forgotten veterans
 ---
 
-A ceremony of remembrance — opening prayer, posting of the colors, the National Anthem, the Pledge of Allegiance, guest speakers, and the placing of flags to honor veterans who might otherwise be forgotten.
+A ceremony of remembrance: opening prayer, posting of the colors, the National Anthem, the Pledge of Allegiance, guest speakers, and the placing of flags to honor veterans who might otherwise be forgotten.

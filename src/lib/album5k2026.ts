@@ -28,7 +28,7 @@ export const album5k2026 = {
   date: '2026-08-08',
   venue: 'Washington Lake Park · Sewell, NJ',
   intro:
-    'From the first tent going up to the last finisher — race morning, in the order it happened.',
+    'From the first tent going up to the last finisher: race morning, in the order it happened.',
   chapters: [
     {
       title: 'Before the gun',
@@ -59,7 +59,7 @@ export const album5k2026 = {
       photos: [
         { slug: 'the-start', caption: 'Runners break from the line' },
         { slug: 'walkers-start', caption: 'Walkers head out under the arch' },
-        { slug: 'every-age', caption: 'Every age on the course — strollers included' },
+        { slug: 'every-age', caption: 'Every age on the course, strollers included' },
       ],
     },
     {

@@ -228,7 +228,7 @@ export function eventFaqs(entry: CollectionEntry<'events'>): Faq[] {
     faqs.push({
       question: 'Can I walk instead of run?',
       answer:
-        'Yes — this is a 5K run/walk. Runners and walkers of all ages and ' +
+        'Yes, this is a 5K run/walk. Runners and walkers of all ages and ' +
         'abilities are welcome, so bring the whole family.',
     });
   }
