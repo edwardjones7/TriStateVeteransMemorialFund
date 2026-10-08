@@ -1,0 +1,322 @@
+---
+/**
+ * SpotlightCard — a headline event (home and events pages), staged to
+ * stand out on a navy band:
+ *   - a giant outlined day numeral ("07") rising behind the card (parallax)
+ *   - a flyer thumbnail that lifts and tilts toward the pointer and opens
+ *     the full flyer
+ *   - a keepsake hung over the card's top corner: a dog tag for a ceremony,
+ *     a ticket stub for a fundraiser
+ *   - a live countdown to the start time
+ *   - a border that draws itself in when the card scrolls into view
+ *   - a mood layer: a slow light sweep (ceremony) or a gold spotlight that
+ *     follows the cursor (fundraiser)
+ * The script that drives the motion lives in FeaturedEvents.astro. Every
+ * effect is decorative and stands down under prefers-reduced-motion.
+ */
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import Button from './Button.astro';
+import DogTag from './DogTag.astro';
+import TicketStub from './TicketStub.astro';
+import AddToCalendar from './AddToCalendar.astro';
+import { formatDate, dateParts } from '@/lib/format';
+import { eventLink, eventPath, eventLocale } from '@/lib/eventSchema';
+import { easternAt, eventStartMs } from '@/lib/eventTime';
+
+interface Props {
+  event: CollectionEntry<'events'>;
+}
+const { event } = Astro.props;
+const d = event.data;
+
+// Free events read as ceremonies unless the content says otherwise.
+const mood = d.spotlight ?? (/free/i.test(d.entryFee ?? '') ? 'ceremony' : 'fundraiser');
+const isCeremony = mood === 'ceremony';
+const accent = isCeremony ? 'text-gold' : 'text-red-light';
+const accentSoft = isCeremony ? 'text-gold/80' : 'text-red-light/90';
+
+const parts = dateParts(d.date);
+const ghost = parts.day.padStart(2, '0');
+const shortDate = `${parts.month} ${parts.day}`;
+const place = d.address ? `${d.location}, ${d.address}` : d.location;
+const cta = eventLink(event);
+// Count down to the start time; untimed events count to 8 AM like the banner.
+const target = eventStartMs(event) ?? easternAt(d.date, 8);
+
+// Keepsake text
+const fee = d.entryFee ?? '';
+const tagLines = [
+  d.shortTitle ?? d.title.split(':')[0],
+  `${parts.month} ${ghost} ${parts.year}`,
+  /free/i.test(fee) ? 'Free · Open to all' : fee,
+  eventLocale(event),
+].filter(Boolean);
+const priceMatch = fee.match(/^\s*(\$\d+(?:\.\d{2})?)\s*(.*)$/);
+const price = priceMatch?.[1] ?? fee;
+const priceNote = priceMatch?.[2]?.trim() || undefined;
+
+const units = [
+  { key: 'd', label: 'Days' },
+  { key: 'h', label: 'Hrs' },
+  { key: 'm', label: 'Min' },
+  { key: 's', label: 'Sec' },
+] as const;
+---
+
+<article
+  class:list={['spot group relative pt-16 sm:pt-24', `spot--${mood}`]}
+  data-spot
+>
+  {/* Giant date numeral rising behind the card */}
+  <span
+    class="ghost pointer-events-none absolute -top-2 left-0 select-none font-display text-[8rem] font-black leading-none sm:text-[11rem]"
+    data-parallax
+    aria-hidden="true"
+  >
+    {ghost}
+  </span>
+
+  <div
+    class="frame relative isolate flex h-full flex-col border border-bone/12 bg-navy shadow-[0_30px_60px_-30px_rgba(0,0,0,0.7)]"
+    data-glow={isCeremony ? undefined : ''}
+  >
+    {/* Self-drawing border */}
+    <svg class="trace pointer-events-none absolute inset-0 z-20 size-full overflow-visible" aria-hidden="true">
+      <rect x="0" y="0" width="100%" height="100%" pathLength="1" fill="none" />
+    </svg>
+
+    {/* Mood layer */}
+    <span class={`mood pointer-events-none absolute inset-0 z-10 overflow-hidden mood--${mood}`} aria-hidden="true"></span>
+
+    {/* Keepsake, hung over the card's top corner */}
+    <div class="pointer-events-none absolute -top-10 right-2 z-30 origin-top-right scale-[0.8] sm:right-5 sm:scale-90">
+      {isCeremony ? (
+        <DogTag lines={tagLines} />
+      ) : (
+        <TicketStub price={price} note={priceNote} dateLabel={shortDate} />
+      )}
+    </div>
+
+    <div class="relative z-0 flex flex-1 flex-col p-6 pt-8 sm:p-8 sm:pt-9">
+      <p class={`font-stencil text-xs uppercase tracking-[0.2em] ${accent}`}>
+        {isCeremony ? 'A morning of remembrance' : 'An evening for our veterans'}
+      </p>
+      <h3 class="mt-3 max-w-[20ch] font-display text-3xl leading-[1.05] text-bone sm:text-[2.15rem]">
+        <a href={eventPath(event)} class="link-underline">{d.title}</a>
+      </h3>
+
+      <div class="mt-6 grid grid-cols-[7rem_1fr] gap-x-5 gap-y-5 sm:grid-cols-[9.5rem_1fr] sm:gap-x-6">
+        {/* Flyer thumbnail — tilts toward the pointer, opens full size */}
+        <div class="sm:row-span-2" style="perspective: 900px">
+          <a
+            href={d.flyerUrl ?? eventPath(event)}
+            target={d.flyerUrl ? '_blank' : undefined}
+            rel={d.flyerUrl ? 'noopener' : undefined}
+            class="flyer relative block"
+            data-tilt
+            aria-label={d.flyerUrl ? `Open the full flyer for ${d.title}` : d.title}
+          >
+            {d.image && (
+              <Image
+                src={d.image}
+                alt={d.imageLabel ?? d.title}
+                widths={[240, 480]}
+                sizes="(min-width: 640px) 152px, 112px"
+                class="flyer-img block h-auto w-full ring-1 ring-bone/15"
+              />
+            )}
+            {d.flyerUrl && (
+              <span class="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1.5 bg-navy-deep/85 py-1.5 font-stencil text-[0.58rem] uppercase tracking-[0.16em] text-bone opacity-0 backdrop-blur transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
+                <Icon name="lucide:maximize-2" class="size-3" aria-hidden="true" />
+                Full flyer
+              </span>
+            )}
+          </a>
+        </div>
+
+        <ul class="space-y-2 text-sm text-bone/80">
+          <li class="flex items-start gap-2.5">
+            <Icon name="lucide:calendar" class={`mt-0.5 size-4 shrink-0 ${accent}`} aria-hidden="true" />
+            <span>{formatDate(d.date)}{d.startTime && ` · ${d.startTime}`}</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <Icon name="lucide:map-pin" class={`mt-0.5 size-4 shrink-0 ${accent}`} aria-hidden="true" />
+            <span>{place}</span>
+          </li>
+          {d.entryFee && (
+            <li class="flex items-start gap-2.5">
+              <Icon name="lucide:ticket" class={`mt-0.5 size-4 shrink-0 ${accent}`} aria-hidden="true" />
+              <span>{d.entryFee}</span>
+            </li>
+          )}
+        </ul>
+
+        {/* Live countdown — full width on phones, beside the flyer above */}
+        <div
+          class="countdown col-span-2 self-end border-y border-bone/10 py-3.5 sm:col-span-1"
+          data-spot-countdown
+          data-target={target}
+        >
+          <p class="sr-only">Time until {d.title}</p>
+          <div data-running class="flex items-end gap-1.5 sm:gap-2" aria-hidden="true">
+            {units.map((u, i) => (
+              <>
+                {i > 0 && <span class="pb-4 font-display text-xl leading-none text-bone/25">:</span>}
+                <span class="flex min-w-[2.4rem] flex-col items-center">
+                  <span
+                    data-unit={u.key}
+                    class="font-display text-[2.1rem] leading-none tabular-nums text-bone"
+                  >
+                    --
+                  </span>
+                  <span class={`mt-1 font-stencil text-[0.55rem] uppercase tracking-[0.2em] ${accentSoft}`}>
+                    {u.label}
+                  </span>
+                </span>
+              </>
+            ))}
+          </div>
+          <p data-done hidden class={`font-display text-xl uppercase tracking-wide ${accent}`}>
+            It&rsquo;s today. Come stand with us.
+          </p>
+        </div>
+      </div>
+
+      <p class="mt-6 text-[0.95rem] leading-relaxed text-bone/75">{event.body}</p>
+
+      <div class="mt-auto flex flex-wrap items-center gap-3 pt-6">
+        <Button
+          href={cta.href}
+          external={cta.external}
+          data-track={cta.track}
+          variant={isCeremony ? 'light' : 'primary'}
+        >
+          {cta.label}
+          <Icon name="lucide:arrow-right" class="size-4 transition-transform duration-150 group-hover:translate-x-0.5" aria-hidden="true" />
+        </Button>
+        <AddToCalendar event={event} />
+      </div>
+    </div>
+  </div>
+</article>
+
+<style>
+  /* ---- Ghost numeral ---- */
+  .ghost {
+    color: transparent;
+    -webkit-text-stroke: 2px rgb(244 242 234 / 0.2);
+    letter-spacing: -0.04em;
+    translate: 0 var(--parallax, 0px);
+    will-change: translate;
+  }
+  .spot--ceremony .ghost {
+    -webkit-text-stroke-color: rgb(176 134 60 / 0.55);
+  }
+  .spot--fundraiser .ghost {
+    -webkit-text-stroke-color: rgb(224 106 94 / 0.5);
+  }
+
+  /* ---- Countdown: needs JS to show real numbers ---- */
+  .countdown {
+    display: none;
+  }
+  :global(.has-js) .countdown {
+    display: block;
+  }
+
+  /* ---- Self-drawing border ---- */
+  .trace rect {
+    stroke-width: 2;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    vector-effect: non-scaling-stroke;
+  }
+  .spot--ceremony .trace rect {
+    stroke: var(--color-gold);
+  }
+  .spot--fundraiser .trace rect {
+    stroke: var(--color-red-light);
+  }
+  :global(.has-js) :global([data-reveal]) .trace rect {
+    stroke-dashoffset: 1;
+  }
+  :global(.has-js) :global([data-reveal].is-visible) .trace rect {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1.6s var(--ease-out-soft) 250ms;
+  }
+
+  /* ---- Flyer lift + tilt ---- */
+  .flyer {
+    transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(0);
+    transition: transform 500ms var(--ease-out-soft);
+    transform-style: preserve-3d;
+  }
+  .flyer[data-tilting] {
+    transition-duration: 80ms;
+  }
+  .flyer-img {
+    transition:
+      transform 500ms var(--ease-out-soft),
+      filter 500ms var(--ease-out-soft);
+    filter: drop-shadow(0 8px 14px rgb(0 0 0 / 0.35));
+  }
+  .group:hover .flyer-img {
+    transform: translateY(-4px) scale(1.03);
+    filter: drop-shadow(0 18px 22px rgb(0 0 0 / 0.55));
+  }
+
+  /* ---- Ceremony: a slow band of light, like dawn across a flag ---- */
+  .mood--ceremony::before {
+    content: '';
+    position: absolute;
+    inset: -20% -60%;
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      rgb(176 134 60 / 0.10) 47%,
+      rgb(255 255 255 / 0.10) 50%,
+      rgb(176 134 60 / 0.10) 53%,
+      transparent 60%
+    );
+    translate: -60% 0;
+    animation: sweep 9s var(--ease-in-soft) infinite;
+  }
+  @keyframes sweep {
+    0% {
+      translate: -60% 0;
+    }
+    55%,
+    100% {
+      translate: 60% 0;
+    }
+  }
+
+  /* ---- Fundraiser: a warm spotlight that follows the cursor ---- */
+  .mood--fundraiser {
+    background: radial-gradient(
+      28rem circle at var(--mx, 50%) var(--my, 30%),
+      rgb(176 134 60 / 0.22),
+      transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 400ms var(--ease-out-soft);
+    mix-blend-mode: screen;
+  }
+  .group:hover .mood--fundraiser {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mood--ceremony::before {
+      display: none;
+    }
+    .ghost {
+      translate: none;
+    }
+    .flyer {
+      transform: none;
+    }
+  }
+</style>

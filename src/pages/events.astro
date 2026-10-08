@@ -6,6 +6,7 @@ import Section from '@/components/Section.astro';
 import Eyebrow from '@/components/Eyebrow.astro';
 import Reveal from '@/components/Reveal.astro';
 import EventCard from '@/components/EventCard.astro';
+import FeaturedEvents from '@/components/FeaturedEvents.astro';
 import StarMark from '@/components/StarMark.astro';
 import Button from '@/components/Button.astro';
 import CallToAction from '@/components/CallToAction.astro';
@@ -20,6 +21,12 @@ const upcoming = events
 const past = events
   .filter((e) => !isUpcoming(e.data.date))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Featured events headline the page in the navy spotlight band, the same as
+// on the home page; everything else upcoming follows as a list.
+const featured = upcoming.filter((e) => e.data.featured).slice(0, 2);
+const headliners = featured.length ? featured : upcoming.slice(0, 1);
+const rest = upcoming.filter((e) => !headliners.includes(e));
 
 const eventLd = upcoming.map(eventSchema);
 
@@ -42,51 +49,47 @@ const metaDescription = next
     intro="Every run, every ceremony, every evening of dancing raises real support for veterans, and reminds them their community has not forgotten."
   />
 
-  {/* Upcoming */}
-  <Section class="py-20 sm:py-24">
-    <Reveal class="mb-10">
-      <Eyebrow>Upcoming</Eyebrow>
-      <h2 class="mt-4 font-display text-3xl sm:text-4xl">On the horizon.</h2>
-    </Reveal>
-    {
-      upcoming.length > 0 ? (
-        <div class="space-y-6">
-          <Reveal>
-            <EventCard
-              event={upcoming[0]!}
-              status="upcoming"
-              featured
-              href={eventPath(upcoming[0]!)}
-              showShare
-            />
-          </Reveal>
-          {upcoming.length > 1 && (
-            <div>
-              {upcoming.slice(1).map((e, i) => (
-                <Reveal delay={i * 50}>
-                  <EventCard event={e} status="upcoming" href={eventPath(e)} />
-                </Reveal>
-              ))}
-            </div>
-          )}
-        </div>
-      ) : (
-        <Reveal class="border border-line bg-bone-deep px-8 py-14 text-center">
-          <StarMark class="mx-auto w-10 text-red/60" />
-          <p class="mt-4 font-display text-xl">
-            No events are on the calendar just yet.
-          </p>
-          <p class="mx-auto mt-2 max-w-md text-ink-soft">
-            Follow us on Facebook to be the first to know when the next
-            gathering is announced.
-          </p>
-          <Button href={site.social.facebook} external variant="secondary" class="mt-6">
-            Follow on Facebook
-          </Button>
+  {/* Headliners */}
+  {headliners.length > 0 && (
+    <FeaturedEvents events={headliners} id="upcoming" showAllLink={false} />
+  )}
+
+  {/* Rest of the calendar, or the empty state */}
+  {
+    rest.length > 0 ? (
+      <Section class="py-20 sm:py-24">
+        <Reveal class="mb-6">
+          <Eyebrow>Also on the calendar</Eyebrow>
+          <h2 class="mt-4 font-display text-3xl sm:text-4xl">On the horizon.</h2>
         </Reveal>
+        <div>
+          {rest.map((e, i) => (
+            <Reveal delay={i * 50}>
+              <EventCard event={e} status="upcoming" href={eventPath(e)} />
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+    ) : (
+      headliners.length === 0 && (
+        <Section class="py-20 sm:py-24">
+          <Reveal class="border border-line bg-bone-deep px-8 py-14 text-center">
+            <StarMark class="mx-auto w-10 text-red/60" />
+            <p class="mt-4 font-display text-xl">
+              No events are on the calendar just yet.
+            </p>
+            <p class="mx-auto mt-2 max-w-md text-ink-soft">
+              Follow us on Facebook to be the first to know when the next
+              gathering is announced.
+            </p>
+            <Button href={site.social.facebook} external variant="secondary" class="mt-6">
+              Follow on Facebook
+            </Button>
+          </Reveal>
+        </Section>
       )
-    }
-  </Section>
+    )
+  }
 
   {/* Past */}
   {

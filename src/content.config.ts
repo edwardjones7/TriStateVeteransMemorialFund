@@ -7,6 +7,8 @@ const events = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
+      /** A few words for tight spots (hero chips, keepsakes), e.g. "Dance at Adelphia". */
+      shortTitle: z.string().optional(),
       date: z.coerce.date(),
       startTime: z.string().optional(),
       location: z.string(),
@@ -22,6 +24,9 @@ const events = defineCollection({
       /** Label for the RSVP button (defaults to "Reserve your spot"). */
       rsvpLabel: z.string().optional(),
       featured: z.boolean().default(false),
+      /** How a featured event is staged in the home-page spotlight: a quiet
+       *  dog-tag "ceremony" card, or a ticket-stub "fundraiser" card. */
+      spotlight: z.enum(['ceremony', 'fundraiser']).optional(),
       imageLabel: z.string().optional(),
       image: image().optional(),
       /** Root-relative URL of a shareable flyer in public/ (stable across builds). */

@@ -9,14 +9,15 @@ import QuoteCard from '@/components/QuoteCard.astro';
 import SectionRule from '@/components/SectionRule.astro';
 import Reveal from '@/components/Reveal.astro';
 import TreatedImage from '@/components/TreatedImage.astro';
-import EventCard from '@/components/EventCard.astro';
+import FeaturedEvents from '@/components/FeaturedEvents.astro';
 import StatBand from '@/components/StatBand.astro';
 import SponsorGrid from '@/components/SponsorGrid.astro';
 import CallToAction from '@/components/CallToAction.astro';
 import { Icon } from 'astro-icon/components';
 import { site } from '@/config/site';
 import { isUpcoming } from '@/lib/format';
-import { eventPath, eventLink } from '@/lib/eventSchema';
+import { eventLink } from '@/lib/eventSchema';
+import { dateParts } from '@/lib/format';
 
 import heroImg from '@/assets/photos/uniform.png';
 import missionImg from '@/assets/photos/salute.jpg';
@@ -34,15 +35,35 @@ const events = await getCollection('events');
 const upcoming = events
   .filter((e) => isUpcoming(e.data.date))
   .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
-const featuredEvent =
-  upcoming.find((e) => e.data.featured) ?? upcoming[0] ?? null;
-// Hero CTA for the next event — the sign-up site when it takes registrations,
-// otherwise its own page. Null when nothing is upcoming.
-const heroCta = featuredEvent ? eventLink(featuredEvent) : null;
+// Headline events: every featured upcoming event, else the soonest one.
+const featured = upcoming.filter((e) => e.data.featured);
+const headliners = featured.length ? featured : upcoming.slice(0, 1);
+const featuredEvent = headliners[0] ?? null;
+// Hero CTA: with several headliners, scroll to them; with one, go straight to
+// its sign-up site (or its own page). Null when nothing is upcoming.
+const heroCta =
+  headliners.length > 1
+    ? { href: '#upcoming', label: 'See upcoming events', external: false, track: undefined }
+    : featuredEvent
+      ? eventLink(featuredEvent)
+      : null;
 const heroCtaLabel =
-  featuredEvent?.data.registrationUrl && /5k/i.test(featuredEvent.data.title)
+  headliners.length === 1 &&
+  featuredEvent?.data.registrationUrl &&
+  /5k/i.test(featuredEvent.data.title)
     ? 'Register for the 5K'
     : (heroCta?.label ?? '');
+// Date chips under the hero buttons, one per headliner.
+const heroChips =
+  headliners.length > 1
+    ? headliners.slice(0, 2).map((e) => {
+        const p = dateParts(e.data.date);
+        return {
+          date: `${p.month} ${p.day}`,
+          title: e.data.shortTitle ?? e.data.title,
+        };
+      })
+    : [];
 
 const serviceImg: Record<string, ImageMetadata> = {
   'mental-health-aid': backHeadshot,
@@ -156,6 +177,35 @@ const involve = [
           >
         </div>
       </Reveal>
+      {
+        heroChips.length > 0 && (
+          <Reveal delay={270}>
+            <a
+              href="#upcoming"
+              class="group mt-8 inline-flex flex-wrap items-center justify-center gap-x-4 gap-y-2 rounded-full border border-bone/20 bg-navy-deep/60 px-5 py-2.5 backdrop-blur transition-colors duration-200 hover:border-gold/60"
+            >
+              {heroChips.map((c, i) => (
+                <>
+                  {i > 0 && (
+                    <span class="size-1.5 rotate-45 bg-red-light" aria-hidden="true" />
+                  )}
+                  <span class="flex items-baseline gap-2">
+                    <span class="font-stencil text-xs tracking-[0.18em] text-gold">
+                      {c.date}
+                    </span>
+                    <span class="text-sm font-semibold text-bone">{c.title}</span>
+                  </span>
+                </>
+              ))}
+              <Icon
+                name="lucide:arrow-down"
+                class="size-4 text-bone/70 transition-transform duration-200 group-hover:translate-y-0.5"
+                aria-hidden="true"
+              />
+            </a>
+          </Reveal>
+        )
+      }
     </div>
 
     <div
@@ -258,38 +308,8 @@ const involve = [
     </div>
   </Section>
 
-  {/* ---------- Featured event ---------- */}
-  {
-    featuredEvent && (
-      <Section tone="bone-deep" class="border-t border-line py-20 sm:py-24">
-        <Reveal class="mb-10 flex items-end justify-between gap-6">
-          <div>
-            <Eyebrow>Mark your calendar</Eyebrow>
-            <h2 class="mt-4 font-display text-3xl sm:text-4xl">
-              Come stand with us.
-            </h2>
-          </div>
-          <Button
-            href="/events"
-            variant="ghost"
-            class="hidden shrink-0 sm:inline-flex"
-          >
-            All events
-            <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
-          </Button>
-        </Reveal>
-        <Reveal delay={100}>
-          <EventCard
-            event={featuredEvent}
-            status="upcoming"
-            featured
-            href={eventPath(featuredEvent)}
-            showShare
-          />
-        </Reveal>
-      </Section>
-    )
-  }
+  {/* ---------- Headline events ---------- */}
+  {headliners.length > 0 && <FeaturedEvents events={headliners} id="upcoming" />}
 
   {/* ---------- Sponsors ---------- */}
   <Section class="border-y border-line py-20 sm:py-24">

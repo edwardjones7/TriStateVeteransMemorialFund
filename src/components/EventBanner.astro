@@ -13,38 +13,13 @@
 import { getCollection } from 'astro:content';
 import { isUpcoming } from '@/lib/format';
 import { eventLink } from '@/lib/eventSchema';
+import { easternAt } from '@/lib/eventTime';
 
 const events = await getCollection('events');
 const upcoming = events
   .filter((e) => isUpcoming(e.data.date))
   .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
 const event = upcoming.find((e) => e.data.featured) ?? upcoming[0] ?? null;
-
-/** Milliseconds that America/New_York wall-clock is ahead of UTC at `at`. */
-function nyAheadMs(at: Date): number {
-  const dtf = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'America/New_York',
-    hourCycle: 'h23',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  });
-  const p = Object.fromEntries(
-    dtf.formatToParts(at).map((part) => [part.type, part.value]),
-  );
-  const asUTC = Date.UTC(
-    Number(p.year),
-    Number(p.month) - 1,
-    Number(p.day),
-    Number(p.hour),
-    Number(p.minute),
-    Number(p.second),
-  );
-  return asUTC - at.getTime();
-}
 
 function splitRemaining(ms: number) {
   if (ms <= 0) return null;
@@ -63,16 +38,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 let targetMs: number | null = null;
 let initial: { d: number; h: number; m: number; s: number } | null = null;
 if (event) {
-  const dt = event.data.date;
-  const dayAt8 = Date.UTC(
-    dt.getUTCFullYear(),
-    dt.getUTCMonth(),
-    dt.getUTCDate(),
-    8,
-    0,
-    0,
-  );
-  targetMs = dayAt8 - nyAheadMs(new Date(dayAt8));
+  targetMs = easternAt(event.data.date, 8);
   initial = splitRemaining(targetMs - Date.now());
 }
 

@@ -1,5 +1,6 @@
 ---
 title: Dance, Buffet & More Fundraiser
+shortTitle: Dance at Adelphia
 image: ../../assets/photos/flyer-dance-buffet-2026.jpg
 date: 2026-11-10
 startTime: 6:00 PM
@@ -10,6 +11,7 @@ hosts: TriState Veterans Memorial Fund · Featuring Bob Pantano
 rsvpUrl: https://www.paypal.com/US/fundraiser/charity/5282334
 rsvpLabel: Reserve your seats
 featured: true
+spotlight: fundraiser
 imageLabel: Flyer for the November 2026 Dance, Buffet & More Fundraiser at Adelphia
 flyerUrl: /flyer-dance-buffet-2026.jpg
 ---

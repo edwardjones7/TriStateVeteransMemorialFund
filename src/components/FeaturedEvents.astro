@@ -1,0 +1,211 @@
+---
+/**
+ * FeaturedEvents — the headline events (home and events pages), side by side on a navy
+ * band and joined by a starred date rule ("NOV 07 ★ NOV 10"). Takes the
+ * first two; with only one, SpotlightCard still carries it alone.
+ *
+ * The client script here drives every SpotlightCard: live countdowns, the
+ * ghost numerals' parallax, flyer tilt, and the fundraiser spotlight.
+ */
+import type { CollectionEntry } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import Section from './Section.astro';
+import Eyebrow from './Eyebrow.astro';
+import Button from './Button.astro';
+import Reveal from './Reveal.astro';
+import StarMark from './StarMark.astro';
+import SpotlightCard from './SpotlightCard.astro';
+import { dateParts } from '@/lib/format';
+
+interface Props {
+  events: CollectionEntry<'events'>[];
+  id?: string;
+  /** Show the "All events" link under the cards (off on the events page). */
+  showAllLink?: boolean;
+}
+const { events: all, id, showAllLink = true } = Astro.props;
+const events = all.slice(0, 2);
+
+const counts = ['', 'One way', 'Two ways'];
+const month = (e: CollectionEntry<'events'>) =>
+  new Intl.DateTimeFormat('en-US', { month: 'long', timeZone: 'UTC' }).format(e.data.date);
+const sameMonth = events.every((e) => month(e) === month(events[0]));
+const heading = sameMonth
+  ? `${counts[events.length]} to stand with us this ${month(events[0])}.`
+  : 'Come stand with us.';
+const label = (e: CollectionEntry<'events'>) => {
+  const p = dateParts(e.data.date);
+  return `${p.month} ${p.day.padStart(2, '0')}`;
+};
+---
+
+<Section
+  tone="navy-deep"
+  width="wide"
+  id={id}
+  class="scroll-mt-16 overflow-clip border-t border-bone/10 py-20 sm:py-28"
+>
+  {/* Faint flag-canton star field */}
+  <div class="stars pointer-events-none absolute inset-0" aria-hidden="true"></div>
+
+  <Reveal class="relative mx-auto max-w-3xl text-center">
+    <Eyebrow tone="bone" class="justify-center">Mark your calendar</Eyebrow>
+    <h2 class="mt-4 font-display text-4xl text-bone sm:text-[3.5rem] sm:leading-[1]">
+      {heading}
+    </h2>
+    <p class="mx-auto mt-5 max-w-xl text-bone/70">
+      One to remember, one to rally. Every flag placed and every seat filled
+      supports veterans across the tri-state area.
+    </p>
+  </Reveal>
+
+  <div
+    class:list={[
+      'relative mt-6 grid gap-y-6 sm:mt-10',
+      events.length > 1 && 'lg:grid-cols-[1fr_auto_1fr] lg:gap-x-10',
+      events.length === 1 && 'mx-auto max-w-xl',
+    ]}
+  >
+    {events.map((event, i) => (
+      <>
+        {i > 0 && (
+          <div
+            class="flex items-center gap-4 lg:sticky lg:top-[30vh] lg:mt-40 lg:h-[22rem] lg:flex-col lg:self-start"
+            aria-hidden="true"
+          >
+            <span class="font-stencil text-xs tracking-[0.2em] text-gold lg:[writing-mode:vertical-rl]">
+              {label(events[i - 1])}
+            </span>
+            <span class="h-px flex-1 bg-gradient-to-r from-gold/0 via-gold/50 to-gold/0 lg:h-auto lg:w-px lg:bg-gradient-to-b" />
+            <StarMark class="w-5 shrink-0 text-red-light" />
+            <span class="h-px flex-1 bg-gradient-to-r from-red-light/0 via-red-light/50 to-red-light/0 lg:h-auto lg:w-px lg:bg-gradient-to-b" />
+            <span class="font-stencil text-xs tracking-[0.2em] text-red-light lg:[writing-mode:vertical-rl]">
+              {label(event)}
+            </span>
+          </div>
+        )}
+        <Reveal delay={i * 140}>
+          <SpotlightCard event={event} />
+        </Reveal>
+      </>
+    ))}
+  </div>
+
+  {showAllLink && (
+    <Reveal class="relative mt-12 flex justify-center">
+      <Button href="/events" variant="on-dark">
+        All events
+        <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+      </Button>
+    </Reveal>
+  )}
+</Section>
+
+<style>
+  .stars {
+    background-image: radial-gradient(
+      circle,
+      rgb(244 242 234 / 0.07) 1.2px,
+      transparent 1.6px
+    );
+    background-size: 28px 28px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000, transparent 75%);
+  }
+</style>
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  /* ---- Countdowns: one shared ticker for every card ---- */
+  const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`);
+
+  function tick(): void {
+    document.querySelectorAll<HTMLElement>('[data-spot-countdown]').forEach((box) => {
+      const target = Number(box.dataset.target);
+      if (!target) return;
+      const rem = target - Date.now();
+      const running = box.querySelector<HTMLElement>('[data-running]');
+      const done = box.querySelector<HTMLElement>('[data-done]');
+      if (rem <= 0) {
+        if (running) running.hidden = true;
+        if (done) done.hidden = false;
+        return;
+      }
+      let s = Math.floor(rem / 1000);
+      const d = Math.floor(s / 86400);
+      s -= d * 86400;
+      const h = Math.floor(s / 3600);
+      s -= h * 3600;
+      const m = Math.floor(s / 60);
+      s -= m * 60;
+      const vals: Record<string, string> = { d: `${d}`, h: pad(h), m: pad(m), s: pad(s) };
+      for (const key in vals) {
+        const el = box.querySelector<HTMLElement>(`[data-unit="${key}"]`);
+        if (el && el.textContent !== vals[key]) el.textContent = vals[key];
+      }
+    });
+  }
+  setInterval(tick, 1000);
+
+  /* ---- Ghost numerals drift against the scroll ---- */
+  let ticking = false;
+  function parallax(): void {
+    ticking = false;
+    const vh = window.innerHeight;
+    document.querySelectorAll<HTMLElement>('[data-parallax]').forEach((el) => {
+      const r = el.parentElement!.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > vh) return;
+      // -1 when the card enters at the bottom, +1 as it leaves at the top
+      const progress = (vh - r.top) / (vh + r.height) * 2 - 1;
+      el.style.setProperty('--parallax', `${(progress * -36).toFixed(1)}px`);
+    });
+  }
+  if (!reduceMotion) {
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(parallax);
+        }
+      },
+      { passive: true },
+    );
+  }
+
+  /* ---- Per-card pointer effects (re-bound after each navigation) ---- */
+  function bindPointer(): void {
+    if (reduceMotion || !finePointer) return;
+
+    document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((el) => {
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        el.dataset.tilting = '';
+        el.style.setProperty('--ry', `${(x * 10).toFixed(2)}deg`);
+        el.style.setProperty('--rx', `${(y * -8).toFixed(2)}deg`);
+      });
+      el.addEventListener('pointerleave', () => {
+        delete el.dataset.tilting;
+        el.style.setProperty('--ry', '0deg');
+        el.style.setProperty('--rx', '0deg');
+      });
+    });
+
+    document.querySelectorAll<HTMLElement>('[data-glow]').forEach((el) => {
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        el.style.setProperty('--my', `${e.clientY - r.top}px`);
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    tick();
+    if (!reduceMotion) parallax();
+    bindPointer();
+  });
+</script>

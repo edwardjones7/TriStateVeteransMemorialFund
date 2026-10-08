@@ -1,0 +1,71 @@
+---
+/**
+ * AddToCalendar — a small disclosure menu: Google Calendar, or the event's
+ * .ics file for Apple Calendar / Outlook. Built on <details> so it works
+ * without JS; the script only adds close-on-outside-click and Escape.
+ */
+import type { CollectionEntry } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import { googleCalendarUrl, icsPath } from '@/lib/eventTime';
+
+interface Props {
+  event: CollectionEntry<'events'>;
+  class?: string;
+}
+const { event, class: cls = '' } = Astro.props;
+
+const item =
+  'flex items-center gap-2.5 px-4 py-2.5 text-sm text-ink transition-colors duration-150 hover:bg-bone-deep focus-visible:bg-bone-deep';
+---
+
+<details class:list={['group/cal relative', cls]} data-add-to-calendar>
+  <summary
+    class="inline-flex min-h-[44px] cursor-pointer list-none items-center gap-2 rounded-[3px] border border-bone/35 px-4 py-2 text-sm font-semibold text-bone transition-colors duration-150 hover:border-bone hover:bg-bone hover:text-ink [&::-webkit-details-marker]:hidden"
+  >
+    <Icon name="lucide:calendar-plus" class="size-4" aria-hidden="true" />
+    Add to calendar
+    <Icon
+      name="lucide:chevron-down"
+      class="size-3.5 transition-transform duration-150 group-open/cal:rotate-180"
+      aria-hidden="true"
+    />
+  </summary>
+  <div
+    class="absolute bottom-full left-0 z-30 mb-2 min-w-[13rem] overflow-hidden rounded-[3px] border border-line bg-bone py-1 shadow-xl"
+  >
+    <a
+      href={googleCalendarUrl(event)}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-track="calendar_click"
+      class={item}
+    >
+      <Icon name="lucide:calendar" class="size-4 text-red" aria-hidden="true" />
+      Google Calendar
+    </a>
+    <a href={icsPath(event)} download data-track="calendar_click" class={item}>
+      <Icon name="lucide:download" class="size-4 text-red" aria-hidden="true" />
+      Apple / Outlook (.ics)
+    </a>
+  </div>
+</details>
+
+<script>
+  // One document-level listener covers every menu, including ones swapped in
+  // by view transitions.
+  const openMenus = () =>
+    document.querySelectorAll<HTMLDetailsElement>('details[data-add-to-calendar][open]');
+
+  document.addEventListener('click', (e) => {
+    openMenus().forEach((d) => {
+      if (!d.contains(e.target as Node)) d.open = false;
+    });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    openMenus().forEach((d) => {
+      d.open = false;
+      d.querySelector('summary')?.focus();
+    });
+  });
+</script>

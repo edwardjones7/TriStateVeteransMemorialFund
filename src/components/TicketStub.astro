@@ -1,0 +1,72 @@
+---
+/**
+ * TicketStub — an admission stub for a fundraiser's spotlight card: the
+ * price large, the fine print small, a perforated tear line down the side.
+ * Decorative: the same facts sit in the card's text, so it is aria-hidden.
+ */
+interface Props {
+  /** The headline figure, e.g. "$25". */
+  price: string;
+  /** The fine print under it, e.g. "donation · $40 per couple". */
+  note?: string;
+  /** Short date for the tear-off end, e.g. "NOV 10". */
+  dateLabel: string;
+  class?: string;
+}
+const { price, note, dateLabel, class: cls = '' } = Astro.props;
+---
+
+<div class:list={['stub', cls]} aria-hidden="true">
+  <div class="stub-main">
+    <p class="font-stencil text-[0.6rem] uppercase tracking-[0.24em] text-red">
+      Admission
+    </p>
+    <p class="mt-0.5 font-display text-[2.6rem] leading-[0.9] text-navy">{price}</p>
+    {note && (
+      <p class="mt-1 font-stencil text-[0.58rem] uppercase leading-snug tracking-[0.12em] text-ink-soft">
+        {note}
+      </p>
+    )}
+  </div>
+  <div class="stub-end">
+    <span class="font-stencil text-[0.62rem] uppercase tracking-[0.22em] text-bone">
+      {dateLabel}
+    </span>
+  </div>
+</div>
+
+<style>
+  .stub {
+    --notch: 0.5rem;
+    display: flex;
+    width: 13rem;
+    rotate: -4deg;
+    transition: rotate 400ms var(--ease-out-soft);
+    filter: drop-shadow(0 14px 18px rgb(0 0 0 / 0.45));
+    /* Half-moon notches where the stub tears off */
+    mask:
+      radial-gradient(circle at calc(100% - 3rem) 0, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) top / 100% 51% no-repeat,
+      radial-gradient(circle at calc(100% - 3rem) 100%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) bottom / 100% 51% no-repeat;
+  }
+  :global(.group:hover) .stub {
+    rotate: -1deg;
+  }
+  .stub-main {
+    flex: 1;
+    min-width: 0;
+    padding: 0.8rem 0.9rem 0.85rem 1rem;
+    background: var(--color-bone);
+    border-right: 2px dashed rgb(22 24 29 / 0.25);
+    box-shadow: inset 0 0 0 1px rgb(176 134 60 / 0.35);
+  }
+  .stub-end {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    background: var(--color-red);
+  }
+  .stub-end span {
+    writing-mode: vertical-rl;
+    rotate: 180deg;
+  }
+</style>
