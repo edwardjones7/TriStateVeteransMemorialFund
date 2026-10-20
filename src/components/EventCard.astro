@@ -171,18 +171,25 @@ const isPortrait = !!d.image && d.image.height > d.image.width;
               {cta.label} &rarr;
             </a>
           )}
-          {/* The thumbnail is hidden on phones, so the flyer gets a text link too. */}
-          {d.flyerUrl && (
-            <a
-              href={d.flyerUrl}
-              data-lightbox
-              class="link-underline font-semibold text-ink"
-              aria-label={`Open the full flyer for ${d.title}`}
-            >
-              View flyer
-            </a>
-          )}
         </div>
+        {/* The side thumbnail is hidden on phones, so the flyer sits under the details there. */}
+        {!hideImage && d.image && d.flyerUrl && (
+          <a
+            href={d.flyerUrl}
+            data-lightbox
+            class="mt-4 block max-w-[16rem] cursor-zoom-in sm:hidden"
+            aria-label={`Open the full flyer for ${d.title}`}
+          >
+            <TreatedImage
+              src={d.image}
+              alt={d.imageLabel ?? d.title}
+              ratio={isPortrait ? '3 / 4' : '4 / 3'}
+              imgClass={isPortrait ? 'object-contain!' : ''}
+              class={isPortrait ? 'border border-line' : ''}
+              sizes="256px"
+            />
+          </a>
+        )}
       </div>
     </article>
   )
