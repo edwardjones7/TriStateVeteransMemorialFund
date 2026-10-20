@@ -3,6 +3,10 @@
   "framework": "astro",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "redirects": [
+    { "source": "/QR", "destination": "/events", "permanent": false },
+    { "source": "/qr", "destination": "/events", "permanent": false }
+  ],
   "headers": [
     {
       "source": "/(.*)",
