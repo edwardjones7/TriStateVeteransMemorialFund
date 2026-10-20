@@ -126,8 +126,8 @@ const isPortrait = !!d.image && d.image.height > d.image.width;
           {parts.year}
         </span>
       </div>
-      {!hideImage && d.image && (
-        <div class="hidden w-40 shrink-0 sm:block">
+      {!hideImage && d.image && (() => {
+        const thumb = (
           <TreatedImage
             src={d.image}
             alt={d.imageLabel ?? d.title}
@@ -136,8 +136,20 @@ const isPortrait = !!d.image && d.image.height > d.image.width;
             class={isPortrait ? 'border border-line' : ''}
             sizes="160px"
           />
-        </div>
-      )}
+        );
+        return d.flyerUrl ? (
+          <a
+            href={d.flyerUrl}
+            data-lightbox
+            class="hidden w-40 shrink-0 cursor-zoom-in sm:block"
+            aria-label={`Open the full flyer for ${d.title}`}
+          >
+            {thumb}
+          </a>
+        ) : (
+          <div class="hidden w-40 shrink-0 sm:block">{thumb}</div>
+        );
+      })()}
       <div class="min-w-0">
         <h3 class="font-display text-xl">
           {href ? <a href={href} class="link-underline">{d.title}</a> : d.title}
@@ -157,6 +169,17 @@ const isPortrait = !!d.image && d.image.height > d.image.width;
               class="link-underline font-semibold text-red"
             >
               {cta.label} &rarr;
+            </a>
+          )}
+          {/* The thumbnail is hidden on phones, so the flyer gets a text link too. */}
+          {d.flyerUrl && (
+            <a
+              href={d.flyerUrl}
+              data-lightbox
+              class="link-underline font-semibold text-ink"
+              aria-label={`Open the full flyer for ${d.title}`}
+            >
+              View flyer
             </a>
           )}
         </div>

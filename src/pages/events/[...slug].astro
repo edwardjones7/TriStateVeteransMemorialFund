@@ -137,7 +137,8 @@ const ogImage = d.image?.src;
           {faqs.map((f) => (
             <Reveal>
               <dt class="font-display text-xl">{f.question}</dt>
-              <dd class="mt-2 leading-relaxed text-ink-soft">{f.answer}</dd>
+              {/* break-words: answers can carry long URLs that would widen the page on phones */}
+              <dd class="mt-2 break-words leading-relaxed text-ink-soft">{f.answer}</dd>
             </Reveal>
           ))}
         </dl>
