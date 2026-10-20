@@ -4,7 +4,7 @@
  * stand out on a navy band:
  *   - a giant outlined day numeral ("07") rising behind the card (parallax)
  *   - a flyer thumbnail that lifts and tilts toward the pointer and opens
- *     the full flyer
+ *     the full flyer in the lightbox
  *   - a keepsake hung over the card's top corner: a dog tag for a ceremony,
  *     a ticket stub for a fundraiser
  *   - a live countdown to the start time
@@ -112,8 +112,7 @@ const units = [
         <div class="sm:row-span-2" style="perspective: 900px">
           <a
             href={d.flyerUrl ?? eventPath(event)}
-            target={d.flyerUrl ? '_blank' : undefined}
-            rel={d.flyerUrl ? 'noopener' : undefined}
+            data-lightbox={d.flyerUrl ? '' : undefined}
             class="flyer relative block"
             data-tilt
             aria-label={d.flyerUrl ? `Open the full flyer for ${d.title}` : d.title}

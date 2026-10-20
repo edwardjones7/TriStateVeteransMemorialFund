@@ -1,0 +1,83 @@
+---
+import { Icon } from 'astro-icon/components';
+
+/**
+ * FlyerLightbox — one shared <dialog> that shows a flyer full size over the
+ * page. Any link marked `data-lightbox` opens its href here instead of
+ * navigating; without JS the link still opens the image as a normal page.
+ * Closes on the X, Esc, or a click on the backdrop.
+ */
+---
+
+<dialog
+  class="flyer-lightbox m-auto max-h-none max-w-none bg-transparent p-0 backdrop:bg-navy-deep/90 backdrop:backdrop-blur-sm"
+  aria-label="Event flyer"
+  data-lightbox-dialog
+>
+  <div class="relative flex h-dvh w-screen items-center justify-center p-4 sm:p-8" data-lightbox-backdrop>
+    <img
+      src=""
+      alt=""
+      class="max-h-full max-w-full object-contain shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]"
+      data-lightbox-img
+    />
+    <button
+      type="button"
+      class="absolute right-3 top-3 inline-flex size-11 items-center justify-center rounded-full bg-bone text-navy shadow-lg transition-transform duration-150 hover:scale-105 active:scale-95 sm:right-5 sm:top-5"
+      aria-label="Close flyer"
+      data-lightbox-close
+    >
+      <Icon name="lucide:x" class="size-5" aria-hidden="true" />
+    </button>
+  </div>
+</dialog>
+
+<style>
+  /* Lock page scroll only while the flyer is open, whichever way it closes. */
+  :global(html:has(.flyer-lightbox[open])) {
+    overflow: hidden;
+  }
+  .flyer-lightbox[open] {
+    animation: lightbox-in 200ms var(--ease-out-soft);
+  }
+  @keyframes lightbox-in {
+    from {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .flyer-lightbox[open] {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  // Document-level listeners (same pattern as ShareFlyer) so this keeps
+  // working after ClientRouter view transitions swap the page. Capture
+  // phase, so the click is claimed before ClientRouter treats it as a
+  // page navigation.
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement | null;
+
+    const trigger = target?.closest<HTMLAnchorElement>('a[data-lightbox]');
+    if (trigger) {
+      // Let ctrl/cmd-click still open a new tab.
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      const dialog = document.querySelector<HTMLDialogElement>('[data-lightbox-dialog]');
+      const img = dialog?.querySelector<HTMLImageElement>('[data-lightbox-img]');
+      if (!dialog || !img) return;
+      e.preventDefault();
+      img.src = trigger.href;
+      img.alt = trigger.getAttribute('aria-label') ?? 'Event flyer';
+      dialog.showModal();
+      return;
+    }
+
+    // Close on the X or on the empty space around the flyer.
+    if (target?.closest('[data-lightbox-close]') || target?.matches('[data-lightbox-backdrop]')) {
+      target.closest<HTMLDialogElement>('dialog')?.close();
+    }
+  }, true);
+</script>
