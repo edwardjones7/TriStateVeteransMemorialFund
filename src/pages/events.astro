@@ -10,22 +10,23 @@ import FeaturedEvents from '@/components/FeaturedEvents.astro';
 import StarMark from '@/components/StarMark.astro';
 import Button from '@/components/Button.astro';
 import CallToAction from '@/components/CallToAction.astro';
-import { isUpcoming, formatDate } from '@/lib/format';
+import { isUpcoming, lastDay, formatDate } from '@/lib/format';
 import { site } from '@/config/site';
 import { eventSchema, eventPath } from '@/lib/eventSchema';
 
 const events = await getCollection('events');
 const upcoming = events
-  .filter((e) => isUpcoming(e.data.date))
+  .filter((e) => isUpcoming(lastDay(e.data)))
   .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
 const past = events
-  .filter((e) => !isUpcoming(e.data.date))
+  .filter((e) => !isUpcoming(lastDay(e.data)))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 // Featured events headline the page in the navy spotlight band, the same as
 // on the home page; everything else upcoming follows as a list.
-const featured = upcoming.filter((e) => e.data.featured).slice(0, 2);
-const headliners = featured.length ? featured : upcoming.slice(0, 1);
+const scheduled = upcoming.filter((e) => !e.data.popup);
+const featured = scheduled.filter((e) => e.data.featured).slice(0, 2);
+const headliners = featured.length ? featured : scheduled.slice(0, 1);
 const rest = upcoming.filter((e) => !headliners.includes(e));
 
 const eventLd = upcoming.map(eventSchema);

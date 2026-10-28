@@ -9,7 +9,7 @@ import EventCard from '@/components/EventCard.astro';
 import CallToAction from '@/components/CallToAction.astro';
 import Button from '@/components/Button.astro';
 import ShareFlyer from '@/components/ShareFlyer.astro';
-import { isUpcoming, formatDate } from '@/lib/format';
+import { isUpcoming, lastDay, formatDateRange } from '@/lib/format';
 import {
   eventSchema,
   eventFaqs,
@@ -32,7 +32,7 @@ interface Props {
 }
 const { entry } = Astro.props;
 const d = entry.data;
-const upcoming = isUpcoming(d.date);
+const upcoming = isUpcoming(lastDay(d));
 const place = d.address ? `${d.location}, ${d.address}` : d.location;
 const locale = eventLocale(entry); // "Sewell, NJ"
 const isRun = /5k|run|walk/i.test(d.title);
@@ -43,8 +43,10 @@ const metaTitle = isRun
   ? `5K Run/Walk in ${locale} · ${d.date.getUTCFullYear()}`
   : `${d.title} · ${locale}`;
 const action = upcoming ? eventAction(entry) : null;
-const metaDescription = `${d.title}: ${formatDate(d.date)} at ${place}. ${
-  d.registrationUrl
+const metaDescription = `${d.title}: ${formatDateRange(d.date, d.endDate)} at ${place}. ${
+  d.popup
+    ? `Stop in${d.entryFee ? ` (${d.entryFee})` : ''}; all proceeds support local veterans.`
+    : d.registrationUrl
     ? 'Register for the run/walk; all proceeds support local veterans.'
     : action
       ? 'Reserve your spot; all proceeds support local veterans.'
@@ -73,7 +75,7 @@ const ogImage = d.image?.src;
   breadcrumbLabel={d.title}
 >
   <PageHeader
-    eyebrow={upcoming ? 'Upcoming event' : 'Past event'}
+    eyebrow={d.popup ? 'Pop-up fundraiser' : upcoming ? 'Upcoming event' : 'Past event'}
     title={d.title}
     intro={intro}
   />

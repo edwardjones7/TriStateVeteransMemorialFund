@@ -25,6 +25,19 @@ export function dateParts(date: Date): {
   };
 }
 
+/** "Friday, November 6 – Sunday, November 8, 2026" for a multi-day event;
+ *  the single date otherwise. */
+export function formatDateRange(start: Date, end?: Date): string {
+  if (!end || end.getTime() === start.getTime()) return formatDate(start);
+  const fmt = new Intl.DateTimeFormat('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+  return `${fmt.format(start)} – ${formatDate(end)}`;
+}
+
 /** An event is "upcoming" if it falls on or after today (UTC). */
 export function isUpcoming(date: Date): boolean {
   const now = new Date();
@@ -34,4 +47,10 @@ export function isUpcoming(date: Date): boolean {
     now.getUTCDate(),
   );
   return date.getTime() >= todayUTC;
+}
+
+/** The day an event finishes: its end date, or its only date. Pass this to
+ *  `isUpcoming` so a multi-day event stays listed through its last day. */
+export function lastDay(data: { date: Date; endDate?: Date }): Date {
+  return data.endDate ?? data.date;
 }

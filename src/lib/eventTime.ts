@@ -66,6 +66,31 @@ export function eventStartMs(entry: CollectionEntry<'events'>): number | null {
   return t ? easternAt(entry.data.date, t.hour, t.minute) : null;
 }
 
+/** Each day's opening hours as epoch ms, for events with `hours`. */
+export function openWindows(
+  entry: CollectionEntry<'events'>,
+): { open: number; close: number }[] {
+  return (entry.data.hours ?? []).flatMap((h) => {
+    const open = parseClock(h.open);
+    const close = parseClock(h.close);
+    if (!open || !close) return [];
+    return [
+      {
+        open: easternAt(h.date, open.hour, open.minute),
+        close: easternAt(h.date, close.hour, close.minute),
+      },
+    ];
+  });
+}
+
+/** "10:00 AM" → "10", "4:30 PM" → "4:30" — for compact hour ranges. */
+export function shortClock(text: string): string {
+  const t = parseClock(text);
+  if (!t) return text;
+  const h = t.hour % 12 || 12;
+  return t.minute ? `${h}:${String(t.minute).padStart(2, '0')}` : String(h);
+}
+
 /** 20261107T160000Z */
 const utcStamp = (ms: number) =>
   new Date(ms).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
@@ -79,7 +104,13 @@ function where(entry: CollectionEntry<'events'>): string {
 
 function details(entry: CollectionEntry<'events'>): string {
   const body = (entry.body ?? '').replace(/\s+/g, ' ').trim();
-  return [body, `Details: ${eventUrl(entry)}`].filter(Boolean).join('\n\n');
+  const day = new Intl.DateTimeFormat('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' });
+  const hours = (entry.data.hours ?? [])
+    .map((h) => `${day.format(h.date)}: ${h.open} – ${h.close}`)
+    .join('\n');
+  return [body, hours && `Hours:\n${hours}`, `Details: ${eventUrl(entry)}`]
+    .filter(Boolean)
+    .join('\n\n');
 }
 
 /** Start/end pair in the formats calendars expect (all-day when untimed). */
@@ -92,7 +123,9 @@ function span(entry: CollectionEntry<'events'>) {
       end: utcStamp(start + DEFAULT_DURATION_MS),
     };
   }
-  const next = new Date(entry.data.date.getTime() + 86_400_000);
+  // All-day through the last day (DTEND is exclusive, so the day after).
+  const last = entry.data.endDate ?? entry.data.date;
+  const next = new Date(last.getTime() + 86_400_000);
   return { allDay: true, start: dayStamp(entry.data.date), end: dayStamp(next) };
 }
 

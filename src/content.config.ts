@@ -10,6 +10,16 @@ const events = defineCollection({
       /** A few words for tight spots (hero chips, keepsakes), e.g. "Dance at Adelphia". */
       shortTitle: z.string().optional(),
       date: z.coerce.date(),
+      /** Last day of a multi-day event (e.g. a weekend pop-up). */
+      endDate: z.coerce.date().optional(),
+      /** Opening hours per day, for events you can drop in on rather than
+       *  arrive at a set time. Times are Eastern, e.g. "10:00 AM". */
+      hours: z
+        .array(z.object({ date: z.coerce.date(), open: z.string(), close: z.string() }))
+        .optional(),
+      /** A pop-up fundraiser (e.g. a partner's sale for us): staged in its own
+       *  "happening now" band on the home page instead of the headline cards. */
+      popup: z.boolean().default(false),
       startTime: z.string().optional(),
       location: z.string(),
       address: z.string().optional(),

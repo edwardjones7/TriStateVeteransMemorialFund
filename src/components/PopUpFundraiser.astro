@@ -1,0 +1,272 @@
+---
+/**
+ * PopUpFundraiser — a home-page band for a partner's drop-in fundraiser
+ * (e.g. a weekend sale at a local shop). Styled like a storefront sign rather
+ * than the navy headline cards: the price large, one tile per open day, and
+ * a live status line ("Open now until 4 PM", "Opens tomorrow at 10 AM").
+ *
+ * The status, today's tile, and the band itself are driven client-side from
+ * the opening hours, so the band hides itself once the last day closes even
+ * if the site hasn't been rebuilt.
+ */
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import Button from './Button.astro';
+import Reveal from './Reveal.astro';
+import StarMark from './StarMark.astro';
+import { dateParts } from '@/lib/format';
+import { directionsUrl, eventPath } from '@/lib/eventSchema';
+import { openWindows } from '@/lib/eventTime';
+
+interface Props {
+  event: CollectionEntry<'events'>;
+}
+const { event } = Astro.props;
+const d = event.data;
+
+const windows = openWindows(event);
+const start = dateParts(d.date);
+const end = d.endDate ? dateParts(d.endDate) : null;
+const range = end
+  ? `${start.month} ${start.day}–${end.month === start.month ? '' : `${end.month} `}${end.day}`
+  : `${start.month} ${start.day}`;
+
+const weekday = (date: Date) =>
+  new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone: 'UTC' })
+    .format(date)
+    .toUpperCase();
+// "10 AM", "4 PM" — the minutes only when they aren't :00.
+const clock = (t: string) => t.replace(':00', '');
+const days = (d.hours ?? []).map((h, i) => ({
+  weekday: weekday(h.date),
+  date: `${dateParts(h.date).month} ${dateParts(h.date).day}`,
+  hours: `${clock(h.open)} – ${clock(h.close)}`,
+  open: windows[i]?.open,
+  close: windows[i]?.close,
+  closeLabel: clock(h.close),
+}));
+
+// "$5 a bag" → "$5" + "a bag"
+const [price, ...perRest] = (d.entryFee ?? '').split(' ');
+const per = perRest.join(' ');
+const days0 = days[0]?.weekday ?? '';
+const daysN = days[days.length - 1]?.weekday ?? '';
+const initialStatus = days.length > 1 ? `${days0}–${daysN} · ${range}` : range;
+---
+
+<section
+  class="popup relative overflow-hidden border-y border-line bg-bone py-16 sm:py-20"
+  aria-labelledby="popup-title"
+  data-popup
+  data-windows={JSON.stringify(windows)}
+>
+  {/* Flag-stripe edge, top and bottom */}
+  <div class="stripes absolute inset-x-0 top-0 h-1.5" aria-hidden="true"></div>
+  <div class="stripes absolute inset-x-0 bottom-0 h-1.5" aria-hidden="true"></div>
+
+  <div class="mx-auto grid max-w-6xl items-center gap-12 px-6 sm:px-8 lg:grid-cols-[1fr_auto] lg:gap-16 lg:px-12">
+    <Reveal>
+      {/* Live status */}
+      <p
+        class="inline-flex items-center gap-2.5 rounded-full border border-red/25 bg-red/[0.06] px-3.5 py-1.5 font-stencil text-xs uppercase tracking-[0.18em] text-red"
+        aria-live="polite"
+      >
+        <span class="relative flex size-2" aria-hidden="true">
+          <span class="pulse absolute inset-0 rounded-full bg-red" data-popup-pulse hidden></span>
+          <span class="relative size-2 rounded-full bg-red"></span>
+        </span>
+        <span data-popup-status>{initialStatus}</span>
+      </p>
+
+      <p class="mt-6 font-stencil text-xs uppercase tracking-[0.22em] text-ink-soft">
+        Pop-up fundraiser &middot; Right inside {d.location}
+      </p>
+      <h2 id="popup-title" class="mt-3 max-w-[20ch] font-display text-4xl leading-[0.95] text-navy sm:text-[3.5rem]">
+        {d.title}
+        <span class="text-red">for our veterans.</span>
+      </h2>
+      <p class="mt-5 max-w-xl leading-relaxed text-ink-soft">{event.body}</p>
+
+      <div class="mt-8 flex flex-wrap items-end gap-x-10 gap-y-6">
+        {/* Price */}
+        {price && (
+          <p class="flex items-baseline gap-2">
+            <span class="font-display text-6xl leading-none text-red sm:text-7xl">{price}</span>
+            <span class="font-display text-2xl uppercase text-navy">{per}</span>
+          </p>
+        )}
+
+        {/* One tile per open day */}
+        <ul class="flex flex-wrap gap-2.5" aria-label="Hours">
+          {days.map((day) => (
+            <li
+              class="day relative min-w-[6.5rem] border border-line bg-bone-deep/60 px-3.5 py-2.5 transition-opacity duration-300"
+              data-open={day.open}
+              data-close={day.close}
+            >
+              <span class="today absolute -top-2.5 left-3 bg-red px-1.5 font-stencil text-[0.55rem] uppercase tracking-[0.2em] text-bone" hidden>
+                Today
+              </span>
+              <span class="block font-stencil text-[0.65rem] uppercase tracking-[0.2em] text-red">
+                {day.weekday} &middot; {day.date}
+              </span>
+              <span class="mt-0.5 block font-display text-lg leading-tight text-navy">{day.hours}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
+        {d.address && (
+          <Button href={directionsUrl(d.address)} external data-track="directions_click">
+            <Icon name="lucide:map-pin" class="size-4" aria-hidden="true" />
+            Get directions
+          </Button>
+        )}
+        <div class="text-sm leading-snug">
+          <p class="font-semibold text-ink">{d.location}</p>
+          {d.address && <p class="text-ink-soft">{d.address}</p>}
+        </div>
+      </div>
+      <a href={eventPath(event)} class="link-underline mt-5 inline-block text-sm font-semibold text-ink-soft">
+        Details &amp; share the flyer &rarr;
+      </a>
+    </Reveal>
+
+    {/* Flyer */}
+    {d.image && (
+      <Reveal delay={100} class="mx-auto w-full max-w-[16rem] sm:max-w-[18rem] lg:max-w-[20rem]">
+        <a
+          href={d.flyerUrl ?? d.image.src}
+          data-lightbox
+          class="flyer group relative block cursor-zoom-in"
+          aria-label={`Open the full flyer for ${d.title}`}
+        >
+          <Image
+            src={d.image}
+            alt={d.imageLabel ?? d.title}
+            widths={[320, 480, 640]}
+            sizes="(min-width: 1024px) 320px, 288px"
+            class="w-full border-[6px] border-white shadow-[0_24px_50px_-18px_rgba(12,23,48,0.45)]"
+          />
+          <StarMark class="absolute -right-3 -top-3 w-8 text-red drop-shadow" />
+        </a>
+      </Reveal>
+    )}
+  </div>
+</section>
+
+<style>
+  .stripes {
+    background: repeating-linear-gradient(
+      90deg,
+      var(--color-red) 0 2.25rem,
+      var(--color-bone) 2.25rem 2.75rem,
+      var(--color-navy) 2.75rem 5rem,
+      var(--color-bone) 5rem 5.5rem
+    );
+  }
+  .flyer {
+    rotate: 2deg;
+    transition: rotate 400ms var(--ease-out-soft);
+  }
+  .flyer:hover {
+    rotate: 0deg;
+  }
+  .day[data-state='today'] {
+    border-color: var(--color-red);
+    background: var(--color-bone);
+  }
+  .day[data-state='past'] {
+    opacity: 0.4;
+  }
+  .pulse {
+    animation: popup-pulse 1.6s var(--ease-out-soft) infinite;
+  }
+  @keyframes popup-pulse {
+    to {
+      transform: scale(2.6);
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .flyer {
+      rotate: none;
+    }
+    .pulse {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  type Window = { open: number; close: number };
+
+  const easternDay = (ms: number) =>
+    new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(ms);
+  const easternClock = (ms: number) =>
+    new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York',
+      hour: 'numeric',
+      minute: '2-digit',
+    })
+      .format(ms)
+      .replace(':00', '');
+
+  function update() {
+    const band = document.querySelector<HTMLElement>('[data-popup]');
+    if (!band) return;
+    const windows: Window[] = JSON.parse(band.dataset.windows ?? '[]');
+    if (!windows.length) return;
+
+    const now = Date.now();
+    // Over: the last day has closed.
+    if (now >= windows[windows.length - 1].close) {
+      band.hidden = true;
+      return;
+    }
+
+    const today = easternDay(now);
+    const tomorrow = easternDay(now + 86_400_000);
+    const current = windows.find((w) => now >= w.open && now < w.close);
+    const next = windows.find((w) => w.open > now);
+
+    let status: string | null = null;
+    if (current) status = `Open now until ${easternClock(current.close)}`;
+    else if (next && easternDay(next.open) === today)
+      status = `Opens today at ${easternClock(next.open)}`;
+    else if (next && easternDay(next.open) === tomorrow)
+      status = `Opens tomorrow at ${easternClock(next.open)}`;
+
+    const label = band.querySelector<HTMLElement>('[data-popup-status]');
+    if (label) {
+      // Keep the server-rendered "FRI–SUN · NOV 6–8" until it's close.
+      label.dataset.initial ??= label.textContent ?? '';
+      label.textContent = status ?? label.dataset.initial;
+    }
+    const pulse = band.querySelector<HTMLElement>('[data-popup-pulse]');
+    if (pulse) pulse.hidden = !current;
+
+    band.querySelectorAll<HTMLElement>('li[data-open]').forEach((li) => {
+      const open = Number(li.dataset.open);
+      const close = Number(li.dataset.close);
+      const isToday = easternDay(open) === today && now < close;
+      li.dataset.state = now >= close ? 'past' : isToday ? 'today' : '';
+      const tag = li.querySelector<HTMLElement>('.today');
+      if (tag) tag.hidden = !isToday;
+    });
+  }
+
+  let timer: number | undefined;
+  document.addEventListener('astro:page-load', () => {
+    update();
+    clearInterval(timer);
+    timer = window.setInterval(update, 60_000);
+  });
+</script>

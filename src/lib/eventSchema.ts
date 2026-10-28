@@ -5,7 +5,7 @@
  */
 import type { CollectionEntry } from 'astro:content';
 import { site } from '@/config/site';
-import { formatDate } from '@/lib/format';
+import { formatDateRange } from '@/lib/format';
 
 /** Root-relative path of an event's landing page — use for internal links. */
 export function eventPath(entry: CollectionEntry<'events'>): string {
@@ -67,6 +67,15 @@ export function eventLink(entry: CollectionEntry<'events'>): EventCta {
  */
 export function eventAction(entry: CollectionEntry<'events'>): EventCta | null {
   const d = entry.data;
+  // A pop-up has nothing to sign up for: the action is getting there.
+  if (d.popup && d.address) {
+    return {
+      href: directionsUrl(d.address),
+      label: 'Get directions',
+      external: true,
+      track: 'directions_click',
+    };
+  }
   if (d.registrationUrl) {
     return {
       href: d.registrationUrl,
@@ -86,6 +95,11 @@ export function eventAction(entry: CollectionEntry<'events'>): EventCta | null {
     };
   }
   return null;
+}
+
+/** Google Maps directions to an address. */
+export function directionsUrl(address: string): string {
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`;
 }
 
 /** Clean a Markdown body into a single-line plain-text description. */
@@ -144,6 +158,7 @@ export function eventSchema(entry: CollectionEntry<'events'>): Record<string, un
     name: d.title,
     description: bodyText(entry) || d.title,
     startDate: d.date.toISOString().slice(0, 10),
+    ...(d.endDate && { endDate: d.endDate.toISOString().slice(0, 10) }),
     eventStatus: 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     url: eventUrl(entry),
@@ -194,14 +209,28 @@ export function eventFaqs(entry: CollectionEntry<'events'>): Faq[] {
 
   const where = d.address ? `${d.location} (${d.address})` : d.location;
   const fee = d.entryFee ? ` Entry is ${d.entryFee}.` : '';
+  const hours = (d.hours ?? [])
+    .map(
+      (h) =>
+        `${new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'UTC' }).format(h.date)} ${h.open} to ${h.close}`,
+    )
+    .join(', ');
   const faqs: Faq[] = [
     {
       question: `When and where is the ${d.title}?`,
       answer:
-        `${d.title} takes place on ${formatDate(d.date)} at ${where}.` +
-        (d.startTime ? ` ${d.startTime}.` : ''),
+        `${d.title} takes place ${d.endDate ? '' : 'on '}${formatDateRange(d.date, d.endDate)} at ${where}.` +
+        (d.startTime ? ` ${d.startTime}.` : '') +
+        (hours ? ` Hours: ${hours}.` : ''),
     },
-    d.registrationUrl
+    d.popup
+      ? {
+          question: 'Do I need to sign up?',
+          answer:
+            `No. Just stop in any time during those hours.` +
+            (d.entryFee ? ` It's ${d.entryFee}.` : ''),
+        }
+      : d.registrationUrl
       ? {
           question: 'How do I register?',
           answer:

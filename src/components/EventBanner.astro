@@ -11,13 +11,13 @@
  * the browser only has to count down to a fixed number.
  */
 import { getCollection } from 'astro:content';
-import { isUpcoming } from '@/lib/format';
+import { isUpcoming, lastDay } from '@/lib/format';
 import { eventLink } from '@/lib/eventSchema';
 import { easternAt } from '@/lib/eventTime';
 
 const events = await getCollection('events');
 const upcoming = events
-  .filter((e) => isUpcoming(e.data.date))
+  .filter((e) => isUpcoming(lastDay(e.data)) && !e.data.popup)
   .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
 const event = upcoming.find((e) => e.data.featured) ?? upcoming[0] ?? null;
 
