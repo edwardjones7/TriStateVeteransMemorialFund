@@ -91,6 +91,16 @@ export function shortClock(text: string): string {
   return t.minute ? `${h}:${String(t.minute).padStart(2, '0')}` : String(h);
 }
 
+/** "Fri 10–5 · Sat 10–4 · Sun 10–3", or null for events without hours. */
+export function hoursLine(entry: CollectionEntry<'events'>): string | null {
+  const weekday = new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone: 'UTC' });
+  return (
+    entry.data.hours
+      ?.map((h) => `${weekday.format(h.date)} ${shortClock(h.open)}–${shortClock(h.close)}`)
+      .join(' · ') ?? null
+  );
+}
+
 /** 20261107T160000Z */
 const utcStamp = (ms: number) =>
   new Date(ms).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');

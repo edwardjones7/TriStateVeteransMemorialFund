@@ -6,6 +6,7 @@ import Section from '@/components/Section.astro';
 import Eyebrow from '@/components/Eyebrow.astro';
 import Reveal from '@/components/Reveal.astro';
 import EventCard from '@/components/EventCard.astro';
+import EventTile from '@/components/EventTile.astro';
 import FeaturedEvents from '@/components/FeaturedEvents.astro';
 import StarMark from '@/components/StarMark.astro';
 import Button from '@/components/Button.astro';
@@ -59,14 +60,14 @@ const metaDescription = next
   {
     rest.length > 0 ? (
       <Section class="py-20 sm:py-24">
-        <Reveal class="mb-6">
+        <Reveal>
           <Eyebrow>Also on the calendar</Eyebrow>
           <h2 class="mt-4 font-display text-3xl sm:text-4xl">On the horizon.</h2>
         </Reveal>
-        <div>
+        <div class="mt-10 grid gap-8">
           {rest.map((e, i) => (
-            <Reveal delay={i * 50}>
-              <EventCard event={e} status="upcoming" href={eventPath(e)} />
+            <Reveal delay={i * 60}>
+              <EventTile event={e} />
             </Reveal>
           ))}
         </div>

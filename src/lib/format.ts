@@ -54,3 +54,10 @@ export function isUpcoming(date: Date): boolean {
 export function lastDay(data: { date: Date; endDate?: Date }): Date {
   return data.endDate ?? data.date;
 }
+
+/** The day number for a date block: "6–8" for a multi-day event in one month. */
+export function dayLabel(start: Date, end?: Date): string {
+  const a = dateParts(start);
+  const b = end ? dateParts(end) : null;
+  return b && b.month === a.month && b.day !== a.day ? `${a.day}–${b.day}` : a.day;
+}

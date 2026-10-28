@@ -4,8 +4,8 @@ import { Icon } from 'astro-icon/components';
 import TreatedImage from './TreatedImage.astro';
 import Button from './Button.astro';
 import ShareFlyer from './ShareFlyer.astro';
-import { formatDateRange, dateParts } from '@/lib/format';
-import { shortClock } from '@/lib/eventTime';
+import { formatDateRange, dateParts, dayLabel as toDayLabel } from '@/lib/format';
+import { hoursLine as toHoursLine } from '@/lib/eventTime';
 import { eventUrl, eventLink } from '@/lib/eventSchema';
 
 /** EventCard — `featured` renders a large two-column card; otherwise a
@@ -35,15 +35,8 @@ const d = event.data;
 // Straight to sign-up/payment when the event has one — no stop-off page.
 const cta = status === 'upcoming' && !hideCta ? eventLink(event) : null;
 const parts = dateParts(d.date);
-// "6–8" for a multi-day event in one month.
-const endParts = d.endDate ? dateParts(d.endDate) : null;
-const dayLabel =
-  endParts && endParts.month === parts.month ? `${parts.day}–${endParts.day}` : parts.day;
-const weekday = new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone: 'UTC' });
-// "Fri 10–5 · Sat 10–4 · Sun 10–3"
-const hoursLine = d.hours
-  ?.map((h) => `${weekday.format(h.date)} ${shortClock(h.open)}–${shortClock(h.close)}`)
-  .join(' · ');
+const dayLabel = toDayLabel(d.date, d.endDate);
+const hoursLine = toHoursLine(event);
 const place = d.address ? `${d.location}, ${d.address}` : d.location;
 /* Portrait images (e.g. event flyers) are letterboxed instead of cropped —
  * cropping would cut off flyer text. */

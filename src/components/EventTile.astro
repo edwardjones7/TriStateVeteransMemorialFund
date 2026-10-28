@@ -1,0 +1,104 @@
+---
+/**
+ * EventTile — the middle tier on the events page: upcoming events that
+ * aren't headliners. Bigger than an archive row (flyer, date block, the
+ * details with icons, a CTA) but kept on the light background so the navy
+ * headline cards above still lead.
+ */
+import type { CollectionEntry } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import TreatedImage from './TreatedImage.astro';
+import { dateParts, dayLabel } from '@/lib/format';
+import { hoursLine } from '@/lib/eventTime';
+import { eventAction, eventLink, eventPath } from '@/lib/eventSchema';
+
+interface Props {
+  event: CollectionEntry<'events'>;
+}
+const { event } = Astro.props;
+const d = event.data;
+const parts = dateParts(d.date);
+const day = dayLabel(d.date, d.endDate);
+const hours = hoursLine(event);
+// A pop-up's action is directions; everything else goes to sign-up/payment.
+const cta = (d.popup && eventAction(event)) || eventLink(event);
+const isPortrait = !!d.image && d.image.height > d.image.width;
+const kicker = d.popup ? 'Pop-up fundraiser' : 'Save the date';
+---
+
+<article class="group grid overflow-hidden border border-line bg-bone-deep sm:grid-cols-[15rem_minmax(0,1fr)] lg:grid-cols-[18rem_minmax(0,1fr)]">
+  {d.image && (
+    <a
+      href={d.flyerUrl ?? eventPath(event)}
+      data-lightbox={d.flyerUrl ? '' : undefined}
+      class="relative block cursor-zoom-in border-b border-line bg-navy-deep/[0.04] p-6 sm:border-b-0 sm:border-r"
+      aria-label={`Open the full flyer for ${d.title}`}
+    >
+      <TreatedImage
+        src={d.image}
+        alt={d.imageLabel ?? d.title}
+        ratio={isPortrait ? '2 / 3' : '4 / 3'}
+        imgClass={isPortrait ? 'object-contain!' : ''}
+        class="mx-auto max-w-[15rem] shadow-[0_18px_36px_-16px_rgba(12,23,48,0.45)] transition-transform duration-300 ease-out-soft group-hover:-translate-y-1 sm:max-w-none"
+        sizes="(min-width: 1024px) 240px, 200px"
+      />
+    </a>
+  )}
+
+  <div class="flex flex-col p-6 sm:p-8 lg:p-10">
+    <div class="flex items-start gap-4">
+      <div class="shrink-0 border-r border-line pr-4 text-center">
+        <span class="block font-stencil text-xs tracking-[0.15em] text-red">{parts.month}</span>
+        <span class="block font-display text-4xl leading-none lg:text-5xl">{day}</span>
+        <span class="block font-stencil text-[0.7rem] text-ink-soft">{parts.year}</span>
+      </div>
+      <div class="min-w-0">
+        <p class="font-stencil text-[0.65rem] uppercase tracking-[0.2em] text-red">{kicker}</p>
+        <h3 class="mt-1 font-display text-2xl leading-tight sm:text-3xl lg:text-[2.25rem]">
+          <a href={eventPath(event)} class="link-underline">{d.title}</a>
+        </h3>
+      </div>
+    </div>
+
+    <ul class="mt-6 grid gap-x-8 gap-y-2 text-sm text-ink-soft lg:grid-cols-2">
+      {(hours ?? d.startTime) && (
+        <li class="flex items-start gap-2.5">
+          <Icon name="lucide:clock" class="mt-0.5 size-4 shrink-0 text-red" aria-hidden="true" />
+          {hours ?? d.startTime}
+        </li>
+      )}
+      <li class="flex items-start gap-2.5">
+        <Icon name="lucide:map-pin" class="mt-0.5 size-4 shrink-0 text-red" aria-hidden="true" />
+        <span>
+          {d.location}
+          {d.address && <span class="block text-ink-soft/80">{d.address}</span>}
+        </span>
+      </li>
+      {d.entryFee && (
+        <li class="flex items-start gap-2.5">
+          <Icon name="lucide:ticket" class="mt-0.5 size-4 shrink-0 text-red" aria-hidden="true" />
+          {d.entryFee}
+        </li>
+      )}
+    </ul>
+
+    <p class="mt-5 max-w-prose text-[0.95rem] leading-relaxed">{event.body}</p>
+
+    <div class="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-6 text-sm">
+      <a
+        href={cta.href}
+        target={cta.external ? '_blank' : undefined}
+        rel={cta.external ? 'noopener noreferrer' : undefined}
+        data-track={cta.track}
+        class="inline-flex min-h-[44px] items-center gap-2 rounded-[3px] bg-red px-4 py-2 font-semibold text-bone transition-colors duration-150 hover:bg-red-deep"
+      >
+        {cta.label} <span aria-hidden="true">&rarr;</span>
+      </a>
+      {cta.external && (
+        <a href={eventPath(event)} class="link-underline font-semibold text-ink-soft">
+          Details
+        </a>
+      )}
+    </div>
+  </div>
+</article>
