@@ -2,8 +2,9 @@
 /**
  * Site-wide announcement bar with a live, segmented countdown to the next
  * event. Driven by the featured upcoming event in the `events` collection
- * (falls back to the soonest upcoming event), so it updates itself as events
- * come and go and disappears entirely when nothing is upcoming. Always shown
+ * (falls back to the soonest upcoming event). One bar is rendered per upcoming
+ * event and the browser shows the right one, so once an event's last day is
+ * over the bar moves on to the next event even before the site is rebuilt. Always shown
  * (not dismissible) so the event stays front-and-center.
  *
  * The countdown targets 8:00 AM Eastern on the event date. That exact instant
@@ -16,10 +17,13 @@ import { eventLink } from '@/lib/eventSchema';
 import { easternAt } from '@/lib/eventTime';
 
 const events = await getCollection('events');
+// Every event still upcoming at build time, soonest first. The page is static,
+// so the browser picks which one to show (see the script below): an event drops
+// out once its last day is over and the next one takes its place, without
+// waiting for a rebuild.
 const upcoming = events
   .filter((e) => isUpcoming(lastDay(e.data)) && !e.data.popup)
   .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
-const event = upcoming.find((e) => e.data.featured) ?? upcoming[0] ?? null;
 
 function splitRemaining(ms: number) {
   if (ms <= 0) return null;
@@ -34,13 +38,29 @@ function splitRemaining(ms: number) {
 }
 
 const pad = (n: number) => String(n).padStart(2, '0');
+const DAY_MS = 86_400_000;
 
-let targetMs: number | null = null;
-let initial: { d: number; h: number; m: number; s: number } | null = null;
-if (event) {
-  targetMs = easternAt(event.data.date, 8);
-  initial = splitRemaining(targetMs - Date.now());
-}
+const banners = upcoming.flatMap((event) => {
+  const cta = eventLink(event);
+  if (!cta) return [];
+  const targetMs = easternAt(event.data.date, 8);
+  // Midnight Eastern after the event's last day.
+  const endMs = easternAt(new Date(lastDay(event.data).getTime() + DAY_MS), 0);
+  return [
+    {
+      event,
+      cta,
+      targetMs,
+      endMs,
+      initial: splitRemaining(targetMs - Date.now()),
+      // "Race day" only reads right for a run.
+      dayOfMessage: /5k|run|walk/i.test(event.data.title) ? "It's race day!" : "It's today!",
+    },
+  ];
+});
+// Build-time pick (featured first, else soonest) so the bar renders correctly
+// before the script runs; the script re-checks against the visitor's clock.
+const initialPick = banners.find((b) => b.event.data.featured) ?? banners[0] ?? null;
 
 const units = [
   { key: 'd', label: 'Days' },
@@ -48,28 +68,22 @@ const units = [
   { key: 'm', label: 'Min' },
   { key: 's', label: 'Sec' },
 ] as const;
-const initialValue = (key: string) => {
+const initialValue = (initial: ReturnType<typeof splitRemaining>, key: string) => {
   if (!initial) return '00';
   const v = initial[key as 'd' | 'h' | 'm' | 's'];
   return key === 'd' ? String(v) : pad(v);
 };
-
-// CTA goes straight to sign-up/payment, falling back to the event's own
-// page — so the bar shows for every upcoming event, not just 5Ks.
-const cta = event ? eventLink(event) : null;
-// "Race day" only reads right for a run.
-const dayOfMessage =
-  event && /5k|run|walk/i.test(event.data.title)
-    ? "It's race day!"
-    : "It's today!";
 ---
 
 {
-  event && cta && targetMs !== null && (
+  banners.map(({ event, cta, targetMs, endMs, initial, dayOfMessage }) => (
     <aside
-      id="event-banner"
+      data-event-banner
       data-event-id={event.id}
       data-target={targetMs}
+      data-end={endMs}
+      data-featured={event.data.featured ? '' : undefined}
+      hidden={event !== initialPick?.event}
       class="texture-navy-deep relative z-[60] border-b border-bone/10 bg-navy-deep text-bone"
     >
       <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-1.5 px-6 py-1.5 sm:px-8 lg:justify-between lg:px-12">
@@ -101,7 +115,7 @@ const dayOfMessage =
                     data-unit={u.key}
                     class="font-display text-base leading-none tabular-nums text-bone sm:text-xl"
                   >
-                    {initialValue(u.key)}
+                    {initialValue(initial, u.key)}
                   </span>
                   <span class="mt-0.5 font-stencil text-[0.5rem] uppercase tracking-[0.16em] text-bone/55">
                     {u.label}
@@ -135,45 +149,66 @@ const dayOfMessage =
           </a>
         </div>
       </div>
-
-      <script is:inline>
-        (function () {
-          function tick() {
-            var b = document.getElementById('event-banner');
-            if (!b) return;
-            var target = parseInt(b.getAttribute('data-target'), 10);
-            if (isNaN(target)) return;
-            var rem = target - Date.now();
-            var cd = b.querySelector('[data-countdown]');
-            var done = b.querySelector('[data-done]');
-            if (rem <= 0) {
-              if (cd) cd.hidden = true;
-              if (done) done.hidden = false;
-              return;
-            }
-            var s = Math.floor(rem / 1000);
-            var d = Math.floor(s / 86400);
-            s -= d * 86400;
-            var h = Math.floor(s / 3600);
-            s -= h * 3600;
-            var m = Math.floor(s / 60);
-            s -= m * 60;
-            function p2(n) {
-              return n < 10 ? '0' + n : '' + n;
-            }
-            var vals = { d: '' + d, h: p2(h), m: p2(m), s: p2(s) };
-            for (var key in vals) {
-              var el = b.querySelector('[data-unit="' + key + '"]');
-              if (el && el.textContent !== vals[key]) el.textContent = vals[key];
-            }
-          }
-          tick();
-          if (!window.__evtCountdown) {
-            window.__evtCountdown = setInterval(tick, 1000);
-          }
-          document.addEventListener('astro:page-load', tick);
-        })();
-      </script>
     </aside>
-  )
+  ))
 }
+
+<script is:inline>
+  (function () {
+    // Show the bar for the featured event among those not yet over (else the
+    // soonest), count down to it, and move on once its last day has passed.
+    function pick(now) {
+      var all = document.querySelectorAll('[data-event-banner]');
+      var live = [];
+      for (var i = 0; i < all.length; i++) {
+        var end = parseInt(all[i].getAttribute('data-end'), 10);
+        if (!(end <= now)) live.push(all[i]);
+      }
+      var chosen = null;
+      for (var j = 0; j < live.length; j++) {
+        if (live[j].hasAttribute('data-featured')) {
+          chosen = live[j];
+          break;
+        }
+      }
+      if (!chosen) chosen = live[0] || null;
+      for (var k = 0; k < all.length; k++) all[k].hidden = all[k] !== chosen;
+      return chosen;
+    }
+    function p2(n) {
+      return n < 10 ? '0' + n : '' + n;
+    }
+    function tick() {
+      var now = Date.now();
+      var b = pick(now);
+      if (!b) return;
+      var target = parseInt(b.getAttribute('data-target'), 10);
+      if (isNaN(target)) return;
+      var rem = target - now;
+      var cd = b.querySelector('[data-countdown]');
+      var done = b.querySelector('[data-done]');
+      if (rem <= 0) {
+        if (cd) cd.hidden = true;
+        if (done) done.hidden = false;
+        return;
+      }
+      var s = Math.floor(rem / 1000);
+      var d = Math.floor(s / 86400);
+      s -= d * 86400;
+      var h = Math.floor(s / 3600);
+      s -= h * 3600;
+      var m = Math.floor(s / 60);
+      s -= m * 60;
+      var vals = { d: '' + d, h: p2(h), m: p2(m), s: p2(s) };
+      for (var key in vals) {
+        var el = b.querySelector('[data-unit="' + key + '"]');
+        if (el && el.textContent !== vals[key]) el.textContent = vals[key];
+      }
+    }
+    tick();
+    if (!window.__evtCountdown) {
+      window.__evtCountdown = setInterval(tick, 1000);
+    }
+    document.addEventListener('astro:page-load', tick);
+  })();
+</script>
