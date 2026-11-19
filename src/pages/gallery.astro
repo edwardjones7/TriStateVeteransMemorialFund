@@ -5,10 +5,15 @@ import PageHeader from '@/components/PageHeader.astro';
 import Section from '@/components/Section.astro';
 import Reveal from '@/components/Reveal.astro';
 import CallToAction from '@/components/CallToAction.astro';
-import Eyebrow from '@/components/Eyebrow.astro';
 import VideoEmbed from '@/components/VideoEmbed.astro';
 import RaceBib from '@/components/RaceBib.astro';
-import { album5k2026 } from '@/lib/album5k2026';
+import TicketStub from '@/components/TicketStub.astro';
+import FlagCase from '@/components/FlagCase.astro';
+import TimelineStop from '@/components/TimelineStop.astro';
+import Eyebrow from '@/components/Eyebrow.astro';
+import PhotoAlbum, { type LoadedChapter } from '@/components/PhotoAlbum.astro';
+import { album5k2026, type AlbumChapter } from '@/lib/album5k2026';
+import { albumDance2026 } from '@/lib/albumDance2026';
 
 // Auto-load every photo in src/assets/gallery — drop a new .avif/.jpg/.png
 // in that folder and it appears here on the next build, no edits needed.
@@ -20,49 +25,56 @@ const photos = Object.entries(modules)
   .sort(([a], [b]) => a.localeCompare(b))
   .map(([, mod]) => mod.default);
 
-/* 5K album — the folder is ordered "NN-slug.avif", so strip the numeric
- * prefix to key each file by slug and let album5k2026 supply the captions
- * and chapter breaks. Mismatches fail the build rather than dropping a
- * photo quietly. */
+/* Event albums — each folder is ordered "NN-slug.avif", so strip the
+ * numeric prefix to key each file by slug and let the album file supply
+ * captions and chapter breaks. Mismatches fail the build rather than
+ * dropping a photo quietly. */
 const albumModules = import.meta.glob<{ default: ImageMetadata }>(
-  '../assets/gallery/5k-2026/*.{avif,jpg,jpeg,png,webp}',
+  '../assets/gallery/*/*.{avif,jpg,jpeg,png,webp}',
   { eager: true },
 );
-const bySlug = new Map(
-  Object.entries(albumModules).map(([file, mod]) => [
-    file.replace(/^.*\/\d+-/, '').replace(/\.[^.]+$/, ''),
-    mod.default,
-  ]),
-);
-const albumChapters = album5k2026.chapters.map((chapter) => ({
-  ...chapter,
-  photos: chapter.photos.map(({ slug, caption }) => {
-    const image = bySlug.get(slug);
-    if (!image) throw new Error(`5K album: no image file for slug "${slug}"`);
-    bySlug.delete(slug);
-    return { image, caption };
-  }),
-}));
-if (bySlug.size) {
-  throw new Error(
-    `5K album: image(s) not listed in album5k2026: ${[...bySlug.keys()].join(', ')}`,
+function loadAlbum(album: { id: string; chapters: AlbumChapter[] }): LoadedChapter[] {
+  const bySlug = new Map(
+    Object.entries(albumModules)
+      .filter(([file]) => file.includes(`/gallery/${album.id}/`))
+      .map(([file, mod]) => [
+        file.replace(/^.*\/\d+-/, '').replace(/\.[^.]+$/, ''),
+        mod.default,
+      ]),
   );
+  const chapters = album.chapters.map((chapter) => ({
+    ...chapter,
+    photos: chapter.photos.map(({ slug, caption }) => {
+      const image = bySlug.get(slug);
+      if (!image) throw new Error(`${album.id} album: no image file for slug "${slug}"`);
+      bySlug.delete(slug);
+      return { image, caption };
+    }),
+  }));
+  if (bySlug.size) {
+    throw new Error(
+      `${album.id} album: image(s) not listed in its album file: ${[...bySlug.keys()].join(', ')}`,
+    );
+  }
+  return chapters;
 }
-const albumCount = albumChapters.reduce((n, c) => n + c.photos.length, 0);
+const danceChapters = loadAlbum(albumDance2026);
+const raceChapters = loadAlbum({ id: '5k-2026', ...album5k2026 });
 
 // Every clip is a YouTube embed — `id` is the code after youtu.be/.
-// `album` pins a clip to the photo album it belongs with; the rest collect
-// under "More from the mission".
+// `album` pins a clip to the event on the timeline it belongs with; the
+// rest collect under "More from the mission".
 const videos = [
   { id: 'rTzuliRQMVY', title: 'Third Annual 5K', album: '5k-2026' },
-  { id: 'aRGtQVFizLk', title: 'Veterans Day 2026' },
+  { id: 'aRGtQVFizLk', title: 'Veterans Day 2026', album: 'veterans-day-2026' },
   { id: 'h8X1aPzVC9Q', title: 'Featured on 6abc' },
   { id: 'RsOro6KpYko', title: 'Honoring Our Veterans' },
   { id: 'BD9h0t7h9RU', title: 'Second Annual 5K' },
   { id: 'xNgKeG1ekNU', title: 'First Annual 5K' },
 ];
 const albumVideo = videos.find((v) => v.album === '5k-2026') ?? null;
-const otherVideos = videos.filter((v) => v.album !== '5k-2026');
+const veteransDayVideo = videos.find((v) => v.album === 'veterans-day-2026') ?? null;
+const otherVideos = videos.filter((v) => !v.album);
 ---
 
 <Base
@@ -75,29 +87,68 @@ const otherVideos = videos.filter((v) => v.album !== '5k-2026');
     intro="The events, the ceremonies, and the community behind our work, captured along the way."
   />
 
-  {/* ---------- 5K album, in the order the morning happened ---------- */}
-  <Section class="border-b border-line py-20 sm:py-24">
-    <div class="flex flex-col gap-10 md:flex-row md:items-start md:justify-between md:gap-14">
-      <Reveal class="max-w-2xl">
-        <Eyebrow>{album5k2026.title}</Eyebrow>
-        <h2 class="mt-4 font-display text-3xl sm:text-4xl">
-          Race morning, start to finish.
-        </h2>
-        <p class="mt-3 text-ink-soft">{album5k2026.intro}</p>
-        <p class="mt-2 font-stencil text-xs uppercase tracking-[0.18em] text-ink-soft">
-          {albumCount} photos
-        </p>
-      </Reveal>
-      <Reveal class="self-center md:shrink-0 md:self-start" delay={100}>
-        <RaceBib
-          date={album5k2026.date}
-          eventName="TriState Veterans Memorial Fund"
-          subtitle={album5k2026.title}
-          venue={album5k2026.venue}
-        />
-      </Reveal>
-    </div>
+  {/* The page runs as a timeline, newest event first — each event opens
+      with a dated TimelineStop. */}
 
+  {/* ---------- Adelphia, the eve of Veterans Day 2026 ---------- */}
+  <PhotoAlbum
+    id="dance-2026"
+    tone="night"
+    date={albumDance2026.date}
+    place={albumDance2026.venue}
+    eyebrow={albumDance2026.title}
+    heading={albumDance2026.heading}
+    intro={albumDance2026.intro}
+    chapters={danceChapters}
+  >
+    <TicketStub slot="emblem" {...albumDance2026.ticket} />
+  </PhotoAlbum>
+
+  {/* ---------- Veterans Day ceremony, Flags for Forgotten Veterans ---------- */}
+  {
+    veteransDayVideo && (
+      <Section id="veterans-day-2026" tone="bone-deep" class="border-b border-line py-20 sm:py-24">
+        <TimelineStop date="2026-11-07" place="Washington Lake Park · Sewell, NJ" />
+        <div class="flex flex-col gap-10 md:flex-row md:items-start md:justify-between md:gap-14">
+          <Reveal class="max-w-2xl">
+            <Eyebrow tone="ink">Veterans Day · Flags for Forgotten Veterans</Eyebrow>
+            <h2 class="mt-4 font-display text-3xl sm:text-4xl">A flag for the forgotten.</h2>
+            <p class="mt-3 text-ink-soft">
+              At the Washington Lake Park amphitheater, a flag placed for each forgotten
+              veteran. A day of remembrance, not celebration.
+            </p>
+          </Reveal>
+          <Reveal class="group self-center md:shrink-0 md:self-start" delay={100}>
+            <FlagCase title="Flags for Forgotten Veterans" detail="Nov 7 · 2026" />
+          </Reveal>
+        </div>
+        <Reveal class="mt-12 max-w-4xl" delay={80}>
+          <VideoEmbed id={veteransDayVideo.id} title={veteransDayVideo.title} showCaption={false} />
+          <p class="mt-2.5 font-stencil text-xs uppercase tracking-[0.18em] text-ink-soft">
+            Watch the ceremony
+          </p>
+        </Reveal>
+      </Section>
+    )
+  }
+
+  {/* ---------- 5K album, in the order the morning happened ---------- */}
+  <PhotoAlbum
+    id="5k-2026"
+    date={album5k2026.date}
+    place={album5k2026.venue}
+    eyebrow={album5k2026.title}
+    heading="Race morning, start to finish."
+    intro={album5k2026.intro}
+    chapters={raceChapters}
+  >
+    <RaceBib
+      slot="emblem"
+      date={album5k2026.date}
+      eventName="TriState Veterans Memorial Fund"
+      subtitle={album5k2026.title}
+      venue={album5k2026.venue}
+    />
     {
       albumVideo && (
         <Reveal class="mt-10 max-w-3xl" delay={80}>
@@ -108,39 +159,7 @@ const otherVideos = videos.filter((v) => v.album !== '5k-2026');
         </Reveal>
       )
     }
-
-    {
-      albumChapters.map((chapter) => (
-        <div class="mt-14 first:mt-12">
-          <Reveal class="flex items-baseline gap-4 border-b border-line pb-3">
-            <span class="font-stencil text-xs uppercase tracking-[0.18em] text-red">
-              {chapter.time}
-            </span>
-            <h3 class="font-display text-2xl sm:text-3xl">{chapter.title}</h3>
-          </Reveal>
-          <div class="mt-7 columns-1 gap-5 sm:columns-2 lg:columns-3">
-            {chapter.photos.map((photo, i) => (
-              <Reveal class="mb-5 break-inside-avoid" delay={(i % 3) * 70}>
-                <figure>
-                  <Image
-                    src={photo.image}
-                    alt={photo.caption}
-                    widths={[480, 768, 1100]}
-                    sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"
-                    loading="lazy"
-                    class="treated develop w-full border border-line"
-                  />
-                  <figcaption class="mt-2 text-sm leading-snug text-ink-soft">
-                    {photo.caption}
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      ))
-    }
-  </Section>
+  </PhotoAlbum>
 
   <Section tone="bone-deep" class="py-20 sm:py-24">
     <Reveal class="max-w-2xl">

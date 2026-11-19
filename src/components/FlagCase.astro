@@ -1,0 +1,118 @@
+---
+/**
+ * FlagCase — a folded memorial flag in its triangular display case, with a
+ * brass plaque beneath. The emblem for the Veterans Day ceremony, where a
+ * flag is placed for each forgotten veteran.
+ * Decorative: the same facts sit in the section's text, so it is aria-hidden.
+ */
+interface Props {
+  /** Engraved on the plaque, top line, e.g. "Flags for Forgotten Veterans". */
+  title: string;
+  /** Plaque second line, e.g. "Nov 7 · 2026". */
+  detail: string;
+  class?: string;
+}
+const { title, detail, class: cls = '' } = Astro.props;
+
+// Star centers for the canton: rows staggered like a flag's field,
+// clipped to the inner triangle so the edge rows read as folded.
+const stars: [number, number][] = [];
+for (let row = 0; row < 6; row++) {
+  const y = 30 + row * 15;
+  const offset = row % 2 ? 9 : 0;
+  for (let x = 30 + offset; x <= 210; x += 18) stars.push([x, y]);
+}
+const star = 'M0 -5 L1.18 -1.62 L4.76 -1.55 L1.9 0.62 L2.94 4.05 L0 2 L-2.94 4.05 L-1.9 0.62 L-4.76 -1.55 L-1.18 -1.62 Z';
+---
+
+<div class:list={['case', cls]} aria-hidden="true">
+  <svg viewBox="0 0 240 128" class="block w-full">
+    <defs>
+      <linearGradient id="flagcase-wood" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#7a4a26" />
+        <stop offset="0.45" stop-color="#5a3219" />
+        <stop offset="1" stop-color="#3d2110" />
+      </linearGradient>
+      <linearGradient id="flagcase-glass" x1="0" y1="0" x2="1" y2="0.6">
+        <stop offset="0.25" stop-color="#fff" stop-opacity="0" />
+        <stop offset="0.42" stop-color="#fff" stop-opacity="0.16" />
+        <stop offset="0.5" stop-color="#fff" stop-opacity="0.04" />
+        <stop offset="0.6" stop-color="#fff" stop-opacity="0" />
+      </linearGradient>
+      <clipPath id="flagcase-field">
+        <polygon points="24,114 120,18 216,114" />
+      </clipPath>
+    </defs>
+
+    {/* Wooden frame */}
+    <polygon points="0,124 120,4 240,124" fill="url(#flagcase-wood)" />
+    <polygon
+      points="0,124 120,4 240,124"
+      fill="none"
+      stroke="#000"
+      stroke-opacity="0.35"
+      stroke-width="1"
+    />
+    {/* Folded flag: the blue field and its stars */}
+    <g clip-path="url(#flagcase-field)">
+      <rect x="0" y="0" width="240" height="128" fill="var(--color-navy)" />
+      {/* the fold lines, faint */}
+      <path d="M72 114 L120 66 L168 114" fill="none" stroke="#000" stroke-opacity="0.22" />
+      <path d="M48 90 L120 18" fill="none" stroke="#fff" stroke-opacity="0.06" />
+      {stars.map(([x, y]) => (
+        <path d={star} transform={`translate(${x} ${y})`} fill="var(--color-bone)" />
+      ))}
+      {/* glass reflection */}
+      <rect class="sheen" x="-240" y="0" width="480" height="128" fill="url(#flagcase-glass)" />
+    </g>
+    <polygon
+      points="24,114 120,18 216,114"
+      fill="none"
+      stroke="var(--color-gold)"
+      stroke-opacity="0.6"
+      stroke-width="1"
+    />
+  </svg>
+
+  <div class="plaque">
+    <p class="font-stencil text-[0.58rem] uppercase leading-tight tracking-[0.18em]">{title}</p>
+    <p class="mt-0.5 font-stencil text-[0.55rem] uppercase tracking-[0.22em] opacity-75">{detail}</p>
+  </div>
+</div>
+
+<style>
+  .case {
+    width: 15rem;
+    rotate: 3deg;
+    transition: rotate 400ms var(--ease-out-soft);
+    filter: drop-shadow(0 14px 18px rgb(0 0 0 / 0.35));
+  }
+  :global(.group:hover) .case {
+    rotate: 0deg;
+  }
+  /* Light slides across the glass on hover */
+  .sheen {
+    transition: transform 900ms var(--ease-out-soft);
+  }
+  :global(.group:hover) .sheen {
+    transform: translateX(200px);
+  }
+  .plaque {
+    width: 70%;
+    margin: 0.55rem auto 0;
+    padding: 0.4rem 0.5rem;
+    text-align: center;
+    color: #3b2a10;
+    background: linear-gradient(135deg, #e2c27a 0%, #b0863c 45%, #d9b468 70%, #9c7430 100%);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.5),
+      inset 0 -1px 0 rgb(0 0 0 / 0.25);
+    text-shadow: 0 1px 0 rgb(255 255 255 / 0.35);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .case,
+    .sheen {
+      transition: none;
+    }
+  }
+</style>

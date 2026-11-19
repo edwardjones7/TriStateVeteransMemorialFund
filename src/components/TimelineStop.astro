@@ -1,0 +1,60 @@
+---
+/**
+ * TimelineStop — the dated marker that opens each event on the gallery
+ * page, so the page reads as one timeline, newest first: a ringed dot, the
+ * date, and a hairline running on toward the next stop.
+ */
+interface Props {
+  /** ISO date, e.g. "2026-11-10". */
+  date: string;
+  /** Short place name after the date, e.g. "Adelphia · Deptford, NJ". */
+  place?: string;
+  tone?: 'day' | 'night';
+}
+const { date, place, tone = 'day' } = Astro.props;
+const night = tone === 'night';
+
+const label = new Intl.DateTimeFormat('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+  timeZone: 'UTC',
+}).format(new Date(`${date}T00:00:00Z`));
+---
+
+<div class="mb-10 flex items-center gap-3 sm:mb-12">
+  <span
+    class:list={[
+      'relative grid size-4 shrink-0 place-items-center rounded-full border-2',
+      night ? 'border-gold' : 'border-red',
+    ]}
+    aria-hidden="true"
+  >
+    <span class:list={['size-1.5 rounded-full', night ? 'bg-gold' : 'bg-red']}></span>
+  </span>
+  <time
+    datetime={date}
+    class:list={[
+      'shrink-0 font-stencil text-xs uppercase tracking-[0.2em]',
+      night ? 'text-gold' : 'text-red',
+    ]}
+  >
+    {label}
+  </time>
+  {
+    place && (
+      <span
+        class:list={[
+          'hidden truncate font-stencil text-xs uppercase tracking-[0.18em] sm:inline',
+          night ? 'text-bone/60' : 'text-ink-soft',
+        ]}
+      >
+        · {place}
+      </span>
+    )
+  }
+  <span
+    class:list={['h-px min-w-8 flex-1', night ? 'bg-bone/15' : 'bg-line']}
+    aria-hidden="true"
+  ></span>
+</div>

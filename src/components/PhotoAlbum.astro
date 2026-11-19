@@ -1,0 +1,142 @@
+---
+/**
+ * PhotoAlbum — one event's photos told as a timeline: a header with an
+ * emblem beside it (race bib, ticket stub…), then chapters, each opened by
+ * its clock time.
+ *
+ * Slots: `emblem` sits beside the header; the default slot lands between
+ * the header and the first chapter (a recap video, say).
+ * `tone="night"` sets the album on deep navy, for events after dark.
+ */
+import { Image } from 'astro:assets';
+import Section from './Section.astro';
+import Reveal from './Reveal.astro';
+import Eyebrow from './Eyebrow.astro';
+import TimelineStop from './TimelineStop.astro';
+
+export type LoadedChapter = {
+  title: string;
+  time: string;
+  photos: { image: ImageMetadata; caption: string }[];
+};
+
+interface Props {
+  eyebrow: string;
+  heading: string;
+  intro: string;
+  chapters: LoadedChapter[];
+  tone?: 'day' | 'night';
+  id?: string;
+  /** ISO date — opens the album with a timeline stop. */
+  date?: string;
+  /** Place shown beside the date in the timeline stop. */
+  place?: string;
+}
+const { eyebrow, heading, intro, chapters, tone = 'day', id, date, place } = Astro.props;
+const night = tone === 'night';
+const count = chapters.reduce((n, c) => n + c.photos.length, 0);
+
+const soft = night ? 'text-bone/70' : 'text-ink-soft';
+const rule = night ? 'border-bone/15' : 'border-line';
+
+/* Every row stays full. Photos sit three to a row on desktop (two on
+ * tablets); when a chapter doesn't divide evenly, the leftover photos open
+ * the chapter larger (one wide hero, or a pair) instead of trailing a
+ * half-empty last row. */
+function leadOf(n: number, i: number) {
+  const r3 = n % 3;
+  const lg = i < r3 ? (r3 === 1 ? 'full' : 'half') : null;
+  const sm = i < n % 2;
+  return { lg, sm };
+}
+---
+
+<Section
+  id={id}
+  tone={night ? 'navy-deep' : 'bone'}
+  class:list={['py-20 sm:py-24', !night && 'border-b border-line']}
+>
+  {date && <TimelineStop date={date} place={place} tone={tone} />}
+  <div class="flex flex-col gap-10 md:flex-row md:items-start md:justify-between md:gap-14">
+    <Reveal class="max-w-2xl">
+      <Eyebrow tone={night ? 'bone' : 'ink'}>{eyebrow}</Eyebrow>
+      <h2 class="mt-4 font-display text-3xl sm:text-4xl">{heading}</h2>
+      <p class:list={['mt-3', soft]}>{intro}</p>
+      <p class:list={['mt-2 font-stencil text-xs uppercase tracking-[0.18em]', soft]}>
+        {count} photos
+      </p>
+    </Reveal>
+    {
+      Astro.slots.has('emblem') && (
+        <Reveal class="group self-center md:shrink-0 md:self-start" delay={100}>
+          <slot name="emblem" />
+        </Reveal>
+      )
+    }
+  </div>
+
+  <slot />
+
+  {
+    chapters.map((chapter) => (
+      <div class="mt-14 first:mt-12">
+        <Reveal class:list={['flex items-baseline gap-4 border-b pb-3', rule]}>
+          <span
+            class:list={[
+              'font-stencil text-xs uppercase tracking-[0.18em]',
+              night ? 'text-gold' : 'text-red',
+            ]}
+          >
+            {chapter.time}
+          </span>
+          <h3 class="font-display text-2xl sm:text-3xl">{chapter.title}</h3>
+        </Reveal>
+        <div class="mt-7 grid gap-x-5 gap-y-7 sm:grid-cols-2 lg:grid-cols-6">
+          {chapter.photos.map((photo, i) => {
+            const { lg, sm } = leadOf(chapter.photos.length, i);
+            return (
+              <Reveal
+                class:list={[
+                  sm ? 'sm:col-span-2' : 'sm:col-span-1',
+                  lg === 'full' ? 'lg:col-span-6' : lg === 'half' ? 'lg:col-span-3' : 'lg:col-span-2',
+                ]}
+                delay={(i % 3) * 70}
+              >
+                <figure>
+                  <Image
+                    src={photo.image}
+                    alt={photo.caption}
+                    widths={[480, 768, 1100, 1600]}
+                    sizes={
+                      lg === 'full'
+                        ? '(min-width: 1024px) 1100px, 100vw'
+                        : lg === 'half'
+                          ? '(min-width: 1024px) 560px, 100vw'
+                          : sm
+                            ? '(min-width: 1024px) 380px, 100vw'
+                            : '(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw'
+                    }
+                    loading="lazy"
+                    class:list={[
+                      'develop aspect-[4/3] w-full border object-cover',
+                      sm && 'sm:aspect-[16/9]',
+                      lg === 'full'
+                        ? 'lg:aspect-[21/9]'
+                        : lg === 'half'
+                          ? 'lg:aspect-[3/2]'
+                          : 'lg:aspect-[4/3]',
+                      night ? 'border-bone/15' : 'treated border-line',
+                    ]}
+                  />
+                  <figcaption class:list={['mt-2 text-sm leading-snug', soft]}>
+                    {photo.caption}
+                  </figcaption>
+                </figure>
+              </Reveal>
+            );
+          })}
+        </div>
+      </div>
+    ))
+  }
+</Section>
