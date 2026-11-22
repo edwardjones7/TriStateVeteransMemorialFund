@@ -48,36 +48,10 @@ const footerSponsors = (await getCollection('sponsors')).filter((s) =>
             >
           </p>
         </address>
-        <div
-          class="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-bone/75"
-        >
-          <a
-            href={site.social.facebook}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="link-underline inline-flex items-center gap-2"
-          >
-            <Icon name="lucide:facebook" class="size-4" aria-hidden="true" />
-            Facebook
-          </a>
-          <a
-            href={site.social.youtube}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="link-underline inline-flex items-center gap-2"
-          >
-            <Icon name="lucide:youtube" class="size-4" aria-hidden="true" />
-            YouTube
-          </a>
-          <span class="inline-flex items-center gap-2">
-            <Icon name="lucide:radio" class="size-4" aria-hidden="true" />
-            Hear us on {site.radio}
-          </span>
-        </div>
       </div>
 
       <!-- Zone 2: sitemap -->
-      <nav class="md:col-span-4 md:col-start-7" aria-label="Footer">
+      <nav class="md:col-span-4 md:col-start-6 lg:col-start-7" aria-label="Footer">
         <p
           class="font-stencil text-xs uppercase tracking-[0.2em] text-bone/50"
         >
@@ -97,7 +71,7 @@ const footerSponsors = (await getCollection('sponsors')).filter((s) =>
       </nav>
 
       <!-- Zone 3: call to action -->
-      <div class="md:col-span-2 md:col-start-11">
+      <div class="md:col-span-3 md:col-start-10 lg:col-start-11 lg:col-span-2">
         <p
           class="font-stencil text-xs uppercase tracking-[0.2em] text-bone/50"
         >
@@ -109,6 +83,39 @@ const footerSponsors = (await getCollection('sponsors')).filter((s) =>
         <Button href="/donate" variant="on-dark" class="mt-4 w-full"
           >Donate</Button
         >
+        <p
+          class="mt-9 font-stencil text-xs uppercase tracking-[0.2em] text-bone/50"
+        >
+          Follow along
+        </p>
+        <ul class="mt-4 space-y-2.5 text-sm text-bone/85">
+          <li>
+            <a
+              href={site.social.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="link-underline inline-flex items-center gap-2.5"
+            >
+              <Icon name="lucide:facebook" class="size-4 text-red-light" aria-hidden="true" />
+              Facebook
+            </a>
+          </li>
+          <li>
+            <a
+              href={site.social.youtube}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="link-underline inline-flex items-center gap-2.5"
+            >
+              <Icon name="lucide:youtube" class="size-4 text-red-light" aria-hidden="true" />
+              YouTube
+            </a>
+          </li>
+          <li class="inline-flex items-center gap-2.5">
+            <Icon name="lucide:radio" class="size-4 text-red-light" aria-hidden="true" />
+            Hear us on {site.radio}
+          </li>
+        </ul>
       </div>
     </div>
 
@@ -155,13 +162,13 @@ const footerSponsors = (await getCollection('sponsors')).filter((s) =>
     </div>
 
     <div
-      class="flex flex-col gap-3 py-7 text-xs text-bone/55 sm:flex-row sm:items-center sm:justify-between"
+      class="flex flex-col gap-3 py-7 text-xs text-bone/55 lg:flex-row lg:items-center lg:justify-between lg:gap-10"
     >
-      <p>
+      <p class="max-w-xl">
         {site.name} is a registered 501(c)(3) nonprofit. Donations are
         tax-deductible to the extent allowed by law.
       </p>
-      <p class="flex items-center gap-3">
+      <p class="flex flex-wrap items-center gap-x-3 gap-y-1 lg:shrink-0 [&>*]:whitespace-nowrap">
         <a href="/privacy" class="link-underline">Privacy Policy</a>
         <span aria-hidden="true">&middot;</span>
         <span>&copy; {year} {site.name}. All rights reserved.</span>
