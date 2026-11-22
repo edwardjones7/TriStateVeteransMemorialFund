@@ -1,0 +1,32 @@
+---
+/**
+ * MobileCallBar — pinned to the bottom of the screen on phones so calling
+ * (or donating) is always one tap away. Hidden from `sm` up, where the
+ * header already shows both. A spacer below the footer keeps the bar from
+ * covering the last lines of the page.
+ */
+import { Icon } from 'astro-icon/components';
+import { site } from '@/config/site';
+---
+
+<div aria-hidden="true" class="h-[calc(4.25rem+env(safe-area-inset-bottom))] sm:hidden"></div>
+<nav
+  aria-label="Quick contact"
+  class="fixed inset-x-0 bottom-0 z-[60] border-t-2 border-red bg-navy-deep px-3 pt-2.5 pb-[calc(0.625rem+env(safe-area-inset-bottom))] shadow-[0_-12px_28px_-18px_rgba(0,0,0,0.8)] sm:hidden"
+>
+  <div class="flex gap-2.5">
+    <a
+      href={site.phoneHref}
+      class="inline-flex min-h-[48px] flex-[3] items-center justify-center gap-2 rounded-[3px] bg-red px-3 font-semibold whitespace-nowrap text-bone active:scale-[0.98]"
+    >
+      <Icon name="lucide:phone" class="size-5" aria-hidden="true" />
+      <span>Call {site.phone}</span>
+    </a>
+    <a
+      href="/donate"
+      class="inline-flex min-h-[48px] flex-[2] items-center justify-center rounded-[3px] bg-bone px-3 font-semibold text-navy active:scale-[0.98]"
+    >
+      Donate
+    </a>
+  </div>
+</nav>

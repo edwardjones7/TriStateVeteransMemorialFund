@@ -6,6 +6,7 @@ import Eyebrow from '@/components/Eyebrow.astro';
 import Reveal from '@/components/Reveal.astro';
 import Button from '@/components/Button.astro';
 import QuoteCard from '@/components/QuoteCard.astro';
+import CallCallout from '@/components/CallCallout.astro';
 import TreatedImage from '@/components/TreatedImage.astro';
 import veteranPhoto from '@/assets/photos/navy-veteran.jpg';
 import { Icon } from 'astro-icon/components';
@@ -125,6 +126,14 @@ const impact = [
                 {site.mailing}
               </p>
             </div>
+          </Reveal>
+
+          {/* By phone */}
+          <Reveal delay={150}>
+            <CallCallout
+              heading="Prefer to give by phone?"
+              body="Call us and we'll walk you through giving by phone or check, or answer any questions."
+            />
           </Reveal>
 
           {/* Sponsor */}

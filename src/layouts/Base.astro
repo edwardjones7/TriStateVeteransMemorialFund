@@ -8,6 +8,7 @@ import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import CookieNotice from '@/components/CookieNotice.astro';
 import FlyerLightbox from '@/components/FlyerLightbox.astro';
+import MobileCallBar from '@/components/MobileCallBar.astro';
 
 interface Props {
   title: string;
@@ -70,6 +71,7 @@ const {
       <slot />
     </main>
     <Footer />
+    <MobileCallBar />
     <CookieNotice />
     <FlyerLightbox />
     <script>

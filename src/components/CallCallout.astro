@@ -1,0 +1,51 @@
+---
+/**
+ * CallCallout — a "talk to a real person" box with the phone number as a
+ * big, tappable link. Many of the veterans and donors we serve would rather
+ * call than fill out a form, so this sits on the pages where a question is
+ * most likely (events, donate, services, contact, Veterans Corner).
+ */
+import { Icon } from 'astro-icon/components';
+import { site } from '@/config/site';
+
+interface Props {
+  heading?: string;
+  body?: string;
+  /** `light` for bone sections, `deep` for bone-deep sections. */
+  tone?: 'light' | 'deep';
+  class?: string;
+}
+const {
+  heading = 'Questions? Call us.',
+  body = 'A member of our team will be glad to help.',
+  tone = 'light',
+  class: cls = '',
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    'flex flex-col gap-5 border border-line border-l-4 border-l-red p-6 sm:flex-row sm:items-center sm:justify-between sm:p-7',
+    tone === 'light' ? 'bg-bone-deep' : 'bg-bone',
+    cls,
+  ]}
+>
+  <div class="flex items-start gap-4">
+    <span
+      class="inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-red text-bone"
+    >
+      <Icon name="lucide:phone" class="size-5" aria-hidden="true" />
+    </span>
+    <div>
+      <p class="font-display text-2xl leading-tight">{heading}</p>
+      <p class="mt-1 leading-relaxed text-ink-soft">{body}</p>
+    </div>
+  </div>
+  <a
+    href={site.phoneHref}
+    class="inline-flex min-h-[52px] shrink-0 items-center justify-center gap-2.5 rounded-[3px] bg-red px-6 py-3 font-body text-lg font-semibold whitespace-nowrap text-bone shadow-sm transition-[background-color,transform] duration-150 ease-out-soft hover:bg-red-deep active:scale-[0.98]"
+  >
+    <Icon name="lucide:phone" class="size-5" aria-hidden="true" />
+    {site.phone}
+  </a>
+</div>

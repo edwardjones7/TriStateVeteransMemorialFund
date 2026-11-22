@@ -3,6 +3,7 @@ import Button from './Button.astro';
 import StarMark from './StarMark.astro';
 import Reveal from './Reveal.astro';
 import { site } from '@/config/site';
+import { Icon } from 'astro-icon/components';
 /** CallToAction — closing band, reused near the foot of most pages. */
 interface Props {
   heading?: string;
@@ -28,11 +29,16 @@ const {
         <Button href="/donate" variant="light" size="lg">Make a donation</Button>
         <Button href="/contact" variant="on-dark" size="lg">Get in touch</Button>
       </div>
-      <p
-        class="mt-6 font-stencil text-xs uppercase tracking-[0.16em] text-bone/70"
-      >
-        Or call us &middot; {site.phone}
+      <p class="mt-7 font-stencil text-xs uppercase tracking-[0.16em] text-bone/70">
+        Or talk with us directly
       </p>
+      <a
+        href={site.phoneHref}
+        class="link-underline mt-2 inline-flex items-center gap-2.5 font-display text-3xl text-bone sm:text-4xl"
+      >
+        <Icon name="lucide:phone" class="size-6 text-red-light sm:size-7" aria-hidden="true" />
+        {site.phone}
+      </a>
     </Reveal>
   </div>
 </section>

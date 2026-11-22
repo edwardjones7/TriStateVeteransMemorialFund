@@ -16,6 +16,7 @@ function inferEvent(el: HTMLElement): string | null {
   const href = el.getAttribute('href') ?? '';
   if (/runsignup\.com/i.test(href)) return 'register_click';
   if (/paypal\.com/i.test(href)) return 'donate_click';
+  if (/^tel:/i.test(href)) return 'call_click';
   return null;
 }
 

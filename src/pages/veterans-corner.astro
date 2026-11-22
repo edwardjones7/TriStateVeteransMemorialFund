@@ -10,6 +10,7 @@ import cornerPhoto from '@/assets/photos/community-parade.jpg';
 import Button from '@/components/Button.astro';
 import SectionRule from '@/components/SectionRule.astro';
 import CallToAction from '@/components/CallToAction.astro';
+import CallCallout from '@/components/CallCallout.astro';
 import { Icon } from 'astro-icon/components';
 import { site } from '@/config/site';
 
@@ -50,6 +51,12 @@ const thumbFor = (url?: string) => {
         veteran find strength and hope.
       </p>
       <SectionRule class="mx-auto mt-9 max-w-xs" />
+    </Reveal>
+    <Reveal class="mx-auto mt-12 max-w-3xl">
+      <CallCallout
+        heading="Need someone to talk to?"
+        body="Call us. A fellow veteran or member of our team will listen and help you find support."
+      />
     </Reveal>
   </Section>
 

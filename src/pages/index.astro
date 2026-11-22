@@ -180,6 +180,16 @@ const involve = [
             >Our mission</Button
           >
         </div>
+        <p class="mt-6 text-bone/85">
+          Questions? Call us at
+          <a
+            href={site.phoneHref}
+            class="link-underline ml-1 inline-flex items-center gap-1.5 font-semibold whitespace-nowrap text-bone"
+          >
+            <Icon name="lucide:phone" class="size-4 text-red-light" aria-hidden="true" />
+            {site.phone}
+          </a>
+        </p>
       </Reveal>
       {
         heroChips.length > 0 && (
